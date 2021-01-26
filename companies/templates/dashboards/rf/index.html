@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+{% include 'dashboards/global/page.header.html' %}
+<!-- Page content -->
+<div class="page-content pt-0">
+
+  <!-- Main content -->
+  <div class="content-wrapper">
+
+    <!-- Content area -->
+    <div class="content">
+      <div class="row">
+        <div class="col-xl-12">
+          <!-- Marketing campaigns -->
+          <div class="card">
+            {% include 'dashboards/rf/kpi_summary.html' %}
+            {% include 'dashboards/rf/predictions_table.html' %}
+
+
+          </div>
+          <!-- /marketing campaigns -->
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
