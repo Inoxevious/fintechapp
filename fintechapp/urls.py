@@ -28,12 +28,15 @@ from apps.endpoints.views import MLAlgorithmViewSet
 from apps.endpoints.views import MLRequestViewSet
 from apps.endpoints.views import PredictView # import PredictView
 from apps.endpoints.views import StopABTestView
-
+from account.views import home
 from apps.endpoints.urls import urlpatterns as endpoints_urlpatterns
 urlpatterns = [
-    path('' , views.index, name='index'),
+    path('', home, name='home'),
+    path('companies_home_dash', views.HomeView.as_view(), name="companies_home_dash"),
     path('admin/', admin.site.urls),
     path('companies/', include('companies.urls')),
+    path('d_processor/', include('d_processor.urls')),
+    path('account/', include('account.urls')),
     url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),  # Django JET dashboard URLS
     path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
     # add predict url

@@ -16,13 +16,14 @@ from django.utils.http import urlsafe_base64_decode
 from django.contrib import messages, auth
 from .choices import state_choices, role_choices
 from django.utils.datastructures import MultiValueDictKeyError
-
-
+from companies.models import Organization, Role, Department
+from datetime import datetime, date
 # Create your views here.
 # 
+def home(request):
+    return render(request,'account/auth/login.html')
 
-
-@login_required(login_url='/pages/login/')
+@login_required(login_url='/account/login/')
 def index(request, **kwargs):
         owner = "owner"
         admin ="admin"
@@ -31,23 +32,27 @@ def index(request, **kwargs):
         user_url = ''
 
         user_id = request.user.id
+        print("User ID", user_id)
         account_user = AccountUser.objects.get(user_id=user_id)
- 
+        print("account_user ID", account_user)
+        context ={
+            'account_user':account_user
+        }
 
-        if str(account_user.role) == admin:
-            user_url = 'admin' 
+        if str(account_user.role) == officer or str(account_user.role) == manager:
+            user_url = 'companies:index' 
 
-        elif str(account_user.role) == owner:
-            user_url = 'owner'
+        # elif str(account_user.role) == owner:
+        #     user_url = 'companies'
                    
-        elif str(account_user.role) == officer:
-            user_url = 'officer'
+        # elif str(account_user.role) == officer:
+        #     user_url = 'companies'
           
-        elif str(account_user.role) == manager:
-            user_url = 'manager'
-        else:
-            user_url = 'pages/login.html'
-        
+        # elif str(account_user.role) == manager:
+        #     user_url = 'companies'
+        # else:
+        #     user_url = 'account:login'
+        # return render(request, "dashboards/landing/index.html", context)
         return HttpResponseRedirect(reverse(user_url, kwargs={'user_id': user_id }))
 
 
@@ -61,82 +66,101 @@ def login(request):
        if user:
 
            auth.login(request,user)
-           messages.success(request,"You are now logged in.")
+           
            return redirect('account:index')
 
           
        else:
             messages.error(request,"Invalid Credentials")
-            return redirect('login')       
+            return redirect('account:login')       
     else:
-        return render(request,'pages/login.html')
+        return render(request,'account/auth/login.html')
 
 def logout(request):
     if request.method == 'POST':
         auth.logout(request)
         messages.success(request,"Logged Out")
-    return redirect('index')
+    return redirect('account:home')
 
 def register(request):
-    
-    if request.method == "POST":
+    role_choices = Role.objects.all()
+    context = {
+        'role_choices': role_choices,
         
+    }
+    if request.method == "POST":
         # Get form values
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
+        work_email = request.POST['work_email']
+        personal_email = request.POST['personal_email']
+        password = request.POST['password1']
         password2 = request.POST['password2']
+        business_name = request.POST['business_name']
+        business_trading_name = request.POST['business_trading_name']
+        total_branches = request.POST['total_branches']
+        terms = request.POST['terms']
+        username = personal_email
+
+
         try:
             role = request.POST['role']
+            role_ins = Role.objects.get(id=role)
         except MultiValueDictKeyError:
             role = 'undefined'
-
-       
-
+        try:
+            last_name = request.POST['last_name']
+        except MultiValueDictKeyError:
+            last_name = 'undefined'
         # Check if passwords match
         if password == password2:
             # Check username
             if User.objects.filter(username = username).exists():
                 messages.error(request,"That username is taken.")
-                return redirect('pages/register')
+                return redirect('account:register')
             else:
-                if User.objects.filter(email = email).exists():
+                if User.objects.filter(email = personal_email).exists():
                     messages.error(request,"That email is taken.")
-                    return redirect('pages/register')
+                    return redirect('account:register')
                 else:
-                    # looks good
-                    
-                    user = User.objects.create_user(username = username,
-                    password = password,email=email,first_name = first_name,
+                        # looks good
+                    print("USER ADDED")
+                    user = User.objects.create_user(username = personal_email,
+                    password = password,email=personal_email,first_name = first_name,
                     last_name = last_name )
                     user.save()
-
-                    user = get_object_or_404(User, email = email)  
-                    acc = AccountUser(user_id = user.id, role = role)          
-                    acc.save()
-                    # Login after register
-                    auth.login(request,user)
-                    messages.success(request,"You are now registered in.")
-                    return redirect('login')
+                    if user.id:
+                        org = Organization(
+                                owner = user, business_name = business_name, 
+                                business_trading_name = business_trading_name, 
+                                registered_byuser_as = role_ins, total_branches = total_branches
+                        )
+                        org.save()
+                        if org.id:
+                            acc = AccountUser(user = user, role = role_ins, personal_email=personal_email, organization=org, work_email=work_email)          
+                            acc.save()
+                            if acc.id:
+                                messages.success(request,"Welcom, {} You are now registered with Fintech.".format(user.first_name))
+                                return redirect('account:login')
+                            else:
+                                messages.error(request,'Could not create business account')
+                                return redirect('account:register')
 
                     # # Login manually 
                     # messages.success(request,"You can now log in.")
                     # return redirect('login')
         else:
             messages.error(request,'Passwords do not match.')
-            return redirect('pages/register')
+            return redirect('account:register')
     else:
-        context = {
-            'role_choices': role_choices,
-           
-        }
-        return render(request,'pages/register.html' , context)
+
+        return render(request,'account/auth/registration.html' , context)
+
+    return render(request,'account/auth/registration.html' , context)
 
 def account_activation_sent(request):
 
-    return render(request, 'registration/account_activation_sent.html')
+    return render(request, 'account/auth/registration/account_activation_sent.html')
 
 def activate(request, uidb64, token):
     form = DelegationForm(request.POST)
@@ -155,13 +179,13 @@ def activate(request, uidb64, token):
                 user.accountuser.role = form.cleaned_data.get('role')
                 user.save()
                 login(request, user)
-                return render(request,'home.html')
+                return render(request,'account/index.html')
             else:
-                return render(request, 'registration/account_activation_invalid.html')
+                return render(request, 'account/auth/registration/account_activation_invalid.html')
 
     else:
         form = DelegationForm()
-    return render(request, 'registration/delegation.html', {'form': form})
+    return render(request, 'registration/auth/delegation.html', {'form': form})
 
 
 

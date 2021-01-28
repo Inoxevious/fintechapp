@@ -1,0 +1,139 @@
+<!-- Registration form -->
+
+<form action="{% url 'account:register' %}" method="POST">
+    {% csrf_token %}
+
+    <div class="row">
+        {% include 'account/auth/_alerts.html' %}
+        <div class="col-lg-6 col-lg-offset-3">
+            <div class="panel registration-form">
+                <div class="panel-body">
+                    <div class="text-center">
+                        <!-- <div class="icon-object border-success text-success"><i class="icon-plus3"></i>
+                        </div> -->
+                        <h5 class="content-group-lg">Register Micro-Finance <small class="display-block">All fields
+                                are required</small></h5>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <input name="business_name" type="text" class="form-control"
+                            placeholder="Register business name">
+                        <div class="form-control-feedback">
+                            <i class="icon-user-plus text-muted"></i>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input name="business_trading_name" type="text" class="form-control"
+                            placeholder="Register business trading name">
+                        <div class="form-control-feedback">
+                            <i class="icon-user-plus text-muted"></i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <select name="role" class="bootstrap-select text-muted" data-width="100%">
+                                    <option value="manager">Executive Role</option>
+                                    {% for role in role_choices %}
+                                    <option value="{{role.id}}">{{role.name}}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                <input name="total_branches" type="text" class="form-control"
+                                    placeholder="Total Operational Branches">
+                                <div class="form-control-feedback">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                <input name="first_name" type="text" class="form-control" placeholder="First name">
+                                <div class="form-control-feedback">
+                                    <i class="icon-user-check text-muted"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                <input name="last_name" type="text" class="form-control" placeholder="Surname name">
+                                <div class="form-control-feedback">
+                                    <i class="icon-user-check text-muted"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                <input name="password1" type="password" class="form-control"
+                                    placeholder="Create password">
+                                <div class="form-control-feedback">
+                                    <i class="icon-user-lock text-muted"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                <input name="password2" type="password" class="form-control"
+                                    placeholder="Repeat password">
+                                <div class="form-control-feedback">
+                                    <i class="icon-user-lock text-muted"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                <input name="work_email" type="email" class="form-control"
+                                    placeholder="Your work email">
+                                <div class="form-control-feedback">
+                                    <i class="icon-mention text-muted"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                <input name="personal_email" type="email" class="form-control"
+                                    placeholder="Your persobal email">
+                                <div class="form-control-feedback">
+                                    <i class="icon-mention text-muted"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input name="terms" type="checkbox" class="styled" required>
+                                Accept <a href="#">terms of service</a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-link"><i class="icon-arrow-left13 position-left"></i> Back
+                            to login form</button>
+                        <button type="submit" class="btn bg-teal-400 btn-labeled btn-labeled-right ml-10"><b><i
+                                    class="icon-plus3"></i></b> Create account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- /registration form -->

@@ -1,0 +1,281 @@
+<!-- Sidebar Nav -->
+<div id="sideNav" class="col-auto u-sidebar-navigation-v1 u-sidebar-navigation--dark">
+    <ul id="sideNavMenu" class="u-sidebar-navigation-v1-menu u-side-nav--top-level-menu g-min-height-100vh mb-0">
+        <!-- Dashboards -->
+        <li
+            class="u-sidebar-navigation-v1-menu-item u-side-nav--has-sub-menu u-side-nav--top-level-menu-item u-side-nav-opened has-active">
+            <a class="media u-side-nav--top-level-menu-link u-side-nav--hide-on-hidden g-px-15 g-py-12" href="#"
+                data-hssm-target="#subMenu1">
+                <span class="d-flex align-self-center g-pos-rel g-font-size-18 g-mr-18">
+                    <i class="hs-admin-server"></i>
+                </span>
+                <span class="media-body align-self-center">Dashboards</span>
+                <span class="d-flex align-self-center u-side-nav--control-icon">
+                    <i class="hs-admin-angle-right"></i>
+                </span>
+                <span class="u-side-nav--has-sub-menu__indicator"></span>
+            </a>
+
+            <!-- Dashboards: Submenu-1 -->
+            <ul id="subMenu1" class="u-sidebar-navigation-v1-menu u-side-nav--second-level-menu mb-0"
+                style="display: block;">
+                <!-- Dashboards v1 -->
+                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12 active"
+                        href="{% url 'companies:index' %}">
+                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                            <i class="hs-admin-infinite"></i>
+                        </span>
+                        <span class="media-body align-self-center">Home</span>
+                    </a>
+                </li>
+                <!-- End Dashboards v1 -->
+                <!-- Dashboards v2 -->
+                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12"
+                        href="{% url 'companies:income_classifier' 1 %}">
+                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                            <i class="hs-admin-blackboard"></i>
+                        </span>
+                        <span class="media-body align-self-center">Income classifier</span>
+                    </a>
+                </li>
+                <!-- End Dashboards v2 -->
+                <!-- Dashboards v2 -->
+                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12"
+                        href="{% url 'companies:application_analytics' %}">
+                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                            <i class="hs-admin-blackboard"></i>
+                        </span>
+                        <span class="media-body align-self-center">Applications Analytics</span>
+                    </a>
+                </li>
+                <!-- End Dashboards v2 -->
+
+                <!-- Dashboards v3 -->
+                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12"
+                        href="{% url 'companies:behavioral_analytics' %}">
+                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                            <i class="hs-admin-harddrive"></i>
+                        </span>
+                        <span class="media-body align-self-center">Behavioral Analytics</span>
+                    </a>
+                </li>
+                <!-- End Dashboards v3 -->
+
+                <!-- Dashboards v4 -->
+                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12"
+                        href="{% url 'companies:retention_analytics' %}">
+                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                            <i class="hs-admin-harddrive"></i>
+                        </span>
+                        <span class="media-body align-self-center">Retention Analytics</span>
+                    </a>
+                </li>
+                <!-- End Dashboards v4 -->
+            </ul>
+            <!-- End Dashboards: Submenu-1 -->
+        </li>
+        <!-- End Dashboards -->
+
+        <!-- App Views -->
+        <li class="u-sidebar-navigation-v1-menu-item u-side-nav--has-sub-menu u-side-nav--top-level-menu-item">
+            <a class="media u-side-nav--top-level-menu-link u-side-nav--hide-on-hidden g-px-15 g-py-12" href="#"
+                data-hssm-target="#subMenu4">
+                <span class="d-flex align-self-center g-pos-rel g-font-size-18 g-mr-18">
+                    <i class="hs-admin-layers"></i>
+                </span>
+                <span class="media-body align-self-center">My Account</span>
+                <span class="d-flex align-self-center u-side-nav--control-icon">
+                    <i class="hs-admin-angle-right"></i>
+                </span>
+
+                <span class="u-side-nav--has-sub-menu__indicator"></span>
+            </a>
+
+            <!-- App Views: Submenu-1 -->
+            <ul id="subMenu4" class="u-sidebar-navigation-v1-menu u-side-nav--second-level-menu mb-0">
+                <!-- Profile Pages -->
+                <li
+                    class="u-sidebar-navigation-v1-menu-item u-side-nav--has-sub-menu u-side-nav--second-level-menu-item">
+                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12" href="#"
+                        data-hssm-target="#subMenu4Profiles">
+                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                            <i class="hs-admin-list"></i>
+                        </span>
+                        <span class="media-body align-self-center">Profile</span>
+                        <span class="d-flex align-self-center u-side-nav--control-icon">
+                            <i class="hs-admin-angle-right"></i>
+                        </span>
+                    </a>
+
+                    <!-- Menu Leveles: Submenu-2 -->
+                    <ul id="subMenu4Profiles" class="u-side-nav--third-level-menu">
+                        <!-- Main -->
+                        <li class="u-side-nav--third-level-menu-item">
+                            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6"
+                                href="{% url 'companies:profile' %}">Personal Information</a>
+                        </li>
+                        <!-- End Main -->
+
+                        <!-- Biography -->
+                        <li class="u-side-nav--third-level-menu-item">
+                            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6"
+                                href="{% url 'companies:index' %}">Biography</a>
+                        </li>
+                        <!-- End Biography -->
+
+                        <!-- Interests -->
+                        <li class="u-side-nav--third-level-menu-item">
+                            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6"
+                                href="{% url 'companies:index' %}">Interests</a>
+                        </li>
+                        <!-- End Interests -->
+
+                        <!-- Mobile -->
+                        <li class="u-side-nav--third-level-menu-item">
+                            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6"
+                                href="{% url 'companies:index' %}">Mobile</a>
+                        </li>
+                        <!-- End Mobile -->
+
+                        <!-- Photos & Videos -->
+                        <li class="u-side-nav--third-level-menu-item">
+                            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6"
+                                href="{% url 'companies:index' %}">Photos &amp; Videos</a>
+                        </li>
+                        <!-- End Photos & Videos -->
+
+                        <!-- Payment Methods -->
+                        <li class="u-side-nav--third-level-menu-item">
+                            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6"
+                                href="{% url 'companies:index' %}">Payment Methods</a>
+                        </li>
+                        <!-- End Payment Methods -->
+
+                        <!-- Transactions -->
+                        <li class="u-side-nav--third-level-menu-item">
+                            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6"
+                                href="{% url 'companies:index' %}">Transactions</a>
+                        </li>
+                        <!-- End Transactions -->
+
+                        <!-- Security -->
+                        <li class="u-side-nav--third-level-menu-item">
+                            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6"
+                                href="{% url 'companies:index' %}">Security</a>
+                        </li>
+                        <!-- End Security -->
+
+                        <!-- Upgrade My Plan -->
+                        <li class="u-side-nav--third-level-menu-item">
+                            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6"
+                                href="{% url 'companies:index' %}">Upgrade My Plan</a>
+                        </li>
+                        <!-- End Upgrade My Plan -->
+
+                        <!-- Invited Friends -->
+                        <li class="u-side-nav--third-level-menu-item">
+                            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6"
+                                href="{% url 'companies:index' %}">Invited Friends</a>
+                        </li>
+                        <!-- End Invited Friends -->
+
+                        <!-- Connected Accounts -->
+                        <li class="u-side-nav--third-level-menu-item">
+                            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6"
+                                href="{% url 'companies:index' %}">Connected Accounts</a>
+                        </li>
+                        <!-- End Connected Accounts -->
+                    </ul>
+                    <!-- End Menu Leveles: Submenu-2 -->
+                </li>
+                <!-- End Profile Pages -->
+
+                <!-- Projects -->
+                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12"
+                        href="{% url 'companies:index' %}">
+                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                            <i class="hs-admin-layout-media-left"></i>
+                        </span>
+                        <span class="media-body align-self-center">Projects</span>
+                    </a>
+                </li>
+                <!-- End Projects -->
+
+                <!-- Chat -->
+                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12"
+                        href="{% url 'companies:index' %}">
+                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                            <i class="hs-admin-comments"></i>
+                        </span>
+                        <span class="media-body align-self-center">Chat</span>
+                    </a>
+                </li>
+                <!-- End Chat -->
+
+                <!-- File Manager -->
+                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12"
+                        href="{% url 'companies:index' %}">
+                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                            <i class="hs-admin-folder"></i>
+                        </span>
+                        <span class="media-body align-self-center">File Manager</span>
+                        <span class="d-flex align-self-center">
+                            <span
+                                class="d-inline-block text-center g-min-width-35 g-bg-primary g-font-size-12 g-color-white g-rounded-15 g-px-8 g-py-1">10</span>
+                        </span>
+                    </a>
+                </li>
+                <!-- End File Manager -->
+
+                <!-- User Contacts -->
+                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12"
+                        href="{% url 'companies:index' %}">
+                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                            <i class="hs-admin-id-badge"></i>
+                        </span>
+                        <span class="media-body align-self-center">User Contacts</span>
+                    </a>
+                </li>
+                <!-- End User Contacts -->
+            </ul>
+            <!-- End App Views: Submenu-1 -->
+        </li>
+        <!-- End App Views -->
+
+
+        <!-- Metrics -->
+        <li class="u-sidebar-navigation-v1-menu-item u-side-nav--top-level-menu-item">
+            <a class="media u-side-nav--top-level-menu-link u-side-nav--hide-on-hidden g-px-15 g-py-12"
+                href="{% url 'companies:reports' %}">
+                <span class="d-flex align-self-center g-pos-rel g-font-size-18 g-mr-18">
+                    <i class="hs-admin-pie-chart"></i>
+                </span>
+                <span class="media-body align-self-center">Reports</span>
+            </a>
+        </li>
+        <!-- End Metrics -->
+        <!-- Metrics -->
+        <li class="u-sidebar-navigation-v1-menu-item u-side-nav--top-level-menu-item">
+            <a class="media u-side-nav--top-level-menu-link u-side-nav--hide-on-hidden g-px-15 g-py-12"
+                href="{% url 'companies:articles' %}">
+                <span class="d-flex align-self-center g-pos-rel g-font-size-18 g-mr-18">
+                    <i class="hs-admin-pie-chart"></i>
+                </span>
+                <span class="media-body align-self-center">Articles</span>
+            </a>
+        </li>
+        <!-- End Metrics -->
+
+
+    </ul>
+</div>
+<!-- End Sidebar Nav -->

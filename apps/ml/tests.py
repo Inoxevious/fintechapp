@@ -1,9 +1,11 @@
 from django.test import TestCase
 from apps.ml.income_classifier.random_forest import RandomForestClassifier
+from apps.ml.risk_assessor.risk_assessor import RiskAssessorClassifier
+from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier
 import inspect
 from apps.ml.registry import MLRegistry
 from rest_framework.test import APIClient
-from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier
+
 
 class MLTests(TestCase):
     def test_rf_algorithm(self):

@@ -1,0 +1,80 @@
+<!-- set bodyTheme = "u-card-v1" -->
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Financial Paradise</title>
+
+    <!-- Global stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
+        type="text/css">
+    <link href="{% static 'account/global_assets/css/icons/icomoon/styles.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'account/assets/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'account/assets/css/core.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'account/assets/css/components.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'account/assets/css/colors.min.css' %}" rel="stylesheet" type="text/css">
+    <!-- /global stylesheets -->
+
+
+
+
+</head>
+
+<body class="login-container">
+    {% include 'account/base/header.html' %}
+    <!-- Page container -->
+    <div class="page-container">
+
+        <!-- Page content -->
+        <div class="page-content">
+
+            <!-- Main content -->
+            <div class="content-wrapper">
+                {% block content %} {% endblock %}
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Core JS files -->
+    <script src="{% static 'account/global_assets/js/plugins/loaders/pace.min.js' %}"></script>
+    <script src="{% static 'account/global_assets/js/core/libraries/jquery.min.js' %}"></script>
+    <script src="{% static 'account/global_assets/js/core/libraries/bootstrap.min.js' %}"></script>
+    <script src="{% static 'account/global_assets/js/plugins/loaders/blockui.min.js' %}"></script>
+    <script src="{% static 'account/global_assets/js/plugins/ui/nicescroll.min.js' %}"></script>
+    <script src="{% static 'account/global_assets/js/plugins/ui/drilldown.js' %}"></script>
+    <!-- /core JS files -->
+
+    <!-- Theme JS files -->
+    <!-- Theme JS files -->
+    <script src="{% static 'account/global_assets/js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
+
+    <script src="{% static 'account/assets/js/app.js' %}"></script>
+    <script src="{% static 'account/global_assets/js/demo_pages/form_bootstrap_select.js' %}"></script>
+    <!-- /theme JS files -->
+    <script src="{% static 'account/global_assets/js/plugins/forms/styling/uniform.min.js' %}"></script>
+
+    <script src="{% static 'account/assets/js/app.js' %}"></script>
+    <script src="{% static 'account/global_assets/js/demo_pages/login.js' %}"></script>
+    <script src="{% static 'account/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+
+    <script src="{% static 'account/global_assets/js/demo_pages/form_select2.js' %}"></script>
+    <!-- /theme JS files -->
+
+
+    <!-- Footer -->
+    <div class="footer text-muted text-center">
+        &copy; 2020. <a href="#">Financial Paradise</a> by <a href="http://dreatolfintech.com/" target="_blank">Dreatol
+            FinTech</a>
+    </div>
+    <!-- /footer -->
+
+</body>
+
+</html>

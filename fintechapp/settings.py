@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+# from companies import dashboard
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-
+    'csvimport',
     'jet.dashboard',
     'jet',
     'rest_framework',
@@ -65,8 +65,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'fintechapp.urls'
 
-JET_DEFAULT_THEME = 'light-blue'
+JET_DEFAULT_THEME = 'light-green'
 JET_SIDE_MENU_COMPACT = True
+# JET_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -79,6 +80,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': { 
+                'custom_tags':'companies.template_tags.custom_tags'
+            }
+            
         },
     },
 ]

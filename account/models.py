@@ -6,12 +6,15 @@ from companies.models import Organization, Department, Role
 class AccountUser(models.Model):
 
     user = models.OneToOneField(User, related_name="account_user", verbose_name="Account User", on_delete = models.CASCADE)
-    organization =  models.ForeignKey(Organization, on_delete=models.CASCADE, default=0)
-    department =  models.ForeignKey(Department, on_delete=models.CASCADE, default=0)
-    role =  models.ForeignKey(Role, on_delete=models.CASCADE, default=0)
+    organization =  models.ForeignKey(Organization, on_delete=models.CASCADE,null=True ,blank=True)
+    department =  models.ForeignKey(Department, on_delete=models.CASCADE,null=True ,blank=True)
+    role =  models.ForeignKey(Role, on_delete=models.CASCADE,null=True ,blank=True)
     category = models.CharField(null=True ,blank=True,max_length=70)
+    work_email = models.CharField(null=True ,blank=True,max_length=70)
+    personal_email = models.CharField(null=True ,blank=True,max_length=70)
     age = models.IntegerField(null=True ,blank=True)
     email_confirmed = models.BooleanField(default=False)
+    accepted_terms = models.BooleanField(default=False)
     address =models.TextField(null=True ,blank=True)
     date_birth =models.DateField(null=True ,blank=True)
     phone =models.CharField(null=True ,blank=True,max_length=70)

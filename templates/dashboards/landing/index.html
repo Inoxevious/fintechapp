@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+
+{% include 'dashboards/global/page.header.html' %}
+<!-- Page content -->
+<div class="page-content pt-0">
+
+  <!-- Main content -->
+  <div class="content-wrapper">
+
+    <!-- Content area -->
+    <div class="content">
+      <div class="row">
+        <div class="col-xl-8">
+
+          {% include 'dashboards/landing/qk_stats.html' %}
+          {% include 'dashboards/landing/support_stats.html' %}
+        </div>
+        <div class="col-xl-4">
+          {% include 'dashboards/landing/messages.html' %}
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

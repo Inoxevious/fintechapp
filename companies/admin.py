@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Country,Organization,Department,Role
+from .models import Country,Organization,Department,Role,LoanApplication
 # Register your models here.
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
@@ -8,7 +8,9 @@ class CountryAdmin(admin.ModelAdmin):
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     pass
-
+@admin.register(LoanApplication)
+class OrganizationAdmin(admin.ModelAdmin):
+    pass
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
     pass
