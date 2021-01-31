@@ -83,8 +83,13 @@ class PredictView(views.APIView):
         algorithm_status = self.request.query_params.get("status", "production")
         algorithm_version = self.request.query_params.get("version")
 
+<<<<<<< HEAD
         algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)[:1]
         print("Algorithmfilter 1", algs)
+=======
+        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)
+
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
         if algorithm_version is not None:
             algs = algs.filter(version = algorithm_version)
 
@@ -101,17 +106,24 @@ class PredictView(views.APIView):
         alg_index = 0
         if algorithm_status == "ab_testing":
             alg_index = 0 if rand() < 0.5 else 1
+<<<<<<< HEAD
         
         print("Algorithmfilter 1 reg", registry)
         print("Algorithmfilter 1 alg_index", alg_index)
         print("Algorithmfilter 1 algs[alg_index]", algs[alg_index])
         print("Algorithmfilter 1 algs[alg_index].id", algs[alg_index].id)
+=======
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
 
         algorithm_object = registry.endpoints[algs[alg_index].id]
         prediction = algorithm_object.compute_prediction(request.data)
 
 
         label = prediction["label"] if "label" in prediction else "error"
+<<<<<<< HEAD
+=======
+        
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
         ml_request = MLRequest(
             input_data=json.dumps(request.data),
             full_response=prediction,
@@ -127,6 +139,10 @@ class PredictView(views.APIView):
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
 class ABTestViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet,
     mixins.CreateModelMixin, mixins.UpdateModelMixin

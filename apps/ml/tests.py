@@ -72,6 +72,7 @@ class MLTests(TestCase):
                 response = my_alg.compute_prediction(input_data)
                 self.assertEqual('OK', response['status'])
                 self.assertTrue('label' in response)
+<<<<<<< HEAD
                 self.assertEqual('<=50K', response['label'])
 
 class MLTests(TestCase):
@@ -136,3 +137,6 @@ class MLTests(TestCase):
         my_alg = RiskAssessorClassifier()
         response = my_alg.compute_prediction(input_data)
         self.assertTrue('label' in response)
+=======
+                self.assertEqual('<=50K', response['label'])
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d

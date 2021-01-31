@@ -9,16 +9,27 @@ class  LoanApplication(models.Model):
     FLAG_OWN_CAR = models.CharField(null=True ,blank=True,max_length=70)
     FLAG_OWN_REALTY = models.CharField(null=True ,blank=True,max_length=70)
     CNT_CHILDREN = models.IntegerField(null=True ,blank=True)
+<<<<<<< HEAD
     AMT_INCOME_TOTAL = models.FloatField(null=True ,blank=True)
     AMT_CREDIT = models.FloatField(null=True ,blank=True)
     AMT_ANNUITY = models.FloatField(null=True ,blank=True)
     AMT_GOODS_PRICE = models.FloatField(null=True ,blank=True)
+=======
+    AMT_INCOME_TOTAL = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    AMT_CREDIT = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    AMT_ANNUITY = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    AMT_GOODS_PRICE = models.IntegerField(null=True ,blank=True)
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
     NAME_TYPE_SUITE = models.CharField(null=True ,blank=True,max_length=70)
     NAME_INCOME_TYPE = models.CharField(null=True ,blank=True,max_length=70)
     NAME_EDUCATION_TYPE = models.CharField(null=True ,blank=True,max_length=70)
     NAME_FAMILY_STATUS = models.CharField(null=True ,blank=True,max_length=70)
     NAME_HOUSING_TYPE = models.CharField(null=True ,blank=True,max_length=70)
+<<<<<<< HEAD
     REGION_POPULATION_RELATIVE = models.FloatField(null=True ,blank=True)
+=======
+    REGION_POPULATION_RELATIVE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
     DAYS_BIRTH = models.IntegerField(null=True ,blank=True)
     DAYS_EMPLOYED = models.IntegerField(null=True ,blank=True)
     DAYS_REGISTRATION = models.IntegerField(null=True ,blank=True)
@@ -43,6 +54,7 @@ class  LoanApplication(models.Model):
     REG_CITY_NOT_WORK_CITY = models.IntegerField(null=True ,blank=True)
     LIVE_CITY_NOT_WORK_CITY = models.IntegerField(null=True ,blank=True)
     ORGANIZATION_TYPE = models.CharField(null=True ,blank=True,max_length=70)
+<<<<<<< HEAD
     EXT_SOURCE_1 = models.FloatField(null=True ,blank=True)
     EXT_SOURCE_2 = models.FloatField(null=True ,blank=True)
     EXT_SOURCE_3 = models.FloatField(null=True ,blank=True)
@@ -91,6 +103,56 @@ class  LoanApplication(models.Model):
     FONDKAPREMONT_MODE = models.CharField(null=True ,blank=True,max_length=70)
     HOUSETYPE_MODE = models.CharField(null=True ,blank=True,max_length=70)
     TOTALAREA_MODE = models.FloatField(null=True ,blank=True)
+=======
+    EXT_SOURCE_1 = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    EXT_SOURCE_2 = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    EXT_SOURCE_3 = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    APARTMENTS_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    BASEMENTAREA_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    YEARS_BEGINEXPLUATATION_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    YEARS_BUILD_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    COMMONAREA_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    ELEVATORS_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    ENTRANCES_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    FLOORSMAX_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    FLOORSMIN_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    LANDAREA_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    LIVINGAPARTMENTS_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    LIVINGAREA_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    NONLIVINGAPARTMENTS_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    NONLIVINGAREA_AVG = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    APARTMENTS_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    BASEMENTAREA_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    YEARS_BEGINEXPLUATATION_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    YEARS_BUILD_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    COMMONAREA_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    ELEVATORS_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    ENTRANCES_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    FLOORSMAX_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    FLOORSMIN_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    LANDAREA_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    LIVINGAPARTMENTS_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    LIVINGAREA_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    NONLIVINGAPARTMENTS_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    NONLIVINGAREA_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    APARTMENTS_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    BASEMENTAREA_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    YEARS_BEGINEXPLUATATION_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    YEARS_BUILD_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    COMMONAREA_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    ELEVATORS_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    ENTRANCES_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    FLOORSMAX_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    FLOORSMIN_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    LANDAREA_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    LIVINGAPARTMENTS_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    LIVINGAREA_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    NONLIVINGAPARTMENTS_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    NONLIVINGAREA_MEDI = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+    FONDKAPREMONT_MODE = models.CharField(null=True ,blank=True,max_length=70)
+    HOUSETYPE_MODE = models.CharField(null=True ,blank=True,max_length=70)
+    TOTALAREA_MODE = models.DecimalField(max_digits=15,decimal_places=5,null=True ,blank=True)
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
     WALLSMATERIAL_MODE = models.CharField(null=True ,blank=True,max_length=70)
     EMERGENCYSTATE_MODE = models.CharField(null=True ,blank=True,max_length=70)
     OBS_30_CNT_SOCIAL_CIRCLE = models.IntegerField(null=True ,blank=True)
@@ -102,6 +164,7 @@ class  LoanApplication(models.Model):
     def __str__(self):
         return self.SK_ID_CURR
 
+<<<<<<< HEAD
 class Loan_History(models.Model):
     LOAN_ID = models.IntegerField(null=True ,blank=True)
     NAME_CONTRACT_TYPE = models.CharField(null=True ,blank=True,max_length=70)
@@ -228,6 +291,8 @@ class Loan_History(models.Model):
     def __str__(self):
         return self.LOAN_ID
 
+=======
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
 class Role(models.Model):
     owner = 'owner'
     officer = 'officer'

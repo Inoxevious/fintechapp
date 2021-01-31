@@ -25,7 +25,11 @@ SECRET_KEY = '3w^xk8yf5m99l_ou7vxohqj4itt++a*v&jrkw)#_%phbp@n69p'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['*']
+=======
+ALLOWED_HOSTS = []
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
 
 
 # Application definition
@@ -97,6 +101,7 @@ WSGI_APPLICATION = 'fintechapp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
+<<<<<<< HEAD
         'USER' : 'postgres',
         # 'NAME': 'finapp',
         # 'PASSWORD': 'postgres', 
@@ -106,6 +111,14 @@ DATABASES = {
         'HOST':  'fintech.coxeytfzdoap.eu-west-2.rds.amazonaws.com',
         'PORT': 5432,
 
+=======
+        'NAME': 'finapp',
+        'USER' : 'postgres',
+        'PASSWORD': 'postgres', 
+        'HOST':  'localhost',
+        # 'PASSWORD':  'vap123456789',
+        # 'HOST':  'vap.coxeytfzdoap.eu-west-2.rds.amazonaws.com', 
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
     }
 }
 

@@ -1,11 +1,18 @@
+<<<<<<< HEAD
 {% load static %}
+=======
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
 {% load custom_tags %}
 <div class="card-header header-elements-sm-inline">
 
     <div class="table-responsive">
+<<<<<<< HEAD
 
         <table class="table table-sm table-bordered table-responsive table-hover table-striped" id="list_data"
             data-toggle="table" url="{% url 'companies:listing' %}">
+=======
+        <table class="table table-sm">
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
 
             <thead>
                 <tr>
@@ -23,6 +30,7 @@
                     <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
                 </tr>
             </thead>
+<<<<<<< HEAD
             <div id="no_results">
                 <h5>No results found</h5>
             </div>
@@ -48,3 +56,62 @@
 <script src="{% static 'assets/js/loan_history.js' %}" type="text/javascript">
 </script>
 {% endblock %}
+=======
+            <tbody>
+                <!-- <tr class="table-waiting for data table-border-double">
+                <td colspan="5">Today</td>
+                <td class="text-right">
+                    <span class="progress-meter" id="today-progress" data-progress="30"></span>
+                </td>
+            </tr> -->
+                {% for cl in loan %}
+                <tr>
+                    <td><span class="text-muted"> {{cl.signing_officer}}</span></td>
+                    <td><span class="text-muted">{{cl.client}}</span></td>
+                    <td><span class="text-muted">{{cl.client.age}}</span></td>
+                    <td><span class="text-muted">{{cl.colleteral}}</span></td>
+
+                    <td>
+                        <h6 class="font-weight-semibold mb-0">${{ cl.amount }}</h6>
+                    </td>
+
+                    <td> {% for d_id, d_info in income_classifier_prediction.items  %}
+                        {% if d_id == cl.client_id   %}
+                        {% for l in d_info %}
+                        <span class='badge bg-{{l.color}}'>
+                            {{l.text}}
+                        </span>
+                        {% endfor %}
+                        {% endif  %}
+                        {% endfor %}
+                    </td>
+
+                    <td><span class="badge bg-blue">waiting for data</span></td>
+                    <td><span class="badge bg-blue">waiting for data</span></td>
+                    <td><span class="badge bg-blue">waiting for data</span></td>
+                    <td><span class="badge bg-blue">waiting for data</span></td>
+                    <td><span class="badge bg-blue">waiting for data</span></td>
+                    <td class="text-center">
+                        <div class="list-icons">
+                            <div class="list-icons-item dropdown">
+                                <a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i
+                                        class="icon-menu7"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="#" class="dropdown-item"><i class="icon-file-stats"></i> View statement</a>
+                                    <a href="#" class="dropdown-item"><i class="icon-file-text2"></i> Edit campaign</a>
+                                    <a href="#" class="dropdown-item"><i class="icon-file-locked"></i> Disable
+                                        campaign</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="#" class="dropdown-item"><i class="icon-gear"></i>
+                                        Settings</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d

@@ -5,9 +5,16 @@ from companies.models import LoanApplication
 # Create your views here.
 
 def importer(request):
+<<<<<<< HEAD
     opfile =  '/home/greats/Documents/projects/dreatol/webapp/fintechapp/no_header_clean_data.csv'
     imp.get_data(opfile)
     data = LoanApplication.objects.all()
+=======
+    opfile =  '/home/greats/Documents/projects/dreatol/webapp/fintechapp/clean_data.csv'
+    imp.get_data(opfile)
+    data = LoanApplication.objects.all()
+    pri
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
     context = {
         'data':data,
     }

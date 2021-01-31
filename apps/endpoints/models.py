@@ -52,7 +52,11 @@ class MLAlgorithmStatus(models.Model):
     active = models.BooleanField()
     created_by = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
+<<<<<<< HEAD
     parent_mlalgorithm = models.ForeignKey(MLAlgorithm, related_name="status", verbose_name="Analytics Algorithm Status", on_delete=models.CASCADE)
+=======
+    parent_mlalgorithm = models.ForeignKey(MLAlgorithm, related_name="ml_algorithm_status", verbose_name="Analytics Algorithm Status", on_delete=models.CASCADE)
+>>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
 
 class MLRequest(models.Model):
     '''
