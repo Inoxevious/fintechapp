@@ -7,7 +7,7 @@ blessed
 botocore 
 cached-property 
 cart 
-cement
+certifi 
 cffi 
 chardet 
 colorama 
