@@ -1,0 +1,50 @@
+{% load static %}
+{% load custom_tags %}
+<div class="card-header header-elements-sm-inline">
+
+    <div class="table-responsive">
+
+        <table class="table table-sm table-bordered table-responsive table-hover table-striped" id="list_data"
+            data-toggle="table" url="{% url 'companies:listing' %}">
+
+            <thead>
+                <tr>
+                    <th class="text-default font-weight-semibold">Loan Officer</th>
+                    <th class="text-default font-weight-semibold">Client Name</th>
+                    <th class="text-default font-weight-semibold">Age</th>
+                    <th class="text-default font-weight-semibold">Colleteral</th>
+                    <th class="text-default font-weight-semibold">Amount Applied For</th>
+                    <th class="text-default font-weight-semibold">Social Media Assessment</th>
+                    <th class="text-default font-weight-semibold">Credit History Assessment</th>
+                    <th class="text-default font-weight-semibold">Pyschometric Assessment</th>
+                    <th class="text-default font-weight-semibold">Text Assessment Analytics</th>
+                    <th class="text-default font-weight-semibold">Overal Assessment</th>
+                    <th class="text-default font-weight-semibold">Decision</th>
+                    <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
+                </tr>
+            </thead>
+            <div id="no_results">
+                <h5>No results found</h5>
+            </div>
+            <tbody id="listing">
+            </tbody>
+        </table>
+    </div>
+    <div class="row justify-content-center">
+        <nav aria-label="navigation">
+            <ul class="pagination">
+                <li class="page-item">
+                    <button class="btn btn-primary page-link" id="previous">Previous</button>
+                </li>
+                <li class="page-item pull-right">
+                    <button class="btn btn-primary page-link" id="next">Next</button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+{% block script %}
+<script src="{% static 'global_assets/js/main/jquery.min.js' %}"></script>
+<script src="{% static 'assets/js/loan_history.js' %}" type="text/javascript">
+</script>
+{% endblock %}

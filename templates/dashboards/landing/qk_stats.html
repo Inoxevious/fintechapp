@@ -1,0 +1,226 @@
+{% load static %}
+
+<!-- Quick stats boxes -->
+<div class="row">
+    <div class="col-lg-4">
+
+        <!-- Members online -->
+        <div class="card ">
+            <div class="card-body">
+                <div style="width: 200px; margin-top: 5%;" id="chartjs1">
+                    Chart Data {{ webdata.1.grade_a.1 }}
+                    <canvas id="data_aggretation" width="200px" height="200px"
+                        data-url="{% url 'companies:data_aggretation' %}"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- /members online -->
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <!-- Current server load -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex">
+                    <div style="width: 200px; margin-top: 5%;" id="chartjs1">
+                        Chart Data {{ webdata.1.grade_a.1 }}
+                        <canvas id="chart2" width="200px" height="200px"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /current server load -->
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <!-- Today's revenue -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex">
+                    <div style="width: 200px; margin-top: 5%;" id="chartjs1">
+                        Chart Data {{ webdata.1.grade_a.1 }}
+                        <canvas id="chart3" width="200px" height="200px"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /today's revenue -->
+    </div>
+</div>
+<!-- /quick stats boxes -->
+
+<!-- Core JS files -->
+<script src="{% static 'global_assets/js/main/jquery.min.js' %}"></script>
+<script src="{% static 'assets/js/chart.bundle.js' %}"></script>
+<script>
+
+    $(function () {
+
+        var $data_aggretationChart = $("#data_aggretation");
+        $.ajax({
+            url: $data_aggretationChart.data("url"),
+            success: function (data) {
+
+                var ctx = $data_aggretationChart[0].getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Occupation',
+                            backgroundColor: 'blue',
+                            data: data.data
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Occupation Bar Chart'
+                        }
+                    }
+                });
+
+            }
+        });
+
+    });
+
+</script>
+<script>
+    var ctx = document.getElementById("chart1").getContext('2d');
+    my_chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Female', 'Male'],
+            datasets: [{
+                label: 'Gender vs Loan Volume',
+                data: [{{ webdata.1.grade_a.1 }}, {{ webdata.1.grade_b.1 }}],
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+
+        ],
+        borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+
+
+        ],
+        borderWidth: 1
+
+    }]
+       },
+
+        options: {
+        scales: {
+            yAxis: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+
+   })
+</script>
+<script>
+    var ctx = document.getElementById("chart2").getContext('2d');
+    my_chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Female', 'Male'],
+            datasets: [{
+                label: 'Gender vs Loan Volume',
+                data: [{{ webdata.1.grade_a.1 }}, {{ webdata.1.grade_b.1 }}],
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+
+        ],
+        borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+
+
+        ],
+        borderWidth: 1
+
+    }]
+       },
+
+        options: {
+        scales: {
+            yAxis: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+
+   })
+</script>
+<script>
+    var ctx = document.getElementById("chart3").getContext('2d');
+    my_chart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Female', 'Male'],
+            datasets: [{
+                label: 'Gender vs Loan Volume',
+                data: [{{ webdata.1.grade_a.1 }}, {{ webdata.1.grade_b.1 }}],
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+
+        ],
+        borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+
+
+        ],
+        borderWidth: 1
+
+    }]
+       },
+
+        options: {
+        scales: {
+            yAxis: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+
+   })
+</script>

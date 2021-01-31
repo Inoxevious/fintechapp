@@ -1,0 +1,61 @@
+<section class="site_filter">
+    <div class="container-fluid">
+        <div class="row">
+            {% if user.role == 'manager' %}
+            <div class="col-sm-2 col-2">
+                <div class="form-group">
+                    <label for="country">loan officer</label>
+                    <select class="form-control" id="business" url="{%url 'companies:get_businesses' %}">
+                    </select>
+                </div>
+            </div>
+            {% endif %}
+            <div class="col-sm-2 col-2">
+                <div class="form-group">
+                    <label for="country">business</label>
+                    <select class="form-control" id="business" url="{%url 'companies:get_businesses' %}">
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 col-2">
+                <div class="form-group">
+                    <label for="mortage">mortage</label>
+                    <select class="form-control" id="mortage" url="{%url 'companies:get_mortages' %}">
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 col-2">
+                <div class="form-group">
+                    <label for="funeral">funeral</label>
+                    <select class="form-control" id="funeral" url="{%url 'companies:get_funerals' %}">
+                        <option value='all' selected>All funerals</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 col-2">
+                <div class="form-group">
+                    <label for="school">school</label>
+                    <select class="form-control" id="school" url="{%url 'companies:get_schools' %}">
+                        <option value='all' selected>All schools</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 col-2">
+                <div class="form-group">
+                    <label for="Province">Sort By</label>
+                    <select class="form-control" id="sort_by">
+                        <option selected="true" disabled="disabled" value="none">Choose option</option>
+                        <option value='income'>Income</option>
+                        <option value='credit_amount'>Credit amount</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 col-2">
+                <div class="row justify-content-center align-self-center" style="color:white; margin-top:30px;">
+                    <a class="btn btn-secondary" id="display_all">Display all</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<br />
