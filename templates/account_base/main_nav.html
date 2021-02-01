@@ -1,0 +1,38 @@
+{% load static %}
+<!-- Main navbar -->
+<div class="navbar navbar-inverse">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="{% url 'account:index'%}?next={{'/'}}"><img
+                src="{% static 'global_assets/images/dlogo.png' %}" alt=""></a>
+
+        <ul class="nav navbar-nav pull-right visible-xs-block">
+            <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+        </ul>
+    </div>
+
+    <div class="navbar-collapse collapse" id="navbar-mobile">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="http://127.0.0.1:8000/admin">
+                    <span class="">
+                        admin login</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'account:login'%}?next={{'/'}}">
+                    <span>
+                        officer login</span>
+                </a>
+            </li>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-cog3"></i>
+                    <span class="visible-xs-inline-block position-right"> Options</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- /main navbar -->

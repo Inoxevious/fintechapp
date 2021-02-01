@@ -3,30 +3,33 @@
 {% block content %}
 
 {% include 'dashboards/global/page.header.html' %}
-<!-- Page content -->
-<div class="page-content pt-0">
+<!-- Page container -->
+<div class="page-container">
 
-  <!-- Main content -->
-  <div class="content-wrapper">
+  <!-- Page content -->
+  <div class="page-content">
 
-    <!-- Content area -->
-    <div class="content">
-      <div class="row">
-        <div class="col-xl-8">
+    <!-- Main content -->
+    <div class="content-wrapper">
 
-          {% include 'dashboards/landing/qk_stats.html' %}
-          {% include 'dashboards/landing/support_stats.html' %}
+      <!-- Content area -->
+      <div class="content">
+        <div class="row">
+          <div class="col-xl-8">
+
+            {% include 'dashboards/landing/qk_stats.html' %}
+            {% include 'dashboards/landing/datatable_api.html' %}
+          </div>
+          <div class="col-xl-4">
+
+
+
+          </div>
         </div>
-        <div class="col-xl-4">
-          {% include 'dashboards/landing/messages.html' %}
 
-
-        </div>
       </div>
-
     </div>
   </div>
 </div>
-
 
 {% endblock %}

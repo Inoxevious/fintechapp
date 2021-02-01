@@ -1,50 +1,45 @@
 {% load static %}
-<div style="width: 200px; margin-top: 20%;" id="chartjs1">
-    Chart Data {{ webdata.1.grade_a.1 }}
-    <canvas id="chart1" width="200px" height="200px"></canvas>
+<div id="container" style="width: 75%;">
+    <canvas id="population-chart" data-url="{% url 'business:data_aggretation' %}"></canvas>
 </div>
 <!-- Core JS files -->
-<script src="{% static 'assets/js/chart.bundle.js' %}"></script>
+
+<script src="{% static 'account/global_assets/js/main/jquery.min.js' %}"></script>
+<script src="{% static 'account/assets/js/chart.bundle.js' %}"></script>
 <script>
-    var ctx = document.getElementById("chart1").getContext('2d');
-    my_chart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Female', 'Male'],
-            datasets: [{
-                label: 'Gender vs Loan Volume',
-                data: [{{ webdata.1.grade_a.1 }}, {{ webdata.1.grade_b.1 }}],
-        backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
+    $(function () {
 
-        ],
-        borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
+        var $populationChart = $("#population-chart");
+        $.ajax({
+            url: $populationChart.data("url"),
+            success: function (data) {
 
+                var ctx = $populationChart[0].getContext("2d");
 
-        ],
-        borderWidth: 1
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Population',
+                            backgroundColor: 'blue',
+                            data: data.data
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Population Bar Chart'
+                        }
+                    }
+                });
 
-    }]
-       },
+            }
+        });
 
-        options: {
-        scales: {
-            yAxis: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-
-   })
+    });
 </script>

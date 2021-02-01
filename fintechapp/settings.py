@@ -99,14 +99,14 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'USER' : 'postgres',
-        # 'NAME': 'finapp',
-        # 'PASSWORD': 'postgres', 
-        # 'HOST':  'localhost',
+        'NAME': 'finapp',
+        'PASSWORD': 'postgres', 
+        'HOST':  'localhost',
         # 'NAME': 'fintech',
-        'NAME': 'fintech',
-        'PASSWORD':  'fintech123456789',
-        'HOST':  'fintech.coxeytfzdoap.eu-west-2.rds.amazonaws.com',
-        'PORT': 5432,
+        # 'NAME': 'fintech',
+        # 'PASSWORD':  'fintech123456789',
+        # 'HOST':  'fintech.coxeytfzdoap.eu-west-2.rds.amazonaws.com',
+        # 'PORT': 5432,
 
     }
 }
