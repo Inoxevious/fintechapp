@@ -93,7 +93,7 @@ def add_algo(request):
         # print("Added ML algorithms to registry")
     except Exception as e:
         print("Exception while loading the algorithms to the registry,", str(e))
-        error = e
+        error = str(e)
 
     context = {
 
