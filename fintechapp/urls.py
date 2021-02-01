@@ -16,8 +16,8 @@ urlpatterns = [
     path('companies/', include('companies.urls')),
     path('d_processor/', include('d_processor.urls')),
     path('account/', include('account.urls')),
-    url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),  # Django JET dashboard URLS
-    path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
+    # url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),  # Django JET dashboard URLS
+    # path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
 ]
 
 urlpatterns += endpoints_urlpatterns

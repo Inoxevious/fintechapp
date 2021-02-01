@@ -32,11 +32,11 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'csvimport',
-    'jet.dashboard',
-    'jet',
+    # 'jet.dashboard',
+    # 'jet',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_framework_gis',
+    # 'rest_framework_gis',
     'oauth2_provider',
     'mathfilters',
     'corsheaders',
@@ -96,12 +96,14 @@ WSGI_APPLICATION = 'fintechapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'USER' : 'postgres',
         # 'NAME': 'finapp',
         # 'PASSWORD': 'postgres', 
         # 'HOST':  'localhost',
-        'NAME': 'fintech',
+        # 'NAME': 'fintech',
+        'NAME': 'testfin',
         'PASSWORD':  'fintech123456789',
         'HOST':  'fintech.coxeytfzdoap.eu-west-2.rds.amazonaws.com',
         'PORT': 5432,
@@ -198,13 +200,13 @@ OAUTH2_PROVIDER = {
     'ACCESS_TOKEN_EXPIRE_SECONDS' : 86400,
     'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
 }
-MAP_WIDGETS = {
-    "GooglePointFieldWidget": (
-        ("zoom", 15),
-        ("mapCenterLocationName", "gweru"),
-        ("GooglePlaceAutocompleteOptions", {'componentRestrictions': {'country': 'zw'}}),
-        ("markerFitZoom", 12),
-    ),
-    "GOOGLE_MAP_API_KEY": "AIzaSyC9ZFOeEouLH8gYosPqixfP86djN8iZCVk"
+# MAP_WIDGETS = {
+#     "GooglePointFieldWidget": (
+#         ("zoom", 15),
+#         ("mapCenterLocationName", "gweru"),
+#         ("GooglePlaceAutocompleteOptions", {'componentRestrictions': {'country': 'zw'}}),
+#         ("markerFitZoom", 12),
+#     ),
+#     "GOOGLE_MAP_API_KEY": "AIzaSyC9ZFOeEouLH8gYosPqixfP86djN8iZCVk"
     
-}
+# }
