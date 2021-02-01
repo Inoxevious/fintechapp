@@ -1,9 +1,11 @@
+# file backend/server/apps/ml/income_classifier/extra_trees.py
 import joblib
 import pandas as pd
-
+import os
 class ExtraTreesClassifier:
     def __init__(self):
-        path_to_artifacts = ""
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        path_to_artifacts = os.path.join(BASE_DIR, 'algo_data/files/')
         self.values_fill_missing =  joblib.load(path_to_artifacts + "train_mode.joblib")
         self.encoders = joblib.load(path_to_artifacts + "encoders.joblib")
         self.model = joblib.load(path_to_artifacts + "extra_trees.joblib")

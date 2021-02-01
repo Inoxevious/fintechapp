@@ -1,11 +1,10 @@
+# backend/server/apps/endpoints/serializers.py file
 from rest_framework import serializers
 from apps.endpoints.models import Endpoint
 from apps.endpoints.models import MLAlgorithm
 from apps.endpoints.models import MLAlgorithmStatus
 from apps.endpoints.models import MLRequest
 from apps.endpoints.models import ABTest
-
-
 
 
 class EndpointSerializer(serializers.ModelSerializer):
@@ -77,3 +76,5 @@ class ABTestSerializer(serializers.ModelSerializer):
             "parent_mlalgorithm_1",
             "parent_mlalgorithm_2",
             )
+
+

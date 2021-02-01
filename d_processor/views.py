@@ -2,19 +2,23 @@ from django.shortcuts import render
 from data_processor import imports as imp
 from data_processor import logic as log
 from companies.models import LoanApplication
+import inspect
+from apps.ml.registry import MLRegistry
+from apps.ml.income_classifier.random_forest import RandomForestClassifier
+from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier # import ExtraTrees ML algorithm
+from apps.ml.application_classifier.random_forest import RandomForestApplicationClassifier
+from rest_framework import views, status
+from rest_framework.response import Response
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Create your views here.
 
 def importer(request):
-<<<<<<< HEAD
-    opfile =  '/home/greats/Documents/projects/dreatol/webapp/fintechapp/no_header_clean_data.csv'
+    path_to_artifacts = os.path.join(BASE_DIR, 'apps/ml/algo_data/files/')
+    opfile =  path_to_artifacts + 'no_header_clean_data.csv'
     imp.get_data(opfile)
     data = LoanApplication.objects.all()
-=======
-    opfile =  '/home/greats/Documents/projects/dreatol/webapp/fintechapp/clean_data.csv'
-    imp.get_data(opfile)
-    data = LoanApplication.objects.all()
-    pri
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
     context = {
         'data':data,
     }
@@ -40,3 +44,60 @@ def dashboard(request):
         'webdata':return_data
     }
     return render(request, "dashboard-chartsjs.html", context)
+
+
+def add_algo(request):
+    # ML registry
+    try:
+        print("Adding ML algorithms to registry")
+        registry = MLRegistry() # create ML registry
+        # Random Forest classifier
+        rf = RandomForestClassifier()
+        # add to ML registry
+        registry.add_algorithm(endpoint_name="income_classifier",
+                                algorithm_object=rf,
+                                algorithm_name="random forest",
+                                algorithm_status="production",
+                                algorithm_version="0.0.1",
+                                owner="Dreatol",
+                                algorithm_description="Random Forest with simple pre- and post-processing",
+                                algorithm_code=inspect.getsource(RandomForestClassifier))
+
+        # Applications Random Forest classifier
+        aprf = RandomForestApplicationClassifier()
+        # add to ML registry
+        registry.add_algorithm(endpoint_name="application_classifier",
+                                algorithm_object=aprf,
+                                algorithm_name="random forest",
+                                algorithm_status="production",
+                                algorithm_version="0.0.1",
+                                owner="Dreatol",
+                                algorithm_description="Random Forest with simple pre- and post-processing",
+                                algorithm_code=inspect.getsource(RandomForestApplicationClassifier))
+
+
+
+
+        # # Extra Trees classifier
+        # et = ExtraTreesClassifier()
+        # # add to ML registry
+
+        # registry.add_algorithm(endpoint_name="income_classifier",
+        #                         algorithm_object=et,
+        #                         algorithm_name="extra trees",
+        #                         algorithm_status="testing",
+        #                         algorithm_version="0.0.1",
+        #                         owner="Dreatol",
+        #                         algorithm_description="Extra Trees with simple pre- and post-processing",
+        #                         algorithm_code=inspect.getsource(RandomForestClassifier))
+        # print("Added ML algorithms to registry")
+    except Exception as e:
+        print("Exception while loading the algorithms to the registry,", str(e))
+        error = e
+
+    context = {
+
+        'error':error,
+        'registry':registry,
+    }
+    return render(request, "test.html", context)

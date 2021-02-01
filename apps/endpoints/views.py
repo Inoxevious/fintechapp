@@ -1,3 +1,4 @@
+# backend/server/apps/endpoints/views.py file
 from rest_framework import viewsets
 from rest_framework import mixins
 
@@ -13,18 +14,22 @@ from apps.endpoints.serializers import MLAlgorithmStatusSerializer
 from apps.endpoints.models import MLRequest
 from apps.endpoints.serializers import MLRequestSerializer
 
-# please add imports
 import json
 from numpy.random import rand
 from rest_framework import views, status
 from rest_framework.response import Response
 from apps.ml.registry import MLRegistry
-from fintechapp.wsgi import registry
 from django.db import transaction
 from apps.endpoints.models import ABTest
 from apps.endpoints.serializers import ABTestSerializer
+from apps.ml.income_classifier.random_forest import RandomForestClassifier
+from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier
+from apps.ml.application_classifier.random_forest import RandomForestApplicationClassifier
 
+# please add to the file backend/server/apps/endpoints/views.py
 
+from django.db.models import F
+import datetime
 class EndpointViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
@@ -72,64 +77,39 @@ class MLRequestViewSet(
     serializer_class = MLRequestSerializer
     queryset = MLRequest.objects.all()
 
-
-
-
-
-
 class PredictView(views.APIView):
     def post(self, request, endpoint_name, format=None):
 
         algorithm_status = self.request.query_params.get("status", "production")
         algorithm_version = self.request.query_params.get("version")
+        all_ags = MLAlgorithm.objects.all()
+        print("Req end name",all_ags)
+        print("FILTERING STARTS")
+        print("Req end name",endpoint_name)
+        print("Req status name",algorithm_status)
 
-<<<<<<< HEAD
-        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)[:1]
-        print("Algorithmfilter 1", algs)
-=======
-        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)
+        # algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name)
+        # print("ALgo object 1st filter",algs)
 
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
-        if algorithm_version is not None:
-            algs = algs.filter(version = algorithm_version)
-
-        if len(algs) == 0:
-            return Response(
-                {"status": "Error", "message": "ML algorithm is not available"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if len(algs) != 1 and algorithm_status != "ab_testing":
-            return Response(
-                {"status": "Error", "message": "ML algorithm selection is ambiguous. Please specify algorithm version."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        alg_index = 0
-        if algorithm_status == "ab_testing":
-            alg_index = 0 if rand() < 0.5 else 1
-<<<<<<< HEAD
-        
-        print("Algorithmfilter 1 reg", registry)
-        print("Algorithmfilter 1 alg_index", alg_index)
-        print("Algorithmfilter 1 algs[alg_index]", algs[alg_index])
-        print("Algorithmfilter 1 algs[alg_index].id", algs[alg_index].id)
-=======
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
-
-        algorithm_object = registry.endpoints[algs[alg_index].id]
+        # algorithm_object = registry.endpoints[algs[alg_index].id]
+        # prediction = algorithm_object.compute_prediction(request.data)
+        algorithm_object = object()
+        if endpoint_name == 'income_classifier':
+            algorithm_object = RandomForestClassifier()
+        elif endpoint_name == 'application_classifier':
+            algorithm_object = RandomForestApplicationClassifier()
+        print("PREDICTIOON OBJECT",algorithm_object)
         prediction = algorithm_object.compute_prediction(request.data)
-
+        print("PREDICTIOON RES",prediction)
+        algs = MLAlgorithm.objects.get(parent_endpoint__name = endpoint_name)
 
         label = prediction["label"] if "label" in prediction else "error"
-<<<<<<< HEAD
-=======
-        
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
         ml_request = MLRequest(
             input_data=json.dumps(request.data),
             full_response=prediction,
             response=label,
             feedback="",
-            parent_mlalgorithm=algs[alg_index],
+            parent_mlalgorithm=algs,
         )
         ml_request.save()
 
@@ -139,10 +119,6 @@ class PredictView(views.APIView):
 
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
 class ABTestViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet,
     mixins.CreateModelMixin, mixins.UpdateModelMixin
@@ -172,14 +148,9 @@ class ABTestViewSet(
 
         except Exception as e:
             raise APIException(str(e))
-# please add to the file backend/server/apps/endpoints/views.py
-
-from django.db.models import F
-import datetime
 
 class StopABTestView(views.APIView):
-    def get(self, request, ab_test_id, format=None):
-        print("AB TEST ID", ab_test_id)
+    def post(self, request, ab_test_id, format=None):
 
         try:
             ab_test = ABTest.objects.get(pk=ab_test_id)

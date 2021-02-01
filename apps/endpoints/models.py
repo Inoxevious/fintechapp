@@ -32,9 +32,7 @@ class MLAlgorithm(models.Model):
     version = models.CharField(max_length=128)
     owner = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
-    parent_endpoint = models.ForeignKey(Endpoint, related_name="ml_algorithm", verbose_name="Analytics Algorithm", on_delete=models.CASCADE)
-    def __str__(self):
-        return self.name
+    parent_endpoint = models.ForeignKey(Endpoint, on_delete=models.CASCADE)
 
 class MLAlgorithmStatus(models.Model):
     '''
@@ -52,11 +50,7 @@ class MLAlgorithmStatus(models.Model):
     active = models.BooleanField()
     created_by = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
-<<<<<<< HEAD
-    parent_mlalgorithm = models.ForeignKey(MLAlgorithm, related_name="status", verbose_name="Analytics Algorithm Status", on_delete=models.CASCADE)
-=======
-    parent_mlalgorithm = models.ForeignKey(MLAlgorithm, related_name="ml_algorithm_status", verbose_name="Analytics Algorithm Status", on_delete=models.CASCADE)
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
+    parent_mlalgorithm = models.ForeignKey(MLAlgorithm, on_delete=models.CASCADE, related_name = "status")
 
 class MLRequest(models.Model):
     '''
@@ -75,10 +69,8 @@ class MLRequest(models.Model):
     response = models.CharField(max_length=10000)
     feedback = models.CharField(max_length=10000, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
-    parent_mlalgorithm = models.ForeignKey(MLAlgorithm, related_name="ml_request", verbose_name="Analytics request", on_delete=models.CASCADE)
-
-
-
+    parent_mlalgorithm = models.ForeignKey(MLAlgorithm, on_delete=models.CASCADE)
+# please add at the end of file backend/server/apps/endpoints/models.py
 # please add at the end of file backend/server/apps/endpoints/models.py
 
 class ABTest(models.Model):
@@ -99,5 +91,5 @@ class ABTest(models.Model):
     ended_at = models.DateTimeField(blank=True, null=True)
     summary = models.CharField(max_length=10000, blank=True, null=True)
 
-    parent_mlalgorithm_1 = models.ForeignKey(MLAlgorithm, on_delete=models.CASCADE, related_name="parent_mlalgorithm_1")
-    parent_mlalgorithm_2 = models.ForeignKey(MLAlgorithm, blank=True, null=True, on_delete=models.CASCADE, related_name="parent_mlalgorithm_2")
+    parent_mlalgorithm_1 = models.ForeignKey(MLAlgorithm, on_delete=models.CASCADE, related_name="parent_mlalgorithm_1",blank=True, null=True)
+    parent_mlalgorithm_2 = models.ForeignKey(MLAlgorithm, on_delete=models.CASCADE, related_name="parent_mlalgorithm_2",blank=True, null=True)

@@ -39,22 +39,17 @@ from numpy.random import rand
 from rest_framework import views, status
 from rest_framework.response import Response
 from apps.ml.registry import MLRegistry
-from fintechapp.wsgi import registry
+# from fintechapp.wsgi import registry
 from django.db import transaction
 from account.models import Clients, LoanOfficer, Loan, AccountUser
 from companies.models import *
 from django.forms.models import model_to_dict
-<<<<<<< HEAD
 from companies.models import Loan_History
-=======
-from companies.models import LoanApplication
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
 # Create your views here.
 from data_processor import imports as imp
 from data_processor import logic as log
 from datetime import datetime, date
 from django.db.models import Sum
-<<<<<<< HEAD
 
 from django.http import JsonResponse
 
@@ -166,13 +161,6 @@ def data_aggretation(request):
     labels = []
     data = []
     queryset =  Loan_History.objects.values('OCCUPATION_TYPE').annotate(amount_borrowed=Sum('AMT_CREDIT')).order_by('-amount_borrowed')
-=======
-from django.http import JsonResponse
-def data_aggretation(request):
-    labels = []
-    data = []
-    queryset =  LoanApplication.objects.values('OCCUPATION_TYPE').annotate(amount_borrowed=Sum(float('AMT_CREDIT'))).order_by('-amount_borrowed')
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
     print("QRYSET", queryset)
     for entry in queryset:
         labels.append(entry['OCCUPATION_TYPE'])
@@ -195,13 +183,8 @@ class HomeView(ListView):
         org = Organization.objects.get(id=1)
         client = Clients.objects.filter(insti=org)
         loan = Loan.objects.filter(signing_officer__insti = org)
-<<<<<<< HEAD
         application_data = Loan_History.objects.all()
         print("loan application_data loan", loan)
-=======
-        application_data = LoanApplication.objects.all()
-        print("loan application_data", application_data)
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
 
     def get_context_data(self, **kwargs):
         # context = super().get_context_data(**kwargs)
@@ -212,32 +195,14 @@ class HomeView(ListView):
         algorithm_version = None
         endpoint_name = 'income_classifier'
         print("End point name found", endpoint_name)
-        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, ml_algorithm_status__status = algorithm_status, ml_algorithm_status__active=True)
+        if endpoint_name == 'income_classifier':
+            algorithm_object = RandomForestClassifier()
+        elif endpoint_name == 'application_classifier':
+            algorithm_object = RandomForestApplicationClassifier()
 
-        if algorithm_version is not None:
-            algs = algs.filter(version = algorithm_version)
-
-        if len(algs) == 0:
-            return Response(
-                {"status": "Error", "message": "ML algorithm is not available"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        # if len(algs) != 1 and algorithm_status != "ab_testing":
-        #     return Response(
-        #         {"status": "Error", "message": "ML algorithm selection is ambiguous. Please specify algorithm version."},
-        #         status=status.HTTP_400_BAD_REQUEST,
-        #     )
-        alg_index = 0
-        if algorithm_status == "ab_testing":
-            alg_index = 0 if rand() < 0.5 else 1
-
-        algorithm_object = registry.endpoints[algs[alg_index].id]
-<<<<<<< HEAD
-        print("Algorith Object", algorithm_object)
-=======
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
-        query_object_data_dict = {}
-
+        # prediction = algorithm_object.compute_prediction(request.data)
+        algs = MLAlgorithm.objects.get(parent_endpoint__name = endpoint_name)
+       
         for ln in loan:
             query_object_data_dict[ln.client_id] = []
             query_object_data_dict[ln.client_id].append(model_to_dict(ln))
@@ -265,19 +230,12 @@ class HomeView(ListView):
             for key in d_info:
                 predict_dict_data[d_id] = []
                 input_data = key
-<<<<<<< HEAD
                 print("Key value", key)
                 # prediction here
                 prediction = algorithm_object.compute_prediction(key)
                 print("Prediction Error",prediction )
                 prediction["cust_id"] = d_id #result here as a probability
                 # print(prediction['probability'])
-=======
-                # prediction here
-                prediction = algorithm_object.compute_prediction(key)
-                prediction["cust_id"] = d_id #result here as a probability
-                print(prediction['probability'])
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
                 if  prediction['probability'] > 0.67:
                     color = 'red'
                     text = 'high risk of defaulting the loan'
@@ -306,20 +264,15 @@ class HomeView(ListView):
             full_response=prediction,
             response=label,
             feedback="",
-            parent_mlalgorithm=algs[alg_index],
+            parent_mlalgorithm=algs.id,
         )
         ml_request.save()
 
 
 
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-<<<<<<< HEAD
         data = Loan_History.objects.all()
         return_data = log.grade_avg(data)
-=======
-        # data = LoanApplication.objects.all()
-        # return_data = log.grade_avg(data)
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data End ~~~~~~~~~~~~~~~~~~~~~~
         prediction["request_id"] = ml_request.id
         context = {
@@ -327,11 +280,7 @@ class HomeView(ListView):
             'loan': loan,
             'user_name':user_name,
             'acc_user':acc_user,
-<<<<<<< HEAD
             'webdata':return_data
-=======
-            # 'webdata':return_data
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
         }
         return context
 
@@ -360,7 +309,7 @@ class IncomeClassfierResultsView(ListView):
         algorithm_version = None
         endpoint_name = 'income_classifier'
         print("End point name found", endpoint_name)
-        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, ml_algorithm_status__status = algorithm_status, ml_algorithm_status__active=True)
+        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)
 
         if algorithm_version is not None:
             algs = algs.filter(version = algorithm_version)
@@ -444,11 +393,7 @@ class IncomeClassfierResultsView(ListView):
         )
         ml_request.save()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-<<<<<<< HEAD
         # data = Loan_History.objects.all()
-=======
-        # data = LoanApplication.objects.all()
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
         # return_data = log.grade_avg(data)
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data End ~~~~~~~~~~~~~~~~~~~~~~
         prediction["request_id"] = ml_request.id
@@ -484,7 +429,7 @@ class ApplicationAnalyticsResultsView(ListView):
         algorithm_version = None
         endpoint_name = 'income_classifier'
         print("End point name found", endpoint_name)
-        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, ml_algorithm_status__status = algorithm_status, ml_algorithm_status__active=True)
+        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)
 
         if algorithm_version is not None:
             algs = algs.filter(version = algorithm_version)
@@ -568,11 +513,7 @@ class ApplicationAnalyticsResultsView(ListView):
         )
         ml_request.save()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-<<<<<<< HEAD
         # data = Loan_History.objects.all()
-=======
-        # data = LoanApplication.objects.all()
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
         # return_data = log.grade_avg(data)
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data End ~~~~~~~~~~~~~~~~~~~~~~
         prediction["request_id"] = ml_request.id
@@ -607,7 +548,7 @@ class RetentionAnalyticsResultsView(ListView):
         algorithm_version = None
         endpoint_name = 'income_classifier'
         print("End point name found", endpoint_name)
-        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, ml_algorithm_status__status = algorithm_status, ml_algorithm_status__active=True)
+        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)
 
         if algorithm_version is not None:
             algs = algs.filter(version = algorithm_version)
@@ -691,11 +632,7 @@ class RetentionAnalyticsResultsView(ListView):
         )
         ml_request.save()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-<<<<<<< HEAD
         # data = Loan_History.objects.all()
-=======
-        # data = LoanApplication.objects.all()
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
         # return_data = log.grade_avg(data)
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data End ~~~~~~~~~~~~~~~~~~~~~~
         prediction["request_id"] = ml_request.id
@@ -722,7 +659,7 @@ class BehavioralAnalyticsResultsView(ListView):
         algorithm_version = None
         endpoint_name = 'income_classifier'
         print("End point name found", endpoint_name)
-        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, ml_algorithm_status__status = algorithm_status, ml_algorithm_status__active=True)
+        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)
 
         if algorithm_version is not None:
             algs = algs.filter(version = algorithm_version)
@@ -806,11 +743,7 @@ class BehavioralAnalyticsResultsView(ListView):
         )
         ml_request.save()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-<<<<<<< HEAD
         # data = Loan_History.objects.all()
-=======
-        # data = LoanApplication.objects.all()
->>>>>>> fe2c9bd2d5d9d693e3b134dfde94bb3dc2d99c4d
         # return_data = log.grade_avg(data)
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data End ~~~~~~~~~~~~~~~~~~~~~~
         prediction["request_id"] = ml_request.id
