@@ -5,7 +5,11 @@
             <h4>
                 <!-- <i class="icon-arrow-left52 position-left"></i> -->
                 <span class="text-semibold"> Dashboard
-                    <small class="display-block">Hello, {{user.first_name}}</small>
+                    <small class="display-block">Hello,
+                        {% if user.first_name %}
+                        {{user.first_name}}
+                        {% endif %}
+                    </small>
             </h4>
         </div>
 

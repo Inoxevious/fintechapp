@@ -99,14 +99,14 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'USER' : 'postgres',
-        # 'NAME': 'finapp',
-        # 'PASSWORD': 'postgres', 
-        # 'HOST':  'localhost',
+        'NAME': 'finapp',
+        'PASSWORD': 'postgres', 
+        'HOST':  'localhost',
         # 'NAME': 'fintech',
-        'NAME': 'fintech',
-        'PASSWORD':  'fintech123456789',
-        'HOST':  'fintech.coxeytfzdoap.eu-west-2.rds.amazonaws.com',
-        'PORT': 5432,
+        # 'NAME': 'fintech',
+        # 'PASSWORD':  'fintech123456789',
+        # 'HOST':  'fintech.coxeytfzdoap.eu-west-2.rds.amazonaws.com',
+        # 'PORT': 5432,
 
     }
 }
@@ -151,7 +151,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_FILES = '/static/'
-STATIC_ROOT = '/static'
+STATIC_ROOT = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = '/'

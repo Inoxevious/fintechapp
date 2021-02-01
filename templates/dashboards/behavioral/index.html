@@ -1,31 +1,35 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block content %}
+
 {% include 'dashboards/global/page.header.html' %}
-<!-- Page content -->
-<div class="page-content pt-0">
+<!-- Page container -->
+<div class="page-container">
 
-  <!-- Main content -->
-  <div class="content-wrapper">
+  <!-- Page content -->
+  <div class="page-content">
 
-    <!-- Content area -->
-    <div class="content">
-      <div class="row">
-        <div class="col-xl-12">
-          <!-- Marketing campaigns -->
-          <div class="card">
-            {% include 'dashboards/filters.html' %}
-            {% include 'dashboards/application/kpi_summary.html' %}
-            {% include 'dashboards/application/predictions_table.html' %}
+    <!-- Main content -->
+    <div class="content-wrapper">
+
+      <!-- Content area -->
+      <div class="content">
+        <div class="row">
+          <div class="col-xl-8">
+
+            {% include 'dashboards/landing/qk_stats.html' %}
+            {% include 'dashboards/landing/table.html' %}
+          </div>
+          <div class="col-xl-4">
+
 
 
           </div>
-          <!-- /marketing campaigns -->
         </div>
 
       </div>
-
     </div>
   </div>
 </div>
+
 {% endblock %}

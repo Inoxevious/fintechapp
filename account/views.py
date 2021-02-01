@@ -187,5 +187,5 @@ def activate(request, uidb64, token):
         form = DelegationForm()
     return render(request, 'registration/auth/delegation.html', {'form': form})
 
-
-
+def view_client(request,loan_id):
+     return render(request,'dashboards/clients/profile/index.html')
