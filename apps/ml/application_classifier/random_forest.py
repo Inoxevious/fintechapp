@@ -7,6 +7,7 @@ from sklearn import preprocessing
 import joblib
 import pandas as pd
 import os
+from sklearn.preprocessing import PolynomialFeatures
 class RandomForestApplicationClassifier:
     def __init__(self):
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -18,7 +19,7 @@ class RandomForestApplicationClassifier:
         # Set an index
         # input_data = input_data.set_index('SK_ID_CURR')
         # print("INdex Data", input_data)
-        input_data = pd.DataFrame(json.loads(input_data, index=[0]))
+        input_data = pd.DataFrame(input_data, index=[0])
         print("INdex Data 2", input_data)
 
         # Subset numerical data
@@ -54,8 +55,10 @@ class RandomForestApplicationClassifier:
         return clean_data
     # Define a risk assessment function
     def predict(self, input_data):
-        client_infor = input_data   #Subset a specific client infor, *a* represent SK_ID_CURR
-        prob = self.model.predict_proba(client_infor).tolist()[0]    #predict a client's probability of defaulting
+        
+          #Subset a specific client infor, *a* represent SK_ID_CURR
+        # client_infor = np.array(list(input_data.values())).astype(float)
+        prob = self.model.predict_proba(input_data).tolist()[0]    #predict a client's probability of defaulting
         p = prob[1]
         return p
    # def predict(self, input_data):
@@ -80,8 +83,10 @@ class RandomForestApplicationClassifier:
         try:
             print("Un proccessed data", input_data)
             pre_input_data = self.preprocessing(input_data)
-            print("Preproccessed data", pre_input_data)
-            prediction = self.predict(input_data)[0]  # only one sample
+            
+            client_infor = np.array(list(pre_input_data.values())).astype(float)
+            print("Preproccessed data", client_infor)
+            prediction = self.predict(client_infor)[0]  # only one sample
             print("Prediction data", pre_input_data)
             post_prediction = self.postprocessing(prediction)
             print("Processed Prediction data", post_prediction)

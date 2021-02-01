@@ -50,6 +50,9 @@ from data_processor import imports as imp
 from data_processor import logic as log
 from datetime import datetime, date
 from django.db.models import Sum
+from apps.ml.income_classifier.random_forest import RandomForestClassifier
+from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier
+from apps.ml.application_classifier.random_forest import RandomForestApplicationClassifier
 
 from django.http import JsonResponse
 
@@ -202,7 +205,7 @@ class HomeView(ListView):
 
         # prediction = algorithm_object.compute_prediction(request.data)
         algs = MLAlgorithm.objects.get(parent_endpoint__name = endpoint_name)
-       
+        query_object_data_dict ={}
         for ln in loan:
             query_object_data_dict[ln.client_id] = []
             query_object_data_dict[ln.client_id].append(model_to_dict(ln))
@@ -264,7 +267,7 @@ class HomeView(ListView):
             full_response=prediction,
             response=label,
             feedback="",
-            parent_mlalgorithm=algs.id,
+            parent_mlalgorithm=algs,
         )
         ml_request.save()
 
@@ -309,26 +312,13 @@ class IncomeClassfierResultsView(ListView):
         algorithm_version = None
         endpoint_name = 'income_classifier'
         print("End point name found", endpoint_name)
-        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)
+        if endpoint_name == 'income_classifier':
+            algorithm_object = RandomForestClassifier()
+        elif endpoint_name == 'application_classifier':
+            algorithm_object = RandomForestApplicationClassifier()
 
-        if algorithm_version is not None:
-            algs = algs.filter(version = algorithm_version)
-
-        if len(algs) == 0:
-            return Response(
-                {"status": "Error", "message": "ML algorithm is not available"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        # if len(algs) != 1 and algorithm_status != "ab_testing":
-        #     return Response(
-        #         {"status": "Error", "message": "ML algorithm selection is ambiguous. Please specify algorithm version."},
-        #         status=status.HTTP_400_BAD_REQUEST,
-        #     )
-        alg_index = 0
-        if algorithm_status == "ab_testing":
-            alg_index = 0 if rand() < 0.5 else 1
-
-        algorithm_object = registry.endpoints[algs[alg_index].id]
+        # prediction = algorithm_object.compute_prediction(request.data)
+        algs = MLAlgorithm.objects.get(parent_endpoint__name = endpoint_name)
         query_object_data_dict = {}
 
         for ln in loan:
@@ -389,7 +379,7 @@ class IncomeClassfierResultsView(ListView):
             full_response=prediction,
             response=label,
             feedback="",
-            parent_mlalgorithm=algs[alg_index],
+            parent_mlalgorithm=algs,
         )
         ml_request.save()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -429,26 +419,13 @@ class ApplicationAnalyticsResultsView(ListView):
         algorithm_version = None
         endpoint_name = 'income_classifier'
         print("End point name found", endpoint_name)
-        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)
+        if endpoint_name == 'income_classifier':
+            algorithm_object = RandomForestClassifier()
+        elif endpoint_name == 'application_classifier':
+            algorithm_object = RandomForestApplicationClassifier()
 
-        if algorithm_version is not None:
-            algs = algs.filter(version = algorithm_version)
-
-        if len(algs) == 0:
-            return Response(
-                {"status": "Error", "message": "ML algorithm is not available"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        # if len(algs) != 1 and algorithm_status != "ab_testing":
-        #     return Response(
-        #         {"status": "Error", "message": "ML algorithm selection is ambiguous. Please specify algorithm version."},
-        #         status=status.HTTP_400_BAD_REQUEST,
-        #     )
-        alg_index = 0
-        if algorithm_status == "ab_testing":
-            alg_index = 0 if rand() < 0.5 else 1
-
-        algorithm_object = registry.endpoints[algs[alg_index].id]
+        # prediction = algorithm_object.compute_prediction(request.data)
+        algs = MLAlgorithm.objects.get(parent_endpoint__name = endpoint_name)
         query_object_data_dict = {}
 
         for ln in loan:
@@ -509,7 +486,7 @@ class ApplicationAnalyticsResultsView(ListView):
             full_response=prediction,
             response=label,
             feedback="",
-            parent_mlalgorithm=algs[alg_index],
+            parent_mlalgorithm=algs,
         )
         ml_request.save()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -548,26 +525,13 @@ class RetentionAnalyticsResultsView(ListView):
         algorithm_version = None
         endpoint_name = 'income_classifier'
         print("End point name found", endpoint_name)
-        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)
+        if endpoint_name == 'income_classifier':
+            algorithm_object = RandomForestClassifier()
+        elif endpoint_name == 'application_classifier':
+            algorithm_object = RandomForestApplicationClassifier()
 
-        if algorithm_version is not None:
-            algs = algs.filter(version = algorithm_version)
-
-        if len(algs) == 0:
-            return Response(
-                {"status": "Error", "message": "ML algorithm is not available"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        # if len(algs) != 1 and algorithm_status != "ab_testing":
-        #     return Response(
-        #         {"status": "Error", "message": "ML algorithm selection is ambiguous. Please specify algorithm version."},
-        #         status=status.HTTP_400_BAD_REQUEST,
-        #     )
-        alg_index = 0
-        if algorithm_status == "ab_testing":
-            alg_index = 0 if rand() < 0.5 else 1
-
-        algorithm_object = registry.endpoints[algs[alg_index].id]
+        # prediction = algorithm_object.compute_prediction(request.data)
+        algs = MLAlgorithm.objects.get(parent_endpoint__name = endpoint_name)
         query_object_data_dict = {}
 
         for ln in loan:
@@ -628,7 +592,7 @@ class RetentionAnalyticsResultsView(ListView):
             full_response=prediction,
             response=label,
             feedback="",
-            parent_mlalgorithm=algs[alg_index],
+            parent_mlalgorithm=algs,
         )
         ml_request.save()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -659,26 +623,13 @@ class BehavioralAnalyticsResultsView(ListView):
         algorithm_version = None
         endpoint_name = 'income_classifier'
         print("End point name found", endpoint_name)
-        algs = MLAlgorithm.objects.filter(parent_endpoint__name = endpoint_name, status__status = algorithm_status, status__active=True)
+        if endpoint_name == 'income_classifier':
+            algorithm_object = RandomForestClassifier()
+        elif endpoint_name == 'application_classifier':
+            algorithm_object = RandomForestApplicationClassifier()
 
-        if algorithm_version is not None:
-            algs = algs.filter(version = algorithm_version)
-
-        if len(algs) == 0:
-            return Response(
-                {"status": "Error", "message": "ML algorithm is not available"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        # if len(algs) != 1 and algorithm_status != "ab_testing":
-        #     return Response(
-        #         {"status": "Error", "message": "ML algorithm selection is ambiguous. Please specify algorithm version."},
-        #         status=status.HTTP_400_BAD_REQUEST,
-        #     )
-        alg_index = 0
-        if algorithm_status == "ab_testing":
-            alg_index = 0 if rand() < 0.5 else 1
-
-        algorithm_object = registry.endpoints[algs[alg_index].id]
+        # prediction = algorithm_object.compute_prediction(request.data)
+        algs = MLAlgorithm.objects.get(parent_endpoint__name = endpoint_name)
         query_object_data_dict = {}
 
         for ln in loan:
@@ -739,7 +690,7 @@ class BehavioralAnalyticsResultsView(ListView):
             full_response=prediction,
             response=label,
             feedback="",
-            parent_mlalgorithm=algs[alg_index],
+            parent_mlalgorithm=algs,
         )
         ml_request.save()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

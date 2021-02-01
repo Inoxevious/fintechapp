@@ -98,13 +98,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'USER' : 'postgres',
-        'NAME': 'finapp',
-        'PASSWORD': 'postgres', 
-        'HOST':  'localhost',
-        # 'NAME': 'fintech',
-        # 'PASSWORD':  'fintech123456789',
-        # 'HOST':  'fintech.coxeytfzdoap.eu-west-2.rds.amazonaws.com',
-        # 'PORT': 5432,
+        # 'NAME': 'finapp',
+        # 'PASSWORD': 'postgres', 
+        # 'HOST':  'localhost',
+        'NAME': 'fintech',
+        'PASSWORD':  'fintech123456789',
+        'HOST':  'fintech.coxeytfzdoap.eu-west-2.rds.amazonaws.com',
+        'PORT': 5432,
 
     }
 }
