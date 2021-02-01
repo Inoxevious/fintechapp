@@ -135,17 +135,33 @@ function putTableData(result) {
         $("#no_results").hide();
         $("#list_data").show();
         $("#listing").html("");
+        let color = 'red';
         $.each(result["results"], function (a, b) {
-            console.log("data" + b)
-            row = "<tr> <td>" + b.AMT_CREDIT + "</td>" +
-                "<td>" + b.NAME_CONTRACT_TYPE + "</td>" +
+            row = "<tr> <td>" + b.AMT_INCOME_TOTAL + "</td>" +
+                "<td style='background-color:red;'>" + b.NAME_CONTRACT_TYPE + "</td>" +
                 "<td>" + b.AMT_CREDIT + "</td>" +
                 "<td>" + b.AMT_INCOME_TOTAL + "</td>" +
                 "<td>" + b.AMT_ANNUITY + "</td>" +
                 "<td>" + b.ORGANIZATION_TYPE + "</td>" +
                 "<td>" + b.OCCUPATION_TYPE + "</td>" +
                 "<td>" + b.NAME_INCOME_TYPE + "</td>" +
-                "<td>" + b.LIVINGAREA_AVG + "</td></tr>"
+                "<td style='background-color:" + color + ";'>" + b.LIVINGAREA_AVG + "</td>"
+            "<td class='text-center'>" +
+                "<ul class='icons-list'>" +
+                "<li class='dropdown'>" +
+                "<a href='#' class='dropdown-toggle' data-toggle='dropdown'>" +
+                "<i class='icon-menu9'></i>" +
+                "</a>" +
+
+                "<ul class='dropdown-menu dropdown-menu-right'>" +
+                "<li><a href='#'><i class='icon-file-pdf'></i> Export to .pdf</a></li>" +
+                "<li><a href='#'><i class='icon-file-excel'></i> Export to .csv</a></li>" +
+                "<li><a href='#'><i class='icon-file-word'></i> Export to .doc</a></li>" +
+                "</ul>" +
+                "</li>" +
+                "</ul>" +
+                "</td>" +
+                "</tr>"
             $("#listing").append(row);
         });
     }
@@ -195,6 +211,7 @@ function getAPIData() {
             $("#no_results h5").html("Loading data...");
         },
         success: function (result) {
+            let loan_data = result;
             putTableData(result);
         },
         error: function (response) {
@@ -202,6 +219,18 @@ function getAPIData() {
             $("#list_data").hide();
         }
     });
+    url = "{% url 'api/v1/income_classifier/predict' %}"
+    var ajax2 = $.ajax({
+        dataType: "json",
+        url: "url",
+        async: true,
+        success: function (result) {
+            console.log("PREDICTION RESULT" + result)
+            console.log("LOAN DATA" + loan_data)
+        }
+    });
+
+
 }
 
 $("#next").click(function () {
