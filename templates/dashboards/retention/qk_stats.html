@@ -2,6 +2,9 @@
 
 <!-- Quick stats boxes -->
 <div class="row">
+
+
+
     <div class="col-lg-4">
 
         <!-- Members online -->
@@ -10,16 +13,13 @@
                 <div class="heading-elements">
                     <span class="heading-text badge bg-teal-800">+{{ webdata.1.grade_a.1 }}%</span>
                 </div>
-
-                <div id="chartjs1">
-                    <canvas id="data_aggretation" width="400px" height="400px"
+                <div id="chartjs2">
+                    <canvas id="data_aggretation1" width="200px" height="200px"
                         data-url="{% url 'companies:data_aggretation' %}"></canvas>
-
                 </div>
             </div>
         </div>
         <!-- /members online -->
-
 
     </div>
 
@@ -62,7 +62,13 @@
 
 <!-- Core JS files -->
 <script src="{% static 'global_assets/js/main/jquery.min.js' %}"></script>
-<script src="{% static 'assets/js/chart.bundle.js' %}"></script>
+<script src="{% static 'account/assets/js/chart.bundle.js' %}"></script>
+<script src="{% static 'account/global_assets/js/plugins/visualization/d3/d3.min.js' %}"></script>
+<script src="{% static 'account/global_assets/js/plugins/visualization/c3/c3.min.js' %}"></script>
+<script src="{% static 'account/global_assets/js/plugins/visualization/dimple/dimple.min.js' %}"></script>
+<script src="{% static 'account/global_assets/js/plugins/visualization/dimple/dimple.min.js' %}"></script>
+
+
 <script>
 
     $(function () {
@@ -96,6 +102,54 @@
                         responsive: true,
                         legend: {
                             position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Occupation vs Loan Application'
+                        }
+                    }
+                });
+
+            }
+        });
+
+    });
+
+</script>
+
+<script>
+
+    $(function () {
+
+        var $data_aggretationChart = $("#data_aggretation1");
+        $.ajax({
+            url: $data_aggretationChart.data("url"),
+            success: function (data) {
+
+                var ctx = $data_aggretationChart[0].getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Occupation',
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+
+                            data: data.data
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'bottom',
                         },
                         title: {
                             display: true,
@@ -189,7 +243,7 @@
                     options: {
                         responsive: true,
                         legend: {
-                            position: 'top',
+                            position: 'bottom',
                         },
                         title: {
                             display: true,

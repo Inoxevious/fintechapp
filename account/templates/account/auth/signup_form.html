@@ -16,14 +16,14 @@
                     </div>
 
                     <div class="form-group has-feedback">
-                        <input name="business_name" type="text" class="form-control"
+                        <input required name="business_name" type="text" class="form-control"
                             placeholder="Register business name">
                         <div class="form-control-feedback">
                             <i class="icon-user-plus text-muted"></i>
                         </div>
                     </div>
                     <div class="form-group has-feedback">
-                        <input name="business_trading_name" type="text" class="form-control"
+                        <input required name="business_trading_name" type="text" class="form-control"
                             placeholder="Register business trading name">
                         <div class="form-control-feedback">
                             <i class="icon-user-plus text-muted"></i>
@@ -32,8 +32,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <select name="role" class="bootstrap-select text-muted" data-width="100%">
-                                    <option value="manager">Executive Role</option>
+                                <select required name="role" class="bootstrap-select text-muted" data-width="100%">
+                                    <option value="manager">Choose your Role</option>
                                     {% for role in role_choices %}
                                     <option value="{{role.id}}">{{role.name}}</option>
                                     {% endfor %}
@@ -44,7 +44,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                <input name="total_branches" type="text" class="form-control"
+                                <input required name="total_branches" type="text" class="form-control"
                                     placeholder="Total Operational Branches">
                                 <div class="form-control-feedback">
 
@@ -55,7 +55,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                <input name="first_name" type="text" class="form-control" placeholder="First name">
+                                <input required name="first_name" type="text" class="form-control"
+                                    placeholder="First name">
                                 <div class="form-control-feedback">
                                     <i class="icon-user-check text-muted"></i>
                                 </div>
@@ -64,7 +65,8 @@
 
                         <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                <input name="last_name" type="text" class="form-control" placeholder="Surname name">
+                                <input required name="last_name" type="text" class="form-control"
+                                    placeholder="Surname name">
                                 <div class="form-control-feedback">
                                     <i class="icon-user-check text-muted"></i>
                                 </div>
@@ -75,7 +77,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                <input name="password1" type="password" class="form-control"
+                                <input required name="password1" type="password" class="form-control"
                                     placeholder="Create password">
                                 <div class="form-control-feedback">
                                     <i class="icon-user-lock text-muted"></i>
@@ -85,7 +87,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                <input name="password2" type="password" class="form-control"
+                                <input required name="password2" type="password" class="form-control"
                                     placeholder="Repeat password">
                                 <div class="form-control-feedback">
                                     <i class="icon-user-lock text-muted"></i>
@@ -97,7 +99,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                <input name="work_email" type="email" class="form-control"
+                                <input required name="work_email" type="email" class="form-control"
                                     placeholder="Your work email">
                                 <div class="form-control-feedback">
                                     <i class="icon-mention text-muted"></i>
@@ -107,7 +109,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                <input name="personal_email" type="email" class="form-control"
+                                <input required name="personal_email" type="email" class="form-control"
                                     placeholder="Your persobal email">
                                 <div class="form-control-feedback">
                                     <i class="icon-mention text-muted"></i>
@@ -119,7 +121,7 @@
                     <div class="form-group">
                         <div class="checkbox">
                             <label>
-                                <input name="terms" type="checkbox" class="styled" required>
+                                <input required name="terms" type="checkbox" class="styled" required>
                                 Accept <a href="#">terms of service</a>
                             </label>
                         </div>

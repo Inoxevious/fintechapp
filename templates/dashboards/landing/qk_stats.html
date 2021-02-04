@@ -32,7 +32,7 @@
                     <span class="heading-text badge bg-teal-800">+{{ webdata.1.grade_a.1 }}%</span>
                 </div>
                 <div id="chartjs2">
-                    <canvas id="data_aggretation2" width="200px" height="200px"
+                    <canvas id="data_aggretation2" width="500px" height="500px"
                         data-url="{% url 'companies:data_aggretation' %}"></canvas>
                 </div>
             </div>
@@ -75,7 +75,7 @@
                 var ctx = $data_aggretationChart[0].getContext("2d");
 
                 new Chart(ctx, {
-                    type: 'bar',
+                    type: 'doughnut',
                     data: {
                         labels: data.labels,
                         datasets: [{
@@ -95,7 +95,8 @@
                     options: {
                         responsive: true,
                         legend: {
-                            position: 'top',
+                            position: 'bottom',
+                            display: false,
                         },
                         title: {
                             display: true,
@@ -123,7 +124,7 @@
                 var ctx = $data_aggretationChart[0].getContext("2d");
 
                 new Chart(ctx, {
-                    type: 'line',
+                    type: 'doughnut',
                     data: {
                         labels: data.labels,
                         datasets: [{
@@ -142,6 +143,7 @@
                     options: {
                         responsive: true,
                         legend: {
+                            display: false,
                             position: 'top',
                         },
                         title: {
@@ -189,6 +191,7 @@
                     options: {
                         responsive: true,
                         legend: {
+                            display: false,
                             position: 'top',
                         },
                         title: {

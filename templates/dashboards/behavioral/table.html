@@ -3,7 +3,7 @@
 <!-- Individual column searching (selects) -->
 <div class="panel panel-flat">
     <div class="panel-heading">
-        <h5 class="panel-title">Individual column searching</h5>
+        <h5 class="panel-title">Behavioral predictions</h5>
         <div class="heading-elements">
             <ul class="icons-list">
                 <li><a data-action="collapse"></a></li>
@@ -14,207 +14,35 @@
     </div>
 
     <div class="panel-body">
+        {% include 'dashboards/filters.html' %}
     </div>
 
-    <table class="table table-sm" id="list_data" data-toggle="table" url="{% url 'companies:get_predictions' %}">
+    <table class="table table-sm" id="list_data" data-toggle="table" url="{% url 'companies:app_clasf_view' %}">
         <thead>
             <tr>
                 <th>Loan ID</th>
 
-                <th>Colleteral</th>
-                <th>Amount Applied For</th>
-                <th>Social Media Assessment</th>
-                <th>Credit History Assessment</th>
-                <th>Pyschometric Assessment</th>
-                <th>Text Assessment Analytics</th>
-                <th>Overal Assessment</th>
-                <th>Decision</th>
+                <th>Client</th>
+                <!-- <th>Amount Borrowed</th> -->
+                <th>First Instalment</th>
+                <th>Final Instalment</th>
+                <th>Total Instalment</th>
+                <th>Defaulting Probability</th>
+                <th>Default Risk</th>
+                <th>Time to default</th>
+                <th>Contact Channel</th>
+                <th>Contact Schedule</th>
+                <th>Message</th>
                 <th><i class="icon-arrow-down12"></i></th>
 
 
             </tr>
         </thead>
-        <tbody>
-            {% for cl in loan %}
-            <tr>
-                <td>{{cl.LOAN_ID}}</td>
-
-                <td><a href="#">{{cl.colleteral}}</a></td>
-                <td><span class="label label-danger ">${{ cl.AMT_CREDIT }}</span></td>
-                {% for d_id, d_info in predict_dict_data.items  %}
-
-                {% if d_id == cl.LOAN_ID   %}
-                {% for l in d_info %}
-                <td class="bg-{{l.color}}" style="text-overflow: clip;">
-                    <span class=''>
-                        {{l.text}}
-                    </span>
-
-                </td>
-                {% endfor %}
-                {% endif  %}
-                {% endfor %}
-
-
-                {% for d_id, d_info in predict_dict_data.items  %}
-                {% if d_id == cl.LOAN_ID   %}
-                {% for l in d_info %}
-                <td class="bg-{{l.color}}" style="text-overflow: clip;">
-                    <span class=''>
-                        {{l.text}}
-                    </span>
-
-                </td>
-                {% endfor %}
-                {% endif  %}
-                {% endfor %}
-                {% for d_id, d_info in predict_dict_data.items  %}
-
-                {% if d_id == cl.LOAN_ID   %}
-                {% for l in d_info %}
-                <td class="bg-{{l.color}}" style="text-overflow: clip;">
-                    <span class=''>
-                        {{l.text}}
-                    </span>
-
-                </td>
-                {% endfor %}
-                {% endif  %}
-                {% endfor %}
-
-
-                {% for d_id, d_info in predict_dict_data.items  %}
-                {% if d_id == cl.LOAN_ID   %}
-                {% for l in d_info %}
-                <td class="bg-{{l.color}}" style="text-overflow: clip;">
-                    <span class=''>
-                        {{l.text}}
-                    </span>
-
-                </td>
-                {% endfor %}
-                {% endif  %}
-                {% endfor %}
-
-                {% for d_id, d_info in predict_dict_data.items  %}
-
-                {% if d_id == cl.LOAN_ID   %}
-                {% for l in d_info %}
-                <td class="bg-{{l.color}}" style="text-overflow: clip;">
-                    <span class=''>
-                        {{l.text}}
-                    </span>
-
-                </td>
-                {% endfor %}
-                {% endif  %}
-                {% endfor %}
-
-
-                {% for d_id, d_info in predict_dict_data.items  %}
-                {% if d_id == cl.LOAN_ID   %}
-                {% for l in d_info %}
-                <td class="bg-{{l.color}}" style="text-overflow: clip;">
-                    <span class=''>
-                        {{l.text}}
-                    </span>
-
-                </td>
-                {% endfor %}
-                {% endif  %}
-                {% endfor %}
-                <td class="text-center">
-                    <ul class="icons-list">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="icon-menu9"></i>
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="{% url 'account:view_client' cl.LOAN_ID %}"><i class="icon-person"></i>
-                                        View
-                                        Client</a></li>
-                                <li><a href="{% url 'companies:application_report' cl.LOAN_ID %}"><i
-                                            class="icon-book"></i> View
-                                        Report</a></li>
-                                <li><a href="{% url 'companies:application_report_export_csv' cl.LOAN_ID %}"><i
-                                            class="icon-file-excel"></i> Export to .csv</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-            {% endfor %}
-
-        </tbody>
+        <tbody id="behaviora_listing">
         </tbody>
     </table>
 </div>
 <!-- /individual column searching (selects) -->
 <script src="{% static 'global_assets/js/main/jquery.min.js' %}"></script>
 <script src="{% static 'assets/js/chart.bundle.js' %}"></script>
-<!-- <script>
-
-    $(function () {
-
-        let url = $('#list_data').attr("url")
-        $.ajax({
-            url: url,
-            success: function (data) {
-
-                $.each(data, function (a, b) {
-                    /// do stuff
-                    row = "<tr> <td>" + b.probability + "</td>" +
-                        "<td>" + b.probability + "</td>" +
-                        "<td>" + b.probability + "</td>" +
-                        "<td>" + b.probability + "</td>" +
-                        "<td>" + b.probability + "</td>" +
-                        "<td>" + b.probability + "</td></tr>"
-
-                    $("#listing").append(row);
-                });
-
-            }
-        });
-
-    });
-
-</script> -->
-
-
-<script>
-    var frm = $('#filterForm');
-    frm.submit(getAjax);
-    function getAjax() {
-        var formData = JSON.stringify($("#filterForm").serializeArray());
-        console.log("Request parameters:")
-        console.log(JSON.parse(formData))
-        $.ajax({
-            headers: { "X-CSRFToken": '{{csrf_token}}' },
-            type: "POST",
-            url: "{% url 'companies:get_predictions' %}",
-            contentType: 'application/json',
-            dataType: 'json',
-            data: formData,
-            success: function (data) {
-                jsonData = console.log(data);
-                var dataObj = JSON.parse(data);
-                console.log("Response data:")
-                console.log(dataObj)
-                $.each(data, function (a, b) {
-                    alert("We got what we came for!" + b.probability);
-                    /// do stuff
-                    row = "<tr> <td>" + b.probability + "</td>" +
-                        "<td>" + b.probability + "</td>" +
-                        "<td>" + b.probability + "</td>" +
-                        "<td>" + b.probability + "</td>" +
-                        "<td>" + b.probability + "</td>" +
-                        "<td>" + b.probability + "</td></tr>"
-
-                    $("#listing").append(row);
-                });
-                //more stuff here, too much for this example
-            },
-        }); return false;
-    }
-</script>
+<script src="{% static 'account/assets/js/filters.js' %}"></script>

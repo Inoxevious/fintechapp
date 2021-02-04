@@ -30,3 +30,18 @@ def get_data(csv_file):
 )
             the_row.save()
 
+def get_data_income_data(csv_file):
+    opfile = csv_file
+    header  =  []
+    lbfile  =  open(opfile, "rt")
+    reader  =  csv.reader(lbfile)
+    rownum  =  0
+    for row in reader:
+        if rownum  ==  0:
+            header.append(row)
+            rownum += 1
+        else:
+            the_row  =  models.IncomeData(LOAN_ID =row[0],age =row[1],workclass =row[2],fnlwgt =row[3],education =row[4],education_num =row[5],
+            marital_status =row[6],occupation =row[7],relationship =row[8],race =row[9],sex =row[10],capital_gain =row[11],capital_loss =row[12],hours_per_week =row[13],native_country =row[14],income =row[15]
+            )
+            the_row.save()

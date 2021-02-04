@@ -25,6 +25,7 @@ from apps.endpoints.serializers import ABTestSerializer
 from apps.ml.income_classifier.random_forest import RandomForestClassifier
 from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier
 from apps.ml.application_classifier.random_forest import RandomForestApplicationClassifier
+from apps.ml.application_classifier.random_f import LoanApplicationClassifier
 
 # please add to the file backend/server/apps/endpoints/views.py
 
@@ -96,8 +97,13 @@ class PredictView(views.APIView):
         algorithm_object = object()
         if endpoint_name == 'income_classifier':
             algorithm_object = RandomForestClassifier()
+
         elif endpoint_name == 'application_classifier':
             algorithm_object = RandomForestApplicationClassifier()
+
+        elif endpoint_name == 'loan_application_classifier':
+            algorithm_object = LoanApplicationClassifier()
+            
         print("PREDICTIOON OBJECT",algorithm_object)
         prediction = algorithm_object.compute_prediction(request.data)
         print("PREDICTIOON RES",prediction)

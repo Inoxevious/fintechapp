@@ -3,7 +3,7 @@ from django.contrib.postgres.aggregates import StringAgg
 from django.contrib.postgres.search import (
     SearchQuery, SearchRank, SearchVector, TrigramSimilarity,
 )
-
+from mergedeep import merge
 from django.views.generic import TemplateView, ListView, DetailView
 from django.db.models import Q, F
 from django.shortcuts import render, redirect, get_object_or_404
@@ -59,16 +59,17 @@ from django.http import JsonResponse
 
 from rest_framework.generics import ListAPIView
 from .serializers import Loan_HistorySerializers
-from .models import Loan_History
+from .models import Loan_History, IncomeData
 from .pagination import StandardResultsSetPagination
+from .get_income_pred import GetPredictions as gpred
 
 class Loan_ApplicationView(APIView):
     def get(self, request, *args, **kw):
         # filter the queryset based on the filters applied
-        queryList = Loan_History.objects.all()[:50]
-        #dummy for business filter is NAME_INCOME_TYPE
+        global qry
+        pagination_class = StandardResultsSetPagination
+        qry = Loan_History.objects.all()[:50]
         NAME_INCOME_TYPE = self.request.query_params.get('business', None)
-
         ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
         OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
         CODE_GENDER = self.request.query_params.get('school', None)
@@ -76,67 +77,29 @@ class Loan_ApplicationView(APIView):
 
 
         if NAME_INCOME_TYPE:
-            queryList = queryList.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)
+            qry = Loan_History.objects.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)[:50]
 
         if ORGANIZATION_TYPE:
-            queryList = queryList.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)
+            qry = Loan_History.objects.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)[:50]
 
         if OCCUPATION_TYPE:
-            queryList = queryList.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)
+            qry = Loan_History.objects.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)[:50]
         if CODE_GENDER:
-            queryList = queryList.filter(CODE_GENDER = CODE_GENDER)    
+            qry = Loan_History.objects.filter(CODE_GENDER = CODE_GENDER)[:50]  
         # sort it if applied on based on price/points
         if sort_by == "income":
-            queryList = queryList.order_by("AMT_INCOME_TOTAL")
+            qry = qry.order_by("AMT_INCOME_TOTAL")
         elif sort_by == "credit_amount":
-            queryList = queryList.order_by("AMT_CREDIT")
+            qry = qry.order_by("AMT_CREDIT")
 
-        algorithm_object = RandomForestClassifier()
-        object_data_dict = {}
-        for ln in queryList:
-            object_data_dict[ln.LOAN_ID] = []
-            data ={'age': 32, 'workclass': 'Private', 'fnlwgt': ln.DAYS_EMPLOYED, 'education': 'Assoc-voc', 'education-num': ln.DAYS_REGISTRATION, 'marital-status': 'Married-civ-spouse', 'occupation':'Machine-op-inspct', 'relationship': 'Husband', 'race': 'White', 'sex':'Male', 'capital-gain': 0, 'capital-loss': 0, 'hours-per-week': 40, 'native-country': 'United-States'},
-            object_data_dict[ln.LOAN_ID].append(data)
-            print("object data", object_data_dict)
-        predict_dict_data = {}
-        for d_id, d_info in object_data_dict.items():
-            print("\nQuery Data ID:", d_id)
-            for key in d_info:
-                predict_dict_data[d_id] = []
-                input_data = key
-                print("Key value", key)
-                # prediction here
-                prediction = algorithm_object.compute_prediction(key)
-                print("Prediction Error",prediction )
-                prediction["cust_id"] = d_id #result here as a probability
-                # print(prediction['probability'])
-                if  prediction['probability'] > 0.67:
-                    color = 'red'
-                    text = 'high risk of defaulting the loan'
-                    prediction["color"] = color
-                    prediction["text"] = text
-                    print('Client with ID # {} has a high risk of defaulting the loan'.format(d_id))
-                elif  prediction['probability'] > 0.33:
-                    color = 'blue'
-                    text = 'moderate risk of defaulting the loan'
-                    prediction["color"] = color
-                    prediction["text"] = text
-                    print('Client with ID # {} has a moderate risk of defaulting the loan'.format(d_id))
-                else:
-                    color = 'green'
-                    text = 'low risk of defaulting the loan'
-                    prediction["color"] = color
-                    prediction["text"] = text
-                    print('Client with ID # {} has a low risk of defaulting the loan'.format(d_id))
-                predict_dict_data[d_id].append(prediction)
-            print( 'Prediction:', predict_dict_data)
-
-        response = Response(predict_dict_data, status=status.HTTP_200_OK)
-        return response
-
-
-
-
+# get predictions for applications scoring predictions
+        application_classifier_data = gpred.get_pred(qry)
+        return Response(data={
+            # 'labels': labels,
+            # 'pagination_class':pagination_class,
+            'data': application_classifier_data,
+            
+        })
 
 class Loan_HistoryListing(ListAPIView):
     # set the pagination and serializer class
@@ -145,9 +108,7 @@ class Loan_HistoryListing(ListAPIView):
 	serializer_class = Loan_HistorySerializers
 
 	def get_queryset(self):
-
         # filter the queryset based on the filters applied
-
 		queryList = Loan_History.objects.all()
         #dummy for business filter is NAME_INCOME_TYPE
 		NAME_INCOME_TYPE = self.request.query_params.get('business', None)
@@ -176,7 +137,107 @@ class Loan_HistoryListing(ListAPIView):
 		    queryList = queryList.order_by("AMT_CREDIT")
 		return queryList
 
+class HomeView(ListView):
+    template_name = 'dashboards/landing/index.html'
+    def get_queryset(self, **kwargs):
+        global cust_data, loan, user_name, input_data,acc_user, time
+        user = self.request.user
+        time = end = datetime.today()
+        user_name = user
+        acc_user = AccountUser.objects.get(user=user)
+        org = Organization.objects.get(id=1)
+        client = Clients.objects.filter(insti=org)
 
+    def get_context_data(self, **kwargs):
+        context = {
+            'user_name':user_name,
+            'acc_user':acc_user,
+        }
+        return context
+
+class BehavioralAnalyticsResultsView(ListView):
+    template_name = 'dashboards/behavioral/index.html'
+    def get_queryset(self, **kwargs):
+        global cust_data, loan, user_name, input_data,acc_user, time
+        user = self.request.user
+        time = end = datetime.today()
+        user_name = user
+        acc_user = AccountUser.objects.get(user=user)
+        org = Organization.objects.get(id=1)
+        client = Clients.objects.filter(insti=org)
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'user_name':user_name,
+            'acc_user':acc_user,
+        }
+        return context
+
+
+class ApplicationAnalyticsResultsView(ListView):
+    template_name = 'dashboards/application/index.html'
+    def get_queryset(self, **kwargs):
+        global cust_data, loan, user_name, input_data,acc_user, time
+        user = self.request.user
+        time = end = datetime.today()
+        user_name = user
+        acc_user = AccountUser.objects.get(user=user)
+        org = Organization.objects.get(id=1)
+        client = Clients.objects.filter(insti=org)
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'user_name':user_name,
+            'acc_user':acc_user,
+        }
+        return context
+
+class RetentionAnalyticsResultsView(ListView):
+    template_name = 'dashboards/retention/index.html'
+    def get_queryset(self, **kwargs):
+        global cust_data, loan, user_name, input_data,acc_user, time
+        user = self.request.user
+        time = end = datetime.today()
+        user_name = user
+        acc_user = AccountUser.objects.get(user=user)
+        org = Organization.objects.get(id=1)
+        client = Clients.objects.filter(insti=org)
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'user_name':user_name,
+            'acc_user':acc_user,
+        }
+        return context
+
+
+def profile(request):
+    return render(request,'dashboards/profile/index.html')
+
+def reports(request):
+    return render(request,'dashboards/reports/index.html')
+
+def articles(request):
+    return render(request,'dashboards/articles/index.html')
+
+import csv
+from django.http import HttpResponse
+def some_view(request):
+# Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+    return response
+
+
+def application_report_export_csv(request):
+    
+     return render(request,'dashboards/articles/index.html')
+
+def application_report(request):
+     return render(request,'dashboards/articles/index.html')
 
 #Get Business Loan Filter
 def getBusiness(request):
@@ -251,269 +312,3 @@ def data_aggretation(request):
         'data': data,
     })
 
-def get_predictions(request):
-    if request.method == "POST" and request.is_ajax:
-        body = json.loads(request.body)
-        requestData = {}
-        for item in body:
-            name = item['name']
-            requestData[name] = item
-
-    algorithm_status = "production"
-    # algorithm_version = self.request.query_params.get("version")
-    algorithm_version = None
-    endpoint_name = 'income_classifier'
-    if endpoint_name == 'income_classifier':
-        algorithm_object = RandomForestClassifier()
-    elif endpoint_name == 'application_classifier':
-        algorithm_object = RandomForestApplicationClassifier()
-    object_data_dict = {}
-    loan = Loan_History.objects.all()[:50]
-    for ln in loan:
-        object_data_dict[ln.LOAN_ID] = []
-        data ={'age': 32, 'workclass': 'Private', 'fnlwgt': ln.DAYS_EMPLOYED, 'education': 'Assoc-voc', 'education-num': ln.DAYS_REGISTRATION, 'marital-status': 'Married-civ-spouse', 'occupation':'Machine-op-inspct', 'relationship': 'Husband', 'race': 'White', 'sex':'Male', 'capital-gain': 0, 'capital-loss': 0, 'hours-per-week': 40, 'native-country': 'United-States'},
-        object_data_dict[ln.LOAN_ID].append(data)
-    predict_dict_data = {}
-    for d_id, d_info in object_data_dict.items():
-    
-        for key in d_info:
-            predict_dict_data[d_id] = []
-            input_data = key
-        
-            # prediction here
-            prediction = algorithm_object.compute_prediction(key)
-            prediction["loan_id"] = d_id #result here as a probability
-            # print(prediction['probability'])
-            if  prediction['probability'] > 0.67:
-                color = 'red'
-                text = 'high risk of defaulting the loan'
-                prediction["color"] = color
-                prediction["text"] = text
-            elif  prediction['probability'] > 0.33:
-                color = 'blue'
-                text = 'moderate risk of defaulting the loan'
-                prediction["color"] = color
-                prediction["text"] = text
-            else:
-                color = 'green'
-                text = 'low risk of defaulting the loan'
-                prediction["color"] = color
-                prediction["text"] = text
-            
-        print( 'Prediction:', prediction)
-
-    # data = serializers.serialize('json', prediction)
-    return JsonResponse(data=prediction)
-
-
-class HomeView(ListView):
-    template_name = 'dashboards/landing/index.html'
-    def get_queryset(self, **kwargs):
-        global cust_data, loan, user_name, input_data,acc_user, time
-        user = self.request.user
-        time = end = datetime.today()
-        print("TIME", time)
-        user_name = user
-        if user.first_name:
-            user_name = user.first_name
-        acc_user = AccountUser.objects.get(user=user)
-        print("Found USer", user_name)
-        org = Organization.objects.get(id=1)
-        client = Clients.objects.filter(insti=org)
-        loan = Loan_History.objects.all()[:50]
-        application_data = Loan_History.objects.all()
-
-    def get_context_data(self, **kwargs):
-        # context = super().get_context_data(**kwargs)
-
-        # algorithm_status = self.request.query_params.get("status", "production")
-        algorithm_status = "production"
-        # algorithm_version = self.request.query_params.get("version")
-        algorithm_version = None
-        endpoint_name = 'income_classifier'
-        print("End point name found", endpoint_name)
-        if endpoint_name == 'income_classifier':
-            algorithm_object = RandomForestClassifier()
-        elif endpoint_name == 'application_classifier':
-            algorithm_object = RandomForestApplicationClassifier()
-
-        # prediction = algorithm_object.compute_prediction(request.data)
-        algs = MLAlgorithm.objects.get(parent_endpoint__name = endpoint_name)
-        object_data_dict = {}
-        for ln in loan:
-            object_data_dict[ln.LOAN_ID] = []
-            data ={'age': 32, 'workclass': 'Private', 'fnlwgt': 70984, 'education': 'Assoc-voc', 'education-num': 11, 'marital-status': 'Married-civ-spouse', 'occupation': 'Machine-op-inspct', 'relationship': 'Husband', 'race': 'White', 'sex': 'Male', 'capital-gain': 0, 'capital-loss': 0, 'hours-per-week': 40, 'native-country': 'United-States'},
-            object_data_dict[ln.LOAN_ID].append(data)
-
-        predict_dict_data = {}
-        for d_id, d_info in object_data_dict.items():
-
-            for key in d_info:
-                predict_dict_data[d_id] = []
-                input_data = key
-                # prediction here
-                prediction = algorithm_object.compute_prediction(key)
-                prediction["cust_id"] = d_id
-                prediction["loan_officer"] = 'Benji'  
-                #result here as a probability
-                # print(prediction['probability'])
-                if  prediction['probability'] > 0.67:
-                    color = 'red'
-                    text = 'high risk of defaulting the loan'
-                    prediction["color"] = color
-                    prediction["text"] = text
-                    # print('Client with ID # {} has a high risk of defaulting the loan'.format(d_id))
-                elif  prediction['probability'] > 0.33:
-                    color = 'blue'
-                    text = 'moderate risk of defaulting the loan'
-                    prediction["color"] = color
-                    prediction["text"] = text
-                    # print('Client with ID # {} has a moderate risk of defaulting the loan'.format(d_id))
-                else:
-                    color = 'green'
-                    text = 'low risk of defaulting the loan'
-                    prediction["color"] = color
-                    prediction["text"] = text
-                    # print('Client with ID # {} has a low risk of defaulting the loan'.format(d_id))
-                predict_dict_data[d_id].append(prediction)
-            print( 'Prediction d_info:', predict_dict_data)
-
-
-        label = prediction["label"] if "label" in prediction else "error"
-        ml_request = MLRequest(
-            input_data=input_data,
-            full_response=prediction,
-            response=label,
-            feedback="",
-            parent_mlalgorithm=algs,
-        )
-        ml_request.save()
-
-
-
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        data = Loan_History.objects.all()
-        return_data = log.grade_avg(data)
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data End ~~~~~~~~~~~~~~~~~~~~~~
-        prediction["request_id"] = ml_request.id
-        context = {
-            'predict_dict_data': predict_dict_data,
-            'loan': loan,
-            'user_name':user_name,
-            'acc_user':acc_user,
-            'webdata':return_data
-        }
-        return context
-class ApplicationAnalyticsResultsView(ListView):
-    template_name = 'dashboards/application/index.html'
-    def get_queryset(self, **kwargs):
-        global cust_data, loan, user_name, input_data,acc_user, time
-        user = self.request.user
-        time = end = datetime.today()
-        print("TIME", time)
-        user_name = user
-        if user.first_name:
-            user_name = user.first_name
-        acc_user = AccountUser.objects.get(user=user)
-        print("Found USer", user_name)
-        org = Organization.objects.get(id=1)
-        client = Clients.objects.filter(insti=org)
-        loan = Loan_History.objects.all()[:50]
-        application_data = Loan_History.objects.all()
-
-    def get_context_data(self, **kwargs):
-        # context = super().get_context_data(**kwargs)
-
-        # algorithm_status = self.request.query_params.get("status", "production")
-        algorithm_status = "production"
-        # algorithm_version = self.request.query_params.get("version")
-        algorithm_version = None
-        endpoint_name = 'income_classifier'
-        print("End point name found", endpoint_name)
-        if endpoint_name == 'income_classifier':
-            algorithm_object = RandomForestClassifier()
-        elif endpoint_name == 'application_classifier':
-            algorithm_object = RandomForestApplicationClassifier()
-
-        # prediction = algorithm_object.compute_prediction(request.data)
-        algs = MLAlgorithm.objects.get(parent_endpoint__name = endpoint_name)
-        object_data_dict = {}
-        for ln in loan:
-            object_data_dict[ln.LOAN_ID] = []
-            data ={'age': 32, 'workclass': 'Private', 'fnlwgt': 70984, 'education': 'Assoc-voc', 'education-num': 11, 'marital-status': 'Married-civ-spouse', 'occupation': 'Machine-op-inspct', 'relationship': 'Husband', 'race': 'White', 'sex': 'Male', 'capital-gain': 0, 'capital-loss': 0, 'hours-per-week': 40, 'native-country': 'United-States'},
-            object_data_dict[ln.LOAN_ID].append(data)
-
-        predict_dict_data = {}
-        for d_id, d_info in object_data_dict.items():
-
-            for key in d_info:
-                predict_dict_data[d_id] = []
-                input_data = key
-                # prediction here
-                prediction = algorithm_object.compute_prediction(key)
-                prediction["cust_id"] = d_id
-                prediction["loan_officer"] = 'Benji'  
-                #result here as a probability
-                # print(prediction['probability'])
-                if  prediction['probability'] > 0.67:
-                    color = 'red'
-                    text = 'high risk of defaulting the loan'
-                    prediction["color"] = color
-                    prediction["text"] = text
-                    # print('Client with ID # {} has a high risk of defaulting the loan'.format(d_id))
-                elif  prediction['probability'] > 0.33:
-                    color = 'blue'
-                    text = 'moderate risk of defaulting the loan'
-                    prediction["color"] = color
-                    prediction["text"] = text
-                    # print('Client with ID # {} has a moderate risk of defaulting the loan'.format(d_id))
-                else:
-                    color = 'green'
-                    text = 'low risk of defaulting the loan'
-                    prediction["color"] = color
-                    prediction["text"] = text
-                    # print('Client with ID # {} has a low risk of defaulting the loan'.format(d_id))
-                predict_dict_data[d_id].append(prediction)
-            print( 'Prediction d_info:', predict_dict_data)
-
-
-        label = prediction["label"] if "label" in prediction else "error"
-        ml_request = MLRequest(
-            input_data=input_data,
-            full_response=prediction,
-            response=label,
-            feedback="",
-            parent_mlalgorithm=algs,
-        )
-        ml_request.save()
-
-
-
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        data = Loan_History.objects.all()
-        return_data = log.grade_avg(data)
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~Chart JS Data End ~~~~~~~~~~~~~~~~~~~~~~
-        prediction["request_id"] = ml_request.id
-        context = {
-            'predict_dict_data': predict_dict_data,
-            'loan': loan,
-            'user_name':user_name,
-            'acc_user':acc_user,
-            'webdata':return_data
-        }
-        return context
-
-def profile(request):
-    return render(request,'dashboards/profile/index.html')
-
-def reports(request):
-    return render(request,'dashboards/reports/index.html')
-
-def articles(request):
-    return render(request,'dashboards/articles/index.html')
-
-def application_report_export_csv(request):
-     return render(request,'dashboards/articles/index.html')
-
-def application_report(request):
-     return render(request,'dashboards/articles/index.html')

@@ -58,7 +58,7 @@ class RandomForestApplicationClassifier:
         
           #Subset a specific client infor, *a* represent SK_ID_CURR
         # client_infor = np.array(list(input_data.values())).astype(float)
-        prob = self.model.predict_proba(input_data).tolist()[0]    #predict a client's probability of defaulting
+        prob = self.model.predict_proba(input_data)    #predict a client's probability of defaulting
         p = prob[1]
         return p
    # def predict(self, input_data):
@@ -83,7 +83,7 @@ class RandomForestApplicationClassifier:
         try:
             print("Un proccessed data", input_data)
             pre_input_data = self.preprocessing(input_data)
-            
+            # client_infor = pre_input_data
             client_infor = np.array(list(pre_input_data.values())).astype(float)
             print("Preproccessed data", client_infor)
             prediction = self.predict(client_infor)[0]  # only one sample

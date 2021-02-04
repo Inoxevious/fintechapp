@@ -2,7 +2,7 @@
 
 <!-- Quick stats boxes -->
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
 
         <!-- Members online -->
         <div class="panel ">
@@ -12,7 +12,7 @@
                 </div>
 
                 <div id="chartjs1">
-                    <canvas id="data_aggretation" width="400px" height="400px"
+                    <canvas id="data_aggretation01" width="200px" height="200px"
                         data-url="{% url 'companies:data_aggretation' %}"></canvas>
 
                 </div>
@@ -23,7 +23,7 @@
 
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-3">
 
         <!-- Members online -->
         <div class="panel ">
@@ -32,7 +32,7 @@
                     <span class="heading-text badge bg-teal-800">+{{ webdata.1.grade_a.1 }}%</span>
                 </div>
                 <div id="chartjs2">
-                    <canvas id="data_aggretation2" width="200px" height="200px"
+                    <canvas id="data_aggretation02" width="200px" height="200px"
                         data-url="{% url 'companies:data_aggretation' %}"></canvas>
                 </div>
             </div>
@@ -41,7 +41,7 @@
 
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-3">
 
         <!-- Members online -->
         <div class="panel ">
@@ -50,13 +50,15 @@
                     <span class="heading-text badge bg-teal-800">+{{ webdata.1.grade_a.1 }}%</span>
                 </div>
                 <div id="chartjs3">
-                    <canvas id="data_aggretation3" width="200px" height="200px"
+                    <canvas id="data_aggretation03" width="200px" height="200px"
                         data-url="{% url 'companies:data_aggretation' %}"></canvas>
                 </div>
             </div>
         </div>
         <!-- /members online -->
     </div>
+</div>
+<!-- /quick stats boxes -->
 </div>
 <!-- /quick stats boxes -->
 
@@ -67,7 +69,7 @@
 
     $(function () {
 
-        var $data_aggretationChart = $("#data_aggretation");
+        var $data_aggretationChart = $("#data_aggretation01");
         $.ajax({
             url: $data_aggretationChart.data("url"),
             success: function (data) {
@@ -75,7 +77,7 @@
                 var ctx = $data_aggretationChart[0].getContext("2d");
 
                 new Chart(ctx, {
-                    type: 'bar',
+                    type: 'doughnut',
                     data: {
                         labels: data.labels,
                         datasets: [{
@@ -95,6 +97,145 @@
                     options: {
                         responsive: true,
                         legend: {
+                            display: false,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Occupation vs Loan Application'
+                        }
+                    }
+                });
+
+            }
+        });
+
+    });
+
+
+    $(function () {
+
+        var $data_aggretationChart = $("#data_aggretation02");
+        $.ajax({
+            url: $data_aggretationChart.data("url"),
+            success: function (data) {
+
+                var ctx = $data_aggretationChart[0].getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Occupation',
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+
+                            data: data.data
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            display: false,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Occupation vs Loan Application'
+                        }
+                    }
+                });
+
+            }
+        });
+
+    });
+
+
+
+    $(function () {
+
+        var $data_aggretationChart = $("#data_aggretation03");
+        $.ajax({
+            url: $data_aggretationChart.data("url"),
+            success: function (data) {
+
+                var ctx = $data_aggretationChart[0].getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Occupation',
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+
+                            data: data.data
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            display: false,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Occupation vs Loan Application'
+                        }
+                    }
+                });
+
+            }
+        });
+
+    });
+
+    $(function () {
+
+        var $data_aggretationChart = $("#data_aggretation");
+        $.ajax({
+            url: $data_aggretationChart.data("url"),
+            success: function (data) {
+
+                var ctx = $data_aggretationChart[0].getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Occupation',
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+
+                            data: data.data
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            display: false,
                             position: 'top',
                         },
                         title: {
@@ -142,6 +283,7 @@
                     options: {
                         responsive: true,
                         legend: {
+                            display: false,
                             position: 'top',
                         },
                         title: {
@@ -189,6 +331,7 @@
                     options: {
                         responsive: true,
                         legend: {
+                            display: false,
                             position: 'top',
                         },
                         title: {

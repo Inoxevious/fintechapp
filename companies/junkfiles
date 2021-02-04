@@ -128,3 +128,323 @@
             'acc_user':acc_user,
             'webdata':return_data
         }
+def get_predictions(request):
+    if request.method == "POST" and request.is_ajax:
+        body = json.loads(request.body)
+        requestData = {}
+        for item in body:
+            name = item['name']
+            requestData[name] = item
+
+    algorithm_status = "production"
+    # algorithm_version = self.request.query_params.get("version")
+    algorithm_version = None
+    endpoint_name = 'income_classifier'
+    if endpoint_name == 'income_classifier':
+        algorithm_object = RandomForestClassifier()
+    elif endpoint_name == 'application_classifier':
+        algorithm_object = RandomForestApplicationClassifier()
+    object_data_dict = {}
+    loan = Loan_History.objects.all()[:50]
+    for ln in loan:
+        object_data_dict[ln.LOAN_ID] = []
+        data ={'age': 32, 'workclass': 'Private', 'fnlwgt': ln.DAYS_EMPLOYED, 'education': 'Assoc-voc', 'education-num': ln.DAYS_REGISTRATION, 'marital-status': 'Married-civ-spouse', 'occupation':'Machine-op-inspct', 'relationship': 'Husband', 'race': 'White', 'sex':'Male', 'capital-gain': 0, 'capital-loss': 0, 'hours-per-week': 40, 'native-country': 'United-States'},
+        object_data_dict[ln.LOAN_ID].append(data)
+    predict_dict_data = {}
+    for d_id, d_info in object_data_dict.items():
+    
+        for key in d_info:
+            predict_dict_data[d_id] = []
+            input_data = key
+        
+            # prediction here
+            prediction = algorithm_object.compute_prediction(key)
+            prediction["loan_id"] = d_id #result here as a probability
+            # print(prediction['probability'])
+            if  prediction['probability'] > 0.67:
+                color = 'red'
+                text = 'high risk of defaulting the loan'
+                prediction["color"] = color
+                prediction["text"] = text
+            elif  prediction['probability'] > 0.33:
+                color = 'blue'
+                text = 'moderate risk of defaulting the loan'
+                prediction["color"] = color
+                prediction["text"] = text
+            else:
+                color = 'green'
+                text = 'low risk of defaulting the loan'
+                prediction["color"] = color
+                prediction["text"] = text
+            
+
+    # data = serializers.serialize('json', prediction)
+    return JsonResponse(data=prediction)
+
+
+class Loan_HistoryListing(ListAPIView):
+    # set the pagination and serializer class
+
+	pagination_class = StandardResultsSetPagination
+	serializer_class = Loan_HistorySerializers
+
+	def get_queryset(self):
+        # filter the queryset based on the filters applied
+		queryList = Loan_History.objects.all()
+        #dummy for business filter is NAME_INCOME_TYPE
+		NAME_INCOME_TYPE = self.request.query_params.get('business', None)
+
+		ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
+		OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
+		CODE_GENDER = self.request.query_params.get('school', None)
+		sort_by = self.request.query_params.get('sort_by', None)
+
+
+		if NAME_INCOME_TYPE:
+		    queryList = queryList.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)
+
+		if ORGANIZATION_TYPE:
+		    queryList = queryList.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)
+
+		if OCCUPATION_TYPE:
+		    queryList = queryList.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)
+		if CODE_GENDER:
+		    queryList = queryList.filter(CODE_GENDER = CODE_GENDER)    
+
+
+		if sort_by == "income":
+		    queryList = queryList.order_by("AMT_INCOME_TOTAL")
+		elif sort_by == "credit_amount":
+		    queryList = queryList.order_by("AMT_CREDIT")
+		return queryList
+
+
+
+
+
+
+
+
+        {% load static %}
+
+<!-- Individual column searching (selects) -->
+<div class="panel panel-flat">
+    <div class="panel-heading">
+        <h5 class="panel-title">Individual column searching</h5>
+        <div class="heading-elements">
+            <ul class="icons-list">
+                <li><a data-action="collapse"></a></li>
+                <li><a data-action="reload"></a></li>
+                <li><a data-action="close"></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="panel-body">
+    </div>
+
+    <table class="table table-sm" id="list_data" data-toggle="table" url="{% url 'companies:get_predictions' %}">
+        <thead>
+            <tr>
+                <th>Loan ID</th>
+
+                <th>Client</th>
+                <!-- <th>Amount Borrowed</th> -->
+                <th>First Instalment</th>
+                <th>Final Instalment</th>
+                <th>Total Instalment</th>
+                <th>Defaulting Probability</th>
+                <th>Default Risk</th>
+                <th>Time to default</th>
+                <th>Contact Channel</th>
+                <th>Contact Schedule</th>
+                <th>Message</th>
+                <th><i class="icon-arrow-down12"></i></th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for cl in loan %}
+            <tr>
+                <td>{{cl.LOAN_ID}}</td>
+
+                <!-- <td><a href="#">{{cl.colleteral}}</a></td> -->
+                {% for d_id, d_info in predict_dict_data.items  %}
+
+                {% if d_id == cl.LOAN_ID   %}
+                {% for l in d_info %}
+                <td>
+                    <span class=''>
+                        {{l.cust_id}}
+                    </span>
+
+                </td>
+                {% endfor %}
+                {% endif  %}
+                {% endfor %}
+                <td><span class="label label-danger ">${{ cl.AMT_CREDIT }}</span></td>
+                <td><span class="label label-danger ">${{ cl.AMT_CREDIT }}</span></td>
+                <td><span class="label label-danger ">${{ cl.AMT_CREDIT }}</span></td>
+                <td><span class="label label-danger ">${{ cl.AMT_CREDIT }}</span></td>
+
+                {% for d_id, d_info in predict_dict_data.items  %}
+
+                {% if d_id == cl.LOAN_ID   %}
+                {% for l in d_info %}
+                <td class="bg-{{l.color}}" style="text-overflow: clip;">
+                    <span class=''>
+                        {{l.text}}
+                    </span>
+
+                </td>
+                {% endfor %}
+                {% endif  %}
+                {% endfor %}
+
+                {% for d_id, d_info in predict_dict_data.items  %}
+
+                {% if d_id == cl.LOAN_ID   %}
+                {% for l in d_info %}
+                <td class="bg-{{l.color}}" style="text-overflow: clip;">
+                    <span class=''>
+                        {{l.text}}
+                    </span>
+
+                </td>
+                {% endfor %}
+                {% endif  %}
+                {% endfor %}
+                {% for d_id, d_info in predict_dict_data.items  %}
+
+                {% if d_id == cl.LOAN_ID   %}
+                {% for l in d_info %}
+                <td class="bg-{{l.color}}" style="text-overflow: clip;">
+                    <span class=''>
+                        {{l.text}}
+                    </span>
+
+                </td>
+                {% endfor %}
+                {% endif  %}
+                {% endfor %}
+                {% for d_id, d_info in predict_dict_data.items  %}
+
+                {% if d_id == cl.LOAN_ID   %}
+                {% for l in d_info %}
+                <td class="bg-{{l.color}}" style="text-overflow: clip;">
+                    <span class=''>
+                        {{l.text}}
+                    </span>
+
+                </td>
+                {% endfor %}
+                {% endif  %}
+                {% endfor %}
+                {% for d_id, d_info in predict_dict_data.items  %}
+                {% if d_id == cl.LOAN_ID   %}
+                {% for l in d_info %}
+                <td class="bg-{{l.color}}" style="text-overflow: clip;">
+                    <span class=''>
+                        {{l.text}}
+                    </span>
+
+                </td>
+                {% endfor %}
+                {% endif  %}
+                {% endfor %}
+                <td class="text-center">
+                    <ul class="icons-list">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-menu9"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="{% url 'account:view_client' cl.LOAN_ID %}"><i class="icon-person"></i>
+                                        View
+                                        Client</a></li>
+                                <li><a href="{% url 'companies:application_report' cl.LOAN_ID %}"><i
+                                            class="icon-book"></i> View
+                                        Report</a></li>
+                                <li><a href="{% url 'companies:application_report_export_csv' cl.LOAN_ID %}"><i
+                                            class="icon-file-excel"></i> Export to .csv</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+        </tbody>
+    </table>
+</div>
+<!-- /individual column searching (selects) -->
+<script src="{% static 'global_assets/js/main/jquery.min.js' %}"></script>
+<script src="{% static 'assets/js/chart.bundle.js' %}"></script>
+<!-- <script>
+
+    $(function () {
+
+        let url = $('#list_data').attr("url")
+        $.ajax({
+            url: url,
+            success: function (data) {
+
+                $.each(data, function (a, b) {
+                    /// do stuff
+                    row = "<tr> <td>" + b.probability + "</td>" +
+                        "<td>" + b.probability + "</td>" +
+                        "<td>" + b.probability + "</td>" +
+                        "<td>" + b.probability + "</td>" +
+                        "<td>" + b.probability + "</td>" +
+                        "<td>" + b.probability + "</td></tr>"
+
+                    $("#listing").append(row);
+                });
+
+            }
+        });
+
+    });
+
+</script> -->
+
+
+<script>
+    var frm = $('#filterForm');
+    frm.submit(getAjax);
+    function getAjax() {
+        var formData = JSON.stringify($("#filterForm").serializeArray());
+        console.log("Request parameters:")
+        console.log(JSON.parse(formData))
+        $.ajax({
+            headers: { "X-CSRFToken": '{{csrf_token}}' },
+            type: "POST",
+            url: "{% url 'companies:get_predictions' %}",
+            contentType: 'application/json',
+            dataType: 'json',
+            data: formData,
+            success: function (data) {
+                jsonData = console.log(data);
+                var dataObj = JSON.parse(data);
+                console.log("Response data:")
+                console.log(dataObj)
+                $.each(data, function (a, b) {
+                    alert("We got what we came for!" + b.probability);
+                    /// do stuff
+                    row = "<tr> <td>" + b.probability + "</td>" +
+                        "<td>" + b.probability + "</td>" +
+                        "<td>" + b.probability + "</td>" +
+                        "<td>" + b.probability + "</td>" +
+                        "<td>" + b.probability + "</td>" +
+                        "<td>" + b.probability + "</td></tr>"
+
+                    $("#listing").append(row);
+                });
+                //more stuff here, too much for this example
+            },
+        }); return false;
+    }
+</script>

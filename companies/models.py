@@ -228,7 +228,23 @@ class Loan_History(models.Model):
     OFFICER_ID = models.CharField(null=True ,blank=True,max_length=70)
     def __str__(self):
         return self.LOAN_ID
-
+class IncomeData(models.Model): 
+    LOAN_ID = models.IntegerField(null=True ,blank=True)
+    age =models.IntegerField(null=True ,blank=True)
+    workclass =models.CharField(null=True ,blank=True,max_length=255)
+    fnlwgt =models.IntegerField(null=True ,blank=True)
+    education =models.CharField(null=True ,blank=True,max_length=255)
+    education_num =models.IntegerField(null=True ,blank=True)
+    marital_status =models.CharField(null=True ,blank=True,max_length=255)
+    occupation =models.CharField(null=True ,blank=True,max_length=255)
+    relationship =models.CharField(null=True ,blank=True,max_length=255)
+    race =models.CharField(null=True ,blank=True,max_length=255)
+    sex =models.CharField(null=True ,blank=True,max_length=255)
+    capital_gain =models.IntegerField(null=True ,blank=True)
+    capital_loss =models.IntegerField(null=True ,blank=True)
+    hours_per_week =models.IntegerField(null=True ,blank=True)
+    native_country =models.CharField(null=True ,blank=True,max_length=255)
+    income =models.CharField(null=True ,blank=True,max_length=255)
 class Role(models.Model):
     owner = 'owner'
     officer = 'officer'

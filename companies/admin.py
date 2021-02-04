@@ -5,6 +5,9 @@ from .models import *
 class CountryAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(IncomeData)
+class IncomeDataAdmin(admin.ModelAdmin):
+    pass
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     pass

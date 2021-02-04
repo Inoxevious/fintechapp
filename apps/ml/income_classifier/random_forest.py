@@ -38,7 +38,7 @@ class RandomForestClassifier:
         label = "<=50K"
         if input_data[1] > 0.5:
             label = ">50K"
-        return {"probability": input_data[1], "label": label, "status": "OK"}
+        return {"income_probability": input_data[1], "income_label": label, "income_status": "OK"}
 
     def compute_prediction(self, input_data):
         try:
