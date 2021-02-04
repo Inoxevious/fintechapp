@@ -101,42 +101,6 @@ class Loan_ApplicationView(APIView):
             
         })
 
-class Loan_HistoryListing(ListAPIView):
-    # set the pagination and serializer class
-
-	pagination_class = StandardResultsSetPagination
-	serializer_class = Loan_HistorySerializers
-
-	def get_queryset(self):
-        # filter the queryset based on the filters applied
-		queryList = Loan_History.objects.all()
-        #dummy for business filter is NAME_INCOME_TYPE
-		NAME_INCOME_TYPE = self.request.query_params.get('business', None)
-
-		ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
-		OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
-		CODE_GENDER = self.request.query_params.get('school', None)
-		sort_by = self.request.query_params.get('sort_by', None)
-
-
-		if NAME_INCOME_TYPE:
-		    queryList = queryList.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)
-
-		if ORGANIZATION_TYPE:
-		    queryList = queryList.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)
-
-		if OCCUPATION_TYPE:
-		    queryList = queryList.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)
-		if CODE_GENDER:
-		    queryList = queryList.filter(CODE_GENDER = CODE_GENDER)    
-
-
-		if sort_by == "income":
-		    queryList = queryList.order_by("AMT_INCOME_TOTAL")
-		elif sort_by == "credit_amount":
-		    queryList = queryList.order_by("AMT_CREDIT")
-		return queryList
-
 class HomeView(ListView):
     template_name = 'dashboards/landing/index.html'
     def get_queryset(self, **kwargs):
