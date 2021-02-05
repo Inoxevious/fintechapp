@@ -220,8 +220,8 @@ function putTableData(result) {
 }
 
 function getAPIData() {
-    // let url = $('#behavioral_list_data').attr("url")
-    let url = "{% url 'companies:behavioral_scoring_view' %}"
+    let url = $('#behavioral_list_data').attr("url")
+    // let url = '{% url companies:behavioral_scoring_view %}'
     console.log("bhv url" + url)
     $.ajax({
         method: 'GET',
