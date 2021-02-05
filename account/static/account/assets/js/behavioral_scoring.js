@@ -136,7 +136,7 @@ function putTableData(result) {
     let row;
     if (result["behavioral_classifier_data"]) {
         $("#no_results").hide();
-        $("#list_data").show();
+        $("#behavioral_list_data").show();
         $("#listing").html("");
         // populate application scoring_listing data
 
@@ -185,7 +185,7 @@ function putTableData(result) {
         // if no result found for the given filter, then display no result
         console.log("no data application")
         $("#no_results h5").html("No results found");
-        $("#list_data").hide();
+        $("#behavioral_list_data").hide();
         $("#no_results").show();
     }
 
@@ -220,21 +220,21 @@ function putTableData(result) {
 }
 
 function getAPIData() {
-    let url = $('#list_data').attr("url")
+    let url = $('#behavioral_list_data').attr("url")
     $.ajax({
         method: 'GET',
         url: url,
         data: send_data,
         beforeSend: function () {
-            $("#no_results h5").html("Loading data...");
+            $("#no_results").html("Loading data...");
         },
         success: function (result) {
             console.log("API RES" + JSON.stringify(result))
             putTableData(result);
         },
         error: function (response) {
-            $("#no_results h5").html("Something went wrong");
-            $("#list_data").hide();
+            $("#no_results").html("Something went wrong");
+            $("#behavioral_list_data").hide();
         }
     });
 }

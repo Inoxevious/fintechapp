@@ -221,14 +221,14 @@ function getAPIData() {
         url: url,
         data: send_data,
         beforeSend: function () {
-            $("#no_results h5").html("Loading data...");
+            $("#no_results").html("Loading data...");
         },
         success: function (result) {
             console.log("API RES" + JSON.stringify(result))
             putTableData(result);
         },
         error: function (response) {
-            $("#no_results h5").html("Something went wrong");
+            $("#no_results").html("Something went wrong");
             $("#retention_scoring_list_data").hide();
         }
     });
