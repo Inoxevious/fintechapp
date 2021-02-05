@@ -215,7 +215,8 @@ function putTableData(result) {
 }
 
 function getAPIData() {
-    let url = $('#retention_scoring_list_data').attr("url")
+    // let url = $('#retention_scoring_list_data').attr("url")
+    let url = "{% url 'companies:retention_scoring_view' %}"
     $.ajax({
         method: 'GET',
         url: url,
