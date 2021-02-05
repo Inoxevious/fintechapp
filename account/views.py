@@ -105,7 +105,10 @@ def register(request):
 
         try:
             role = request.POST['role']
-            role_ins = Role.objects.get(name=role)
+            if role == 'manager':
+                role_ins = Role.objects.get(name=role)
+            else:
+                role_ins = Role.objects.get(id=role)
         except MultiValueDictKeyError:
             role = 'undefined'
         try:
