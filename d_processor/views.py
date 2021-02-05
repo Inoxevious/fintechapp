@@ -7,8 +7,10 @@ from apps.ml.registry import MLRegistry
 from apps.ml.income_classifier.random_forest import RandomForestClassifier
 from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier # import ExtraTrees ML algorithm
 from apps.ml.application_classifier.random_forest import RandomForestApplicationClassifier
-from apps.ml.application_classifier.random_f import LoanApplicationClassifier
-from rest_framework import views, status
+from apps.ml.application_classifier.random_f import LoanApplicationClassifier 
+from apps.ml.behavioral_scoring.random_f import BehavioralScoring 
+from apps.ml.retent_scroring.random_f import  RetentionScoring
+from rest_framework import views, status 
 from rest_framework.response import Response
 import os
 
@@ -53,41 +55,61 @@ def add_algo(request):
         print("Adding ML algorithms to registry")
         registry = MLRegistry() # create ML registry
         # Random Forest classifier
-        rf = RandomForestClassifier()
-        # add to ML registry
-        registry.add_algorithm(endpoint_name="income_classifier",
-                                algorithm_object=rf,
-                                algorithm_name="random forest",
-                                algorithm_status="production",
-                                algorithm_version="0.0.1",
-                                owner="Dreatol",
-                                algorithm_description="Random Forest with simple pre- and post-processing",
-                                algorithm_code=inspect.getsource(RandomForestClassifier))
+        # rf = RandomForestClassifier()
+        # # add to ML registry
+        # registry.add_algorithm(endpoint_name="income_classifier",
+        #                         algorithm_object=rf,
+        #                         algorithm_name="random forest",
+        #                         algorithm_status="production",
+        #                         algorithm_version="0.0.1",
+        #                         owner="Dreatol",
+        #                         algorithm_description="Random Forest with simple pre- and post-processing",
+        #                         algorithm_code=inspect.getsource(RandomForestClassifier))
 
-        # Applications Random Forest classifier
-        aprf = RandomForestApplicationClassifier()
-        # add to ML registry
-        registry.add_algorithm(endpoint_name="application_classifier",
-                                algorithm_object=aprf,
-                                algorithm_name="random forest",
-                                algorithm_status="production",
-                                algorithm_version="0.0.1",
-                                owner="Dreatol",
-                                algorithm_description="Random Forest with simple pre- and post-processing",
-                                algorithm_code=inspect.getsource(RandomForestApplicationClassifier))
+        # # Applications Random Forest classifier
+        # aprf = RandomForestApplicationClassifier()
+        # # add to ML registry
+        # registry.add_algorithm(endpoint_name="application_classifier",
+        #                         algorithm_object=aprf,
+        #                         algorithm_name="random forest",
+        #                         algorithm_status="production",
+        #                         algorithm_version="0.0.1",
+        #                         owner="Dreatol",
+        #                         algorithm_description="Random Forest with simple pre- and post-processing",
+        #                         algorithm_code=inspect.getsource(RandomForestApplicationClassifier))
 
-        ln_rf = LoanApplicationClassifier()
+        # ln_rf = LoanApplicationClassifier()
+        # # add to ML registry
+        # registry.add_algorithm(endpoint_name="loan_application_classifier",
+        #                         algorithm_object=ln_rf,
+        #                         algorithm_name="random forest",
+        #                         algorithm_status="production",
+        #                         algorithm_version="0.0.1",
+        #                         owner="Dreatol",
+        #                         algorithm_description="55 features Random Forest with simple pre- and post-processing",
+        #                         algorithm_code=inspect.getsource(LoanApplicationClassifier))
+
+        behavioral_scoring = BehavioralScoring()
         # add to ML registry
-        registry.add_algorithm(endpoint_name="loan_application_classifier",
-                                algorithm_object=ln_rf,
+        registry.add_algorithm(endpoint_name="behavioral_scoring",
+                                algorithm_object=behavioral_scoring,
                                 algorithm_name="random forest",
                                 algorithm_status="production",
                                 algorithm_version="0.0.1",
                                 owner="Dreatol",
                                 algorithm_description="55 features Random Forest with simple pre- and post-processing",
-                                algorithm_code=inspect.getsource(LoanApplicationClassifier))
+                                algorithm_code=inspect.getsource(BehavioralScoring))
 
-
+        retention_scoring = RetentionScoring()
+        # add to ML registry
+        registry.add_algorithm(endpoint_name="retention_scoring",
+                                algorithm_object=retention_scoring,
+                                algorithm_name="random forest",
+                                algorithm_status="production",
+                                algorithm_version="0.0.1",
+                                owner="Dreatol",
+                                algorithm_description="55 features Random Forest with simple pre- and post-processing",
+                                algorithm_code=inspect.getsource(RetentionScoring))
 
 
 

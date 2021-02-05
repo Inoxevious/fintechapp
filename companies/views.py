@@ -63,12 +63,12 @@ from .models import Loan_History, IncomeData
 from .pagination import StandardResultsSetPagination
 from .get_income_pred import GetPredictions as gpred
 
-class Loan_ApplicationView(APIView):
+class ApplicationAPIView(APIView):
     def get(self, request, *args, **kw):
         # filter the queryset based on the filters applied
         global qry
         pagination_class = StandardResultsSetPagination
-        qry = Loan_History.objects.all()[:50]
+        qry = Loan_History.objects.all()[:5]
         NAME_INCOME_TYPE = self.request.query_params.get('business', None)
         ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
         OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
@@ -77,15 +77,51 @@ class Loan_ApplicationView(APIView):
 
 
         if NAME_INCOME_TYPE:
-            qry = Loan_History.objects.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)[:50]
+            qry = Loan_History.objects.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)[:5]
 
         if ORGANIZATION_TYPE:
-            qry = Loan_History.objects.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)[:50]
+            qry = Loan_History.objects.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)[:5]
 
         if OCCUPATION_TYPE:
-            qry = Loan_History.objects.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)[:50]
+            qry = Loan_History.objects.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)[:5]
         if CODE_GENDER:
-            qry = Loan_History.objects.filter(CODE_GENDER = CODE_GENDER)[:50]  
+            qry = Loan_History.objects.filter(CODE_GENDER = CODE_GENDER)[:5]  
+        # sort it if applied on based on price/points
+        if sort_by == "income":
+            qry = qry.order_by("AMT_INCOME_TOTAL")
+        elif sort_by == "credit_amount":
+            qry = qry.order_by("AMT_CREDIT")
+# get predictions for applications scoring predictions
+        application_classifier_data = gpred.get_application_scores(qry)
+        return Response(data={
+            # 'labels': labels,
+            # 'pagination_class':pagination_class,
+            'application_classifier_data': application_classifier_data,
+        })
+
+class BehavioralAPIView(APIView):
+    def get(self, request, *args, **kw):
+        # filter the queryset based on the filters applied
+        global qry
+        pagination_class = StandardResultsSetPagination
+        qry = Loan_History.objects.all()[:5]
+        NAME_INCOME_TYPE = self.request.query_params.get('business', None)
+        ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
+        OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
+        CODE_GENDER = self.request.query_params.get('school', None)
+        sort_by = self.request.query_params.get('sort_by', None)
+
+
+        if NAME_INCOME_TYPE:
+            qry = Loan_History.objects.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)[:5]
+
+        if ORGANIZATION_TYPE:
+            qry = Loan_History.objects.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)[:5]
+
+        if OCCUPATION_TYPE:
+            qry = Loan_History.objects.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)[:5]
+        if CODE_GENDER:
+            qry = Loan_History.objects.filter(CODE_GENDER = CODE_GENDER)[:5]  
         # sort it if applied on based on price/points
         if sort_by == "income":
             qry = qry.order_by("AMT_INCOME_TOTAL")
@@ -93,12 +129,47 @@ class Loan_ApplicationView(APIView):
             qry = qry.order_by("AMT_CREDIT")
 
 # get predictions for applications scoring predictions
-        application_classifier_data = gpred.get_pred(qry)
+        behavioral_classifier_data = gpred.get_behavioral_scores(qry)
         return Response(data={
             # 'labels': labels,
             # 'pagination_class':pagination_class,
-            'data': application_classifier_data,
-            
+            'behavioral_classifier_data': behavioral_classifier_data,
+        })
+
+class RetentionAPIView(APIView):
+    def get(self, request, *args, **kw):
+        # filter the queryset based on the filters applied
+        global qry
+        pagination_class = StandardResultsSetPagination
+        qry = Loan_History.objects.all()[:10]
+        NAME_INCOME_TYPE = self.request.query_params.get('business', None)
+        ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
+        OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
+        CODE_GENDER = self.request.query_params.get('school', None)
+        sort_by = self.request.query_params.get('sort_by', None)
+
+
+        if NAME_INCOME_TYPE:
+            qry = Loan_History.objects.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)[:5]
+
+        if ORGANIZATION_TYPE:
+            qry = Loan_History.objects.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)[:5]
+
+        if OCCUPATION_TYPE:
+            qry = Loan_History.objects.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)[:5]
+        if CODE_GENDER:
+            qry = Loan_History.objects.filter(CODE_GENDER = CODE_GENDER)[:5]  
+        # sort it if applied on based on price/points
+        if sort_by == "income":
+            qry = qry.order_by("AMT_INCOME_TOTAL")
+        elif sort_by == "credit_amount":
+            qry = qry.order_by("AMT_CREDIT")
+# get predictions for applications scoring predictions
+        retention_scoring_data = gpred.get_retention_scores(qry)
+        return Response(data={
+            # 'labels': labels,
+            # 'pagination_class':pagination_class,
+            'retention_scoring_data': retention_scoring_data,
         })
 
 class HomeView(ListView):
@@ -129,7 +200,7 @@ class BehavioralAnalyticsResultsView(ListView):
         acc_user = AccountUser.objects.get(user=user)
         org = Organization.objects.get(id=1)
         client = Clients.objects.filter(insti=org)
-
+        
     def get_context_data(self, **kwargs):
         context = {
             'user_name':user_name,
@@ -260,7 +331,20 @@ def getSchool(request):
         }
         return JsonResponse(data, status = 200)
 
-
+def data_for_charts(request):
+    labels = []
+    data ={}
+    chart_data = {}
+    queryset =  Loan_History.objects.values('OCCUPATION_TYPE').annotate(amount_borrowed=Sum('AMT_CREDIT')).order_by('-amount_borrowed')
+    for entry in queryset:
+        data[entry['OCCUPATION_TYPE']] = []
+        # chart_data['label'] = entry['OCCUPATION_TYPE']
+        data[entry['OCCUPATION_TYPE']].append(entry['amount_borrowed'])
+    # data = merge(data,chart_data)
+    return JsonResponse(data={
+        # 'labels': labels,
+        'data': data,
+    })
 
 
 def data_aggretation(request):

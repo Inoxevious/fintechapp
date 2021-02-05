@@ -17,7 +17,7 @@ from sklearn.ensemble import RandomForestClassifier
 # import xgboost as xgb
 import json # will be needed for saving preprocessing details
 import joblib 
-class LoanApplicationClassifier:
+class BehavioralScoring:
     def __init__(self):
         global BASE_DIR, path_to_artifacts
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -116,12 +116,15 @@ class LoanApplicationClassifier:
         # print("PERFORMING PREDICTIONS FOR",input_data)
         prob = self.modelReload.predict_proba(input_data)
         # print("PERFORMING PREDICTIONS DOOONE")
+        str_prob = str(prob)
+        print("Proba strinng", str_prob)
         p = prob.any()
         # print("SENT PREDICTIONS FOR",p)
         return p
 
     def postprocessing(self, p):
         label = "low"
+        
         # print("Prob",p)
         if p > 0.67:
             label = "high"
@@ -133,7 +136,7 @@ class LoanApplicationClassifier:
             label = "low"
             # print('Client with ID # {} has a low risk of defaulting the loan'.format(a))
         # print("application_probability:",p, "label:", label, "status:", "OK")    
-        return {"application_probability": p, "application_label": label, "application_status": "OK"}
+        return {"behavioral_probability": p, "behavioral_label": label, "behavioral_status": "OK"}
 
     def compute_prediction(self, input_data):
         try:

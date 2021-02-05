@@ -10,17 +10,13 @@
                 <div class="heading-elements">
                     <span class="heading-text badge bg-teal-800">+{{ webdata.1.grade_a.1 }}%</span>
                 </div>
-
-                <div id="chartjs1">
-                    <canvas id="data_aggretation01" width="200px" height="200px"
+                <div id="chartjs3">
+                    <canvas id="data_aggretation" width="200px" height="200px"
                         data-url="{% url 'companies:data_aggretation' %}"></canvas>
-
                 </div>
             </div>
         </div>
         <!-- /members online -->
-
-
     </div>
 
     <div class="col-lg-3">
@@ -63,8 +59,18 @@
 <!-- /quick stats boxes -->
 
 <!-- Core JS files -->
-<script src="{% static 'global_assets/js/main/jquery.min.js' %}"></script>
-<script src="{% static 'assets/js/chart.bundle.js' %}"></script>
+<!-- Load jQuery -->
+<script type="text/javascript" src="{% static 'account/global_assets/js/core/libraries/jquery.min.js' %}"></script>
+
+<!-- Load D3.js library -->
+<script type="text/javascript"
+    src="{% static 'account/global_assets/js/plugins/visualization/d3/d3.min.js' %}"></script>
+
+<!-- Load C3.js  -->
+<script type="text/javascript"
+    src="{% static 'account/global_assets/js/plugins/visualization/c3/c3.min.js' %}"></script>
+<script src="{% static 'account/assets/js/chart.bundle.js' %}"></script>
+<script src="{% static 'account/assets/js/charts_stats.js' %}"></script>
 <script>
 
     $(function () {
@@ -102,7 +108,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Occupation vs Loan Application'
+                            text: 'KPI'
                         }
                     }
                 });
@@ -148,7 +154,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Occupation vs Loan Application'
+                            text: 'KPI'
                         }
                     }
                 });
@@ -195,7 +201,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Occupation vs Loan Application'
+                            text: 'KPI'
                         }
                     }
                 });
@@ -240,7 +246,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Occupation vs Loan Application'
+                            text: 'KPI'
                         }
                     }
                 });
@@ -288,7 +294,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Occupation vs Loan Application'
+                            text: 'KPI'
                         }
                     }
                 });
@@ -336,7 +342,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Occupation vs Loan Application'
+                            text: 'KPI'
                         }
                     }
                 });

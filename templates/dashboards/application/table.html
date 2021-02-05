@@ -17,7 +17,8 @@
         {% include 'dashboards/filters.html' %}
     </div>
 
-    <table class="table table-sm" id="list_data" data-toggle="table" url="{% url 'companies:app_clasf_view' %}">
+    <table class="table table-sm" id="application_classifier_list_data" data-toggle="table"
+        url="{% url 'companies:application_scoring_view' %}">
         <thead>
             <tr>
                 <th>Loan ID</th>
@@ -35,11 +36,11 @@
 
             </tr>
         </thead>
-        <tbody id="listing">
+        <tbody id="application_classifier_listing">
         </tbody>
     </table>
 </div>
 <!-- /individual column searching (selects) -->
 <script src="{% static 'global_assets/js/main/jquery.min.js' %}"></script>
 <script src="{% static 'assets/js/chart.bundle.js' %}"></script>
-<script src="{% static 'account/assets/js/filters.js' %}"></script>
+<script src="{% static 'account/assets/js/application_scoring.js' %}"></script>

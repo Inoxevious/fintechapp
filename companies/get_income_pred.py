@@ -65,11 +65,13 @@ from .pagination import StandardResultsSetPagination
 from mergedeep import merge
 from functools import reduce
 from collections.abc import MutableMapping
+from apps.ml.behavioral_scoring.random_f import BehavioralScoring 
+from apps.ml.retent_scroring.random_f import  RetentionScoring
 class GetPredictions:
     def __init__(self):
         global algorithm_object, prediction
 
-    def get_pred(qry):
+    def get_application_scores(qry):
         prediction_data_dict = {}
         for ln in qry:
             prediction_data_dict[ln.LOAN_ID] = []
@@ -82,6 +84,98 @@ class GetPredictions:
             prediction_data_dict[ln.LOAN_ID].append(prediction)
         # print("predictions",prediction)
         return prediction_data_dict
+
+    def get_retention_scores(qry):
+        prediction_data_dict = {}
+        for ln in qry:
+            prediction_data_dict[ln.LOAN_ID] = []
+            incomes_prediction = GetPredictions.get_retention_pred(ln)
+            application_prediction = GetPredictions.get_applications_pred(ln)
+            prediction = merge(incomes_prediction, application_prediction)
+            if ln.LOAN_ID == prediction["cust_id"]:
+                #result here as a probability
+                prediction['loan_amount'] = ln.AMT_CREDIT
+            prediction_data_dict[ln.LOAN_ID].append(prediction)
+        # print("predictions",prediction)
+        return prediction_data_dict
+
+    def get_behavioral_scores(qry):
+        prediction_data_dict = {}
+        for ln in qry:
+            prediction_data_dict[ln.LOAN_ID] = []
+            incomes_prediction = GetPredictions.get_income_pred(ln)
+            application_prediction = GetPredictions.get_behavioral_pred(ln)
+            prediction = merge(incomes_prediction, application_prediction)
+            if ln.LOAN_ID == prediction["cust_id"]:
+                #result here as a probability
+                prediction['loan_amount'] = ln.AMT_CREDIT
+            prediction_data_dict[ln.LOAN_ID].append(prediction)
+        # print("predictions",prediction)
+        return prediction_data_dict
+
+        
+    def get_retention_pred(ln_id):
+        algorithm_object = RandomForestClassifier()
+        ln_cnt = IncomeData.objects.filter(LOAN_ID=ln_id.LOAN_ID).count()
+        if ln_cnt == 0:
+            retention_prediction = {}
+            retention_prediction['recommendation_process'] = 'Client data missing'
+            retention_prediction["classification"] = 'Client data missing'                
+            retention_prediction["loan_num"] = 'Client data missing'
+            retention_prediction["closure_date"] = 'Client data missing'
+            retention_prediction["client_clv"] = 'Client data missing'
+            retention_prediction["retention_color"] = 'Client data missing'
+        else:
+            ln = IncomeData.objects.get(LOAN_ID=ln_id.LOAN_ID)
+            object_data_dict = {}
+            object_data_dict[ln.LOAN_ID] = []
+            data ={'age': ln.age, 'workclass': ln.workclass, 'fnlwgt': ln.fnlwgt, 'education': ln.education, 'education-num': ln.education_num, 'marital-status': ln.marital_status, 'occupation':ln.occupation, 'relationship': ln.relationship, 'race': ln.race, 'sex': ln.sex, 'capital-gain': ln.capital_gain, 'capital-loss': ln.capital_loss, 'hours-per-week': ln.hours_per_week, 'native-country': ln.native_country},
+            object_data_dict[ln.LOAN_ID].append(data)
+            retention_prediction = algorithm_object.compute_prediction(data)   
+            retention_prediction["cust_id"] = ln.LOAN_ID
+            predict_dict_data = {}
+            if  retention_prediction['income_probability'] > 0.67:
+                loan_num = 3
+                closure_date = '28/02/2021'
+                client_clv = "20"
+                color = 'red'
+                recommendation_process = "Reject client"
+                classification = 'Reject'
+                retention_prediction["classification"] = classification                
+                retention_prediction["loan_num"] = loan_num
+                retention_prediction["closure_date"] = closure_date
+                retention_prediction["client_clv"] = client_clv
+                retention_prediction["retention_color"] = color
+                retention_prediction["recommendation_process"] = recommendation_process
+            elif  retention_prediction['income_probability'] > 0.33:
+                loan_num = 3
+                closure_date = '28/02/2021'
+                client_clv = "1100"
+                color = 'blue'
+                recommendation_process = "Visit business and home"
+                classification = 'More detailed'
+                retention_prediction["classification"] = classification                
+                retention_prediction["loan_num"] = loan_num
+                retention_prediction["closure_date"] = closure_date
+                retention_prediction["client_clv"] = client_clv
+                retention_prediction["retention_color"] = color
+                retention_prediction["recommendation_process"] = recommendation_process
+            else:
+                loan_num = 3
+                closure_date = '28/02/2021'
+                client_clv = "2000"
+                color = 'green'
+                recommendation_process = "Automatic approval"
+                classification = 'Pre-Approved'
+                retention_prediction["classification"] = classification                
+                retention_prediction["loan_num"] = loan_num
+                retention_prediction["closure_date"] = closure_date
+                retention_prediction["client_clv"] = client_clv
+                retention_prediction["retention_color"] = color
+                retention_prediction["recommendation_process"] = recommendation_process
+
+        return retention_prediction
+
 
 
     def get_income_pred(ln_id):
@@ -101,17 +195,17 @@ class GetPredictions:
             predict_dict_data = {}
             if  incomes_prediction['income_probability'] > 0.67:
                 color = 'red'
-                text = 'high risk of defaulting the loan'
+                text = 'high risk'
                 incomes_prediction["income_color"] = color
                 incomes_prediction["income_text"] = text
             elif  incomes_prediction['income_probability'] > 0.33:
                 color = 'blue'
-                text = 'moderate risk of defaulting the loan'
+                text = 'moderate risk'
                 incomes_prediction["income_color"] = color
                 incomes_prediction["income_text"] = text
             else:
                 color = 'green'
-                text = 'low risk of defaulting the loan'
+                text = 'low risk'
                 incomes_prediction["income_color"] = color
                 incomes_prediction["income_text"] = text
 
@@ -125,21 +219,68 @@ class GetPredictions:
         applications_prediction["cust_id"] = ln.LOAN_ID
         if  applications_prediction['application_probability'] > 0.67:
             color = 'red'
-            text = 'high risk of defaulting the loan'
+            text = 'high risk'
             applications_prediction["application_color"] = color
             applications_prediction["application_text"] = text
         elif  applications_prediction['application_probability'] > 0.33:
             color = 'blue'
-            text = 'moderate risk of defaulting the loan'
+            text = 'moderate risk'
             applications_prediction["application_color"] = color
             applications_prediction["application_text"] = text
         else:
             color = 'green'
-            text = 'low risk of defaulting the loan'
+            text = 'low risk'
             applications_prediction["application_color"] = color
             applications_prediction["application_text"] = text
 
         return applications_prediction
+
+    def get_behavioral_pred(ln):
+        algorithm_object = BehavioralScoring()
+        print("data to bh  model", model_to_dict(ln))
+        behavioral_prediction = algorithm_object.compute_prediction(model_to_dict(ln))
+        behavioral_prediction["cust_id"] = ln.LOAN_ID
+        if  behavioral_prediction['behavioral_probability'] > 0.67:
+            color = 'red'
+            text = 'high risk'
+            time = '7 days'
+            contact_channel = 'phone'
+            contact_schedule = '08/02/2021'
+            message = " C'mon, use your brains"
+            behavioral_prediction["behavioral_color"] = color
+            behavioral_prediction["behavioral_text"] = text
+            behavioral_prediction["behavioral_time_to_default"] = time
+            behavioral_prediction["behavioral_contact_channel"] = contact_channel
+            behavioral_prediction["behavioral_contact_schedule"] = contact_schedule
+            behavioral_prediction["behavioral_message"] = message
+        elif  behavioral_prediction['behavioral_probability'] > 0.33:
+            color = 'blue'
+            text = 'moderate risk'
+            time = '21 days'
+            contact_channel = 'phone'
+            contact_schedule = '28/02/2021'
+            message = " C'mon, use your brains"
+            behavioral_prediction["behavioral_color"] = color
+            behavioral_prediction["behavioral_text"] = text
+            behavioral_prediction["behavioral_time_to_default"] = time
+            behavioral_prediction["behavioral_contact_channel"] = contact_channel
+            behavioral_prediction["behavioral_contact_schedule"] = contact_schedule
+            behavioral_prediction["behavioral_message"] = message
+        else:
+            color = 'green'
+            text = 'low risk'
+            time = '48 days'
+            contact_channel = 'phone'
+            contact_schedule = '08/04/2021'
+            message = " C'mon, use your brains"
+            behavioral_prediction["behavioral_color"] = color
+            behavioral_prediction["behavioral_text"] = text
+            behavioral_prediction["behavioral_time_to_default"] = time
+            behavioral_prediction["behavioral_contact_channel"] = contact_channel
+            behavioral_prediction["behavioral_contact_schedule"] = contact_schedule
+            behavioral_prediction["behavioral_message"] = message
+
+        return behavioral_prediction
 
     def merge(a, b, path=None, update=True):
         "http://stackoverflow.com/questions/7204805/python-dictionaries-of-dictionaries-merge"

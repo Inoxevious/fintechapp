@@ -136,52 +136,45 @@ function putTableData(result) {
     let row;
     if (result["application_classifier_data"]) {
         $("#no_results").hide();
-        $("#list_data").show();
-        $("#listing").html("");
+        $("#application_classifier_list_data").show();
+        $("#application_classifier_listing").html("");
         // populate application scoring_listing data
         $.each(result["application_classifier_data"], function (a, b) {
 
             $.each(b, function (d, c) {
-                console.log("probability " + c.probability)
+                console.log("probability " + c.income_probability)
                 row = "<tr> <td>" + c.cust_id + "</td>" +
                     "<td cl ass=''>" + c.income_probability + "</td>" +
                     "<td>" + c.loan_amount + "</td>" +
                     "<td style='background-color:" + c.income_color + "'>" + c.income_text + "</td>" +
                     "<td style='background-color:" + c.application_color + "'>" + c.application_text + "</td>" +
-                    // "<td>" + c.AMT_ANNUITY + "</td>" +
-                    // "<td>" + c.ORGANIZATION_TYPE + "</td>" +
-                    // "<td>" + c.OCCUPATION_TYPE + "</td>" +
-                    // "<td>" + c.NAME_INCOME_TYPE + "</td>" +
-                    // "<td>" + c.LIVINGAREA_AVG + "</td></tr>"
-                    $("#listing").append(row);
-            });
-        });
-    }
-    if (result["behavioral_classifier_data"]) {
-        $("#no_results").hide();
-        $("#list_data").show();
-        $("#listing").html("");
-        // populate application scoring_listing data
-
-        // populate behaviora_listing data
-        $.each(result["behavioral_classifier_data"], function (a, b) {
-            console.log("behavioral_classifier_data " + JSON.stringify(b))
-            $.each(b, function (d, c) {
-                console.log("probability " + c.income_probability)
-                row = "<tr> <td>" + c.cust_id + "</td>" +
-                    "<td>" + c.cust_id + "</td>" +
-                    "<td>" + c.loan_amount + "</td>" +
-                    "<td>" + c.loan_amount + "</td>" +
-                    "<td>" + c.loan_amount + "</td>" +
-                    "<td style='background-color:" + c.income_color + "'>" + c.income_probability + "</td>" +
                     "<td style='background-color:" + c.income_color + "'>" + c.income_text + "</td>" +
-                    // "<td style='background-color:" + c.application_color + "'>" + c.application_text + "</td>" +
-                    "<td>" + c.behavioral_time_to_default + "</td>" +
-                    "<td>" + c.behavioral_contact_channel + "</td>" +
-                    "<td>" + c.behavioral_contact_schedule + "</td>" +
-                    "<td>" + c.behavioral_message + "</td>" +
-                    "<td>" + "</td></tr>"
-                $("#behavioral_listing").append(row);
+
+                    "<td style='background-color:" + c.income_color + "'>" + c.income_text + "</td>" +
+
+                    "<td style='background-color:" + c.income_color + "'>" + c.income_text + "</td>" +
+                    "<td style='background-color:" + "'>" + c.income_text + "</td>" +
+                    `<td class='text-center'>
+                    <ul class='icons-list'>
+                        <li class='dropdown'>
+                            <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
+                                <i class='icon-menu9'></i>
+                            </a>
+
+                            <ul class='dropdown-menu dropdown-menu-right'>
+                                <li><a href='#'><i class='icon-person'></i>
+                                        View
+                                        Client</a></li>
+                                <li><a href='#'><i
+                                            class='icon-book'></i> View
+                                        Report</a></li>
+                                <li><a href='#'><i
+                                            class='icon-file-excel'></i> Export to .csv</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td></tr>`
+                $("#application_classifier_listing").append(row);
             });
         });
     }
@@ -189,7 +182,7 @@ function putTableData(result) {
         // if no result found for the given filter, then display no result
         console.log("no data application")
         $("#no_results h5").html("No results found");
-        $("#list_data").hide();
+        $("#application_classifier_list_data").hide();
         $("#no_results").show();
     }
 
@@ -224,7 +217,7 @@ function putTableData(result) {
 }
 
 function getAPIData() {
-    let url = $('#list_data').attr("url")
+    let url = $('#application_classifier_list_data').attr("url")
     $.ajax({
         method: 'GET',
         url: url,
@@ -238,7 +231,7 @@ function getAPIData() {
         },
         error: function (response) {
             $("#no_results h5").html("Something went wrong");
-            $("#list_data").hide();
+            $("#application_classifier_list_data").hide();
         }
     });
 }

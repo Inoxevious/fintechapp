@@ -448,3 +448,44 @@ class Loan_HistoryListing(ListAPIView):
         }); return false;
     }
 </script>
+
+
+class Loan_ApplicationView(APIView):
+    def get(self, request, *args, **kw):
+        # filter the queryset based on the filters applied
+        global qry
+        pagination_class = StandardResultsSetPagination
+        qry = Loan_History.objects.all()[:5]
+        NAME_INCOME_TYPE = self.request.query_params.get('business', None)
+        ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
+        OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
+        CODE_GENDER = self.request.query_params.get('school', None)
+        sort_by = self.request.query_params.get('sort_by', None)
+
+
+        if NAME_INCOME_TYPE:
+            qry = Loan_History.objects.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)[:5]
+
+        if ORGANIZATION_TYPE:
+            qry = Loan_History.objects.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)[:5]
+
+        if OCCUPATION_TYPE:
+            qry = Loan_History.objects.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)[:5]
+        if CODE_GENDER:
+            qry = Loan_History.objects.filter(CODE_GENDER = CODE_GENDER)[:5]  
+        # sort it if applied on based on price/points
+        if sort_by == "income":
+            qry = qry.order_by("AMT_INCOME_TOTAL")
+        elif sort_by == "credit_amount":
+            qry = qry.order_by("AMT_CREDIT")
+
+# get predictions for applications scoring predictions
+        behavioral_classifier_data = gpred.get_behavioral_scores(qry)
+        application_classifier_data = gpred.get_application_scores(qry)
+        return Response(data={
+            # 'labels': labels,
+            # 'pagination_class':pagination_class,
+            
+            'application_classifier_data': application_classifier_data,
+            'behavioral_classifier_data': behavioral_classifier_data,
+        })

@@ -7,11 +7,14 @@ app_name = 'companies'
 # Be careful setting the name to just /login use userlogin instead!
 urlpatterns=[
     # path("loan_history_listing/", views.Loan_HistoryListing.as_view(), name = 'listing'),
-    url(r'^api/v1.0/app_clasf[/]?$', views.Loan_ApplicationView.as_view(), name='app_clasf_view'),
+    url(r'^api/v1.0/application_scoring[/]?$', views.ApplicationAPIView.as_view(), name='application_scoring_view'),
+    url(r'^api/v1.0/behavioral_scoring[/]?$', views.BehavioralAPIView.as_view(), name='behavioral_scoring_view'),
+    url(r'^api/v1.0/retention_scoring[/]?$', views.RetentionAPIView.as_view(), name='retention_scoring_view'),
     path("ajax/business/", views.getBusiness, name = 'get_businesses'),
     path("ajax/mortage/", views.getMortage, name = 'get_mortages'),
     path("ajax/school/", views.getSchool, name = 'get_schools'),
     path("ajax/funeral/", views.getFuneral, name = 'get_funerals'),
+    path('data_for_charts', views.data_for_charts, name="data_for_charts"),
     path('data_aggretation', views.data_aggretation, name="data_aggretation"),
     path('<int:loan_id>/application_report_export_csv/$', views.application_report_export_csv, name="application_report_export_csv"),
     path('<int:loan_id>/application_report/$', views.application_report, name="application_report"),

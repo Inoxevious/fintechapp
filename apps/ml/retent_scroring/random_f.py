@@ -17,7 +17,7 @@ from sklearn.ensemble import RandomForestClassifier
 # import xgboost as xgb
 import json # will be needed for saving preprocessing details
 import joblib 
-class LoanApplicationClassifier:
+class RetentionScoring:
     def __init__(self):
         global BASE_DIR, path_to_artifacts
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -133,7 +133,7 @@ class LoanApplicationClassifier:
             label = "low"
             # print('Client with ID # {} has a low risk of defaulting the loan'.format(a))
         # print("application_probability:",p, "label:", label, "status:", "OK")    
-        return {"application_probability": p, "application_label": label, "application_status": "OK"}
+        return {"retention_probability": p, "retention_label": label, "retention_status": "OK"}
 
     def compute_prediction(self, input_data):
         try:

@@ -17,12 +17,14 @@
 
     </div>
 
-    <table class="table table-sm" id="list_data" data-toggle="table" url="{% url 'companies:app_clasf_view' %}">
+    <table class="table table-sm" id="retention_scoring_list_data" data-toggle="table"
+        url="{% url 'companies:retention_scoring_view' %}">
         <thead>
             <tr>
                 <th>Loan ID</th>
 
                 <th>Client</th>
+                <th>Loan#</th>
                 <th>Loan closure date</th>
                 <th>CLV</th>
                 <th>Classification</th>
@@ -34,11 +36,11 @@
 
             </tr>
         </thead>
-        <tbody id="retention_listing">
+        <tbody id="retention_scoring_listing">
         </tbody>
     </table>
 </div>
 <!-- /individual column searching (selects) -->
 <script src="{% static 'global_assets/js/main/jquery.min.js' %}"></script>
 <script src="{% static 'assets/js/chart.bundle.js' %}"></script>
-<script src="{% static 'account/assets/js/filters.js' %}"></script>
+<script src="{% static 'account/assets/js/retention_scoring.js' %}"></script>
