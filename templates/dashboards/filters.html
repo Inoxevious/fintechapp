@@ -12,23 +12,23 @@
             {% endif %}
             <div class="col-sm-2 col-2">
                 <div class="form-group">
-                    <label for="country">Income Type</label>
+                    <label for="country">Loan Type</label>
                     <select class="form-control" id="business" url="{%url 'companies:get_businesses' %}">
                     </select>
                 </div>
             </div>
             <div class="col-sm-2 col-2">
                 <div class="form-group">
-                    <label for="mortage">Organisation </label>
+                    <label for="mortage">Client class </label>
                     <select class="form-control" id="mortage" url="{%url 'companies:get_mortages' %}">
                     </select>
                 </div>
             </div>
             <div class="col-sm-2 col-2">
                 <div class="form-group">
-                    <label for="funeral">Occupation Type</label>
+                    <label for="funeral">Risk Level</label>
                     <select class="form-control" id="funeral" url="{%url 'companies:get_funerals' %}">
-                        <option value='all' selected>All funerals</option>
+                        <option value='all' selected>All risk</option>
                     </select>
                 </div>
             </div>

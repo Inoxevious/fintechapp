@@ -58,46 +58,40 @@ from apps.ml.application_classifier.random_forest import RandomForestApplication
 from django.http import JsonResponse
 
 from rest_framework.generics import ListAPIView
-from .serializers import Loan_HistorySerializers
+from .serializers import *
 from .models import Loan_History, IncomeData
 from .pagination import StandardResultsSetPagination
 from .get_income_pred import GetPredictions as gpred
+from apps.endpoints.models import BehaviouralScores
+from apps.endpoints.models import  RetentionScores
+from apps.endpoints.models import  ApplicationScores
 
-class ApplicationAPIView(APIView):
-    def get(self, request, *args, **kw):
+
+class ApplicationAPIView(ListAPIView):
+    pagination_class = StandardResultsSetPagination
+    serializer_class = ApplicationScoresSerializer
+    def get_queryset(self):
         # filter the queryset based on the filters applied
         global qry
         pagination_class = StandardResultsSetPagination
-        qry = Loan_History.objects.all()[:5]
-        NAME_INCOME_TYPE = self.request.query_params.get('business', None)
-        ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
-        OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
-        CODE_GENDER = self.request.query_params.get('school', None)
+        queryList = ApplicationScores.objects.all()
+        loan_officer = self.request.query_params.get('loan_officer', None)
+        # ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
+        # OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
+        # CODE_GENDER = self.request.query_params.get('school', None)
         sort_by = self.request.query_params.get('sort_by', None)
 
-
-        if NAME_INCOME_TYPE:
-            qry = Loan_History.objects.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)[:5]
-
-        if ORGANIZATION_TYPE:
-            qry = Loan_History.objects.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)[:5]
-
-        if OCCUPATION_TYPE:
-            qry = Loan_History.objects.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)[:5]
-        if CODE_GENDER:
-            qry = Loan_History.objects.filter(CODE_GENDER = CODE_GENDER)[:5]  
+        if loan_officer:
+            queryList = Loan_History.objects.filter(loan_officer = loan_officer)[:5]
+  
         # sort it if applied on based on price/points
         if sort_by == "income":
-            qry = qry.order_by("AMT_INCOME_TOTAL")
+            queryList = queryList.order_by("client_id")
         elif sort_by == "credit_amount":
-            qry = qry.order_by("AMT_CREDIT")
+            queryList = queryList.order_by("loan_amount")
 # get predictions for applications scoring predictions
-        application_classifier_data = gpred.get_application_scores(qry)
-        return Response(data={
-            # 'labels': labels,
-            # 'pagination_class':pagination_class,
-            'application_classifier_data': application_classifier_data,
-        })
+        # application_classifier_data = gpred.get_application_scores(queryList)
+        return  queryList
 
 class BehavioralAPIView(APIView):
     def get(self, request, *args, **kw):
@@ -280,8 +274,8 @@ def getBusiness(request):
     # null and blank values
 
     if request.method == "GET" and request.is_ajax():
-        business = Loan_History.objects.exclude(NAME_INCOME_TYPE__isnull=True).\
-            exclude(NAME_INCOME_TYPE__exact='').order_by('NAME_INCOME_TYPE').values_list('NAME_INCOME_TYPE').distinct()
+        business = ApplicationScores.objects.exclude(loan_id__isnull=True).\
+            exclude(officer_id__exact='').order_by('officer_id').values_list('officer_id').distinct()
         business = [i[0] for i in list(business)]
         data = {
             "business": business, 
@@ -294,8 +288,8 @@ def getMortage(request):
     # null and blank values
 
     if request.method == "GET" and request.is_ajax():
-        mortage = Loan_History.objects.exclude(ORGANIZATION_TYPE__isnull=True).\
-            exclude(ORGANIZATION_TYPE__exact='').order_by('ORGANIZATION_TYPE').values_list('ORGANIZATION_TYPE').distinct()
+        mortage = ApplicationScores.objects.exclude(income_text__isnull=True).\
+            exclude(income_text__exact='').order_by('income_text').values_list('income_text').distinct()
         mortage = [i[0] for i in list(mortage)]
         data = {
             "mortage": mortage, 
@@ -308,8 +302,8 @@ def getFuneral(request):
     # null and blank values
 
     if request.method == "GET" and request.is_ajax():
-        funeral = Loan_History.objects.exclude(OCCUPATION_TYPE__isnull=True).\
-            exclude(OCCUPATION_TYPE__exact='').order_by('OCCUPATION_TYPE').values_list('OCCUPATION_TYPE').distinct()
+        funeral = ApplicationScores.objects.exclude(income_text__isnull=True).\
+            exclude(income_text__exact='').order_by('income_text').values_list('income_text').distinct()
         funeral = [i[0] for i in list(funeral)]
         data = {
             "funeral": funeral, 
@@ -323,8 +317,8 @@ def getSchool(request):
     # null and blank values
 
     if request.method == "GET" and request.is_ajax():
-        school = Loan_History.objects.exclude(ORGANIZATION_TYPE__isnull=True).\
-            exclude(ORGANIZATION_TYPE__exact='').order_by('ORGANIZATION_TYPE').values_list('ORGANIZATION_TYPE').distinct()
+        school = ApplicationScores.objects.exclude(income_text__isnull=True).\
+            exclude(income_text__exact='').order_by('income_text').values_list('income_text').distinct()
         school = [i[0] for i in list(school)]
         data = {
             "school": school, 

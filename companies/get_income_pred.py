@@ -24,34 +24,36 @@ class GetPredictions:
 
     def get_application_scores(qry):
 
-        prediction_data = {}
+        prediction_data_dict = {}
         for ln in qry:
             if ApplicationScores.objects.filter(loan_id=ln.id).exists():
-                prediction_data = ApplicationScores.objects.filter(loan_id=ln.id)
+                prediction_data_qry = ApplicationScores.objects.filter(loan_id=ln.id)
             else:
+                prediction_data_dict[ln.id] = []
                 prediction_data['application_text'] = "Loan prediction scheduled"
                 prediction_data['application_label'] = "System validating data"
+                prediction_data = prediction_data_dict[ln.id].append(prediction_data)
                 # prediction_data_dict[ln.LOAN_ID].append(prediction)
         # print("predictions",prediction)
-        return prediction_data_dict
+        return prediction_data_qry
 
     def get_retention_scores(qry):
         prediction_data_dict = {}
         for ln in qry:
             if RetentionScores.objects.filter(loan_id=ln.id).exists():
-                prediction_data_dict = RetentionScores.objects.filter(loan_id=ln.id)
+                prediction_data_qry = RetentionScores.objects.filter(loan_id=ln.id)
             else:
                 prediction_data_dict['retention_text'] = "Loan prediction scheduled"
                 prediction_data_dict['retention_label'] = "System validating data"
 
         # print("predictions",prediction)
-        return prediction_data
+        return prediction_data_qry
 
     def get_behavioral_scores(qry):
         
         for ln in qry:
             if BehaviouralScores.objects.filter(loan_id=ln.id).exists():
-                prediction_data_dict = BehaviouralScores.objects.filter(loan_id=ln.id)
+                prediction_data_qry = BehaviouralScores.objects.filter(loan_id=ln.id)
             else:
                 prediction_data_dict = {}
                 prediction_data_dict['application_loan_id'] = ln.id
@@ -59,7 +61,7 @@ class GetPredictions:
                 prediction_data_dict['application_label'] = "System validating data"
 
         # print("predictions",prediction)
-        return prediction_data
+        return prediction_data_qry
 
         
   

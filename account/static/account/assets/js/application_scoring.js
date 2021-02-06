@@ -134,27 +134,25 @@ function putTableData(result) {
     // creating table row for each result and
     // pushing to the html cntent of table body of listing table
     let row;
-    if (result["application_classifier_data"]) {
+    if (result["results"]) {
         $("#no_results").hide();
         $("#application_classifier_list_data").show();
         $("#application_classifier_listing").html("");
         // populate application scoring_listing data
-        $.each(result["application_classifier_data"], function (a, b) {
+        $.each(result["results"], function (a, b) {
+            console.log("probability " + b.income_probability)
+            row = "<tr> <td>" + b.client_id + "</td>" +
+                "<td cl ass=''>" + b.income_probability + "</td>" +
+                "<td>" + b.loan_amount + "</td>" +
+                "<td style='background-color:" + b.income_color + "'>" + b.income_text + "</td>" +
+                "<td style='background-color:" + b.application_color + "'>" + b.application_text + "</td>" +
+                "<td style='background-color:" + b.income_color + "'>" + b.income_text + "</td>" +
 
-            $.each(b, function (d, c) {
-                console.log("probability " + c.income_probability)
-                row = "<tr> <td>" + c.cust_id + "</td>" +
-                    "<td cl ass=''>" + c.income_probability + "</td>" +
-                    "<td>" + c.loan_amount + "</td>" +
-                    "<td style='background-color:" + c.income_color + "'>" + c.income_text + "</td>" +
-                    "<td style='background-color:" + c.application_color + "'>" + c.application_text + "</td>" +
-                    "<td style='background-color:" + c.income_color + "'>" + c.income_text + "</td>" +
+                "<td style='background-color:" + b.income_color + "'>" + b.income_text + "</td>" +
 
-                    "<td style='background-color:" + c.income_color + "'>" + c.income_text + "</td>" +
-
-                    "<td style='background-color:" + c.income_color + "'>" + c.income_text + "</td>" +
-                    "<td style='background-color:" + "'>" + c.income_text + "</td>" +
-                    `<td class='text-center'>
+                "<td style='background-color:" + b.income_color + "'>" + b.income_text + "</td>" +
+                "<td style='background-color:" + "'>" + b.income_text + "</td>" +
+                `<td class='text-center'>
                     <ul class='icons-list'>
                         <li class='dropdown'>
                             <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
@@ -174,8 +172,8 @@ function putTableData(result) {
                         </li>
                     </ul>
                 </td></tr>`
-                $("#application_classifier_listing").append(row);
-            });
+            $("#application_classifier_listing").append(row);
+
         });
     }
     else {
