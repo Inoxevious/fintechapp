@@ -213,11 +213,11 @@ class ApplicationAnalyticsResultsView(ListView):
     template_name = 'dashboards/application/index.html'
     def get_queryset(self, **kwargs):
         global cust_data, loan, user_name, input_data,acc_user, time
-        user =  request.session['account_user']
+        user =  self.request.session['account_user']
         time = end = datetime.today()
-        user_name =  request.session['account_user']
+        user_name =  self.request.session['account_user']
         print(user)
-        if user == None:
+        if user == N or user == None:
             redirect('account:login')
         else:
             acc_user = AccountUser.objects.get_object_or_404
