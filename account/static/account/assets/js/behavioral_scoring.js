@@ -144,19 +144,21 @@ function putTableData(result) {
         $.each(result["results"], function (a, b) {
             console.log("behavioral_classifier_data " + JSON.stringify(b))
             console.log("probability " + b.income_probability)
-            row = "<tr> <td>" + b.loan_id + "</td>" +
-                "<td>" + b.client_id + "</td>" +
-                "<td>" + b.loan_amount + "</td>" +
-                "<td>" + b.loan_amount + "</td>" +
-                "<td>" + b.loan_amount + "</td>" +
-                "<td style='background-color:" + b.income_color + "'>" + b.income_probability + "</td>" +
-                "<td style='background-color:" + b.income_color + "'>" + b.income_text + "</td>" +
-                // "<td style='background-color:" + b.application_color + "'>" + b.application_text + "</td>" +
-                "<td>" + b.behavioral_time_to_default + "</td>" +
-                "<td>" + b.behavioral_contact_channel + "</td>" +
-                "<td>" + b.behavioral_contact_schedule + "</td>" +
-                "<td>" + b.behavioral_message + "</td>" +
-                `<td class='text-center'>
+            var client_profile = "{% url'companies:profile' " + b.client_id + " %}"
+            var officer_profile = "{% url'companies:profile' " + b.officer_id + " %}"
+            var report = "{% url'companies:profile' " + b.loan_id + " %}"
+            var csv = "{% url'companies:profile' " + b.loan_id + " %}"
+            client_url_id = 'client_' + b.loan_id
+            officer_url_id = 'officer_' + b.officer_id
+            report_url_id = 'report_' + b.loan_id
+            csv_url_id = 'csv_' + b.loan_id
+            document.getElementById("client_url_id").setAttribute("href", client_profile);
+            // $("#" + client_url_id).attr("url", client_profile);
+            // $("#" + officer_url_id).attr("url", officer_profile);
+            // $("#" + report_url_id).attr("url", report);
+            // $("#" + csv_url_id).attr("url", csv);
+            console.log("URLSSSSS" + client_profile)
+            row = `<tr> <td>${b.loan_id}</td><td><a href="${client_profile}" id="${client_url_id}" >${b.client_id}</a></td><td>${b.loan_amount}</td><td>${b.loan_amount}</td><td>${b.loan_amount}</td><td style='background-color:${b.income_color}'>${b.income_probability}</td><td style='background-color:${b.income_color}'>${b.income_text}</td><td>${b.behavioral_time_to_default}</td><td>${b.behavioral_contact_channel}</td><td>${b.behavioral_contact_schedule}</td><td>${b.behavioral_message}</td>${`<td class='text-center'>
                     <ul class='icons-list'>
                         <li class='dropdown'>
                             <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
@@ -164,19 +166,21 @@ function putTableData(result) {
                             </a>
 
                             <ul class='dropdown-menu dropdown-menu-right'>
-                                <li><a href='#'><i class='icon-person'></i>
+                                <li><a id="`}${client_url_id}${`" href=""><i class='icon-person'></i>
                                         View
                                         Client</a></li>
-                                <li><a href='#'><i
+                                <li><a id="`}${report_url_id}${`" href=""><i
                                             class='icon-book'></i> View
                                         Report</a></li>
-                                <li><a href='#'><i
+                                <li><a id="`}${csv_url_id}${`" href=''><i
                                             class='icon-file-excel'></i> Export to .csv</a></li>
                             </ul>
                         </li>
                     </ul>
-                </td></tr>`
+                </td></tr>`}`
             $("#behavioral_listing").append(row);
+
+
         });
     }
     else {
