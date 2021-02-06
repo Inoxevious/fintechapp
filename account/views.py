@@ -33,7 +33,11 @@ def index(request, **kwargs):
 
         user_id = request.user.id
         print("User ID", user_id)
-        account_user = AccountUser.objects.get(user_id=user_id)
+        if AccountUser.objects.filter(user_id=user_id).exists():
+            account_user = AccountUser.objects.get(user_id=user_id)
+        else:
+            account_user = request.user
+            
         request.session['account_user_id'] = account_user.id
         print("account_user ID", account_user)
         context ={
