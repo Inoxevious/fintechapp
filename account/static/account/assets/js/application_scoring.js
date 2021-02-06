@@ -134,7 +134,7 @@ function putTableData(result) {
     // creating table row for each result and
     // pushing to the html cntent of table body of listing table
     let row;
-    if (result["results"]) {
+    if (result["results"].length > 0) {
         $("#no_results").hide();
         $("#application_classifier_list_data").show();
         $("#application_classifier_listing").html("");

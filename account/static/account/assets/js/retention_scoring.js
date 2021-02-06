@@ -134,25 +134,24 @@ function putTableData(result) {
     // creating table row for each result and
     // pushing to the html cntent of table body of listing table
     let row;
-    if (result["retention_scoring_data"]) {
+    if (result["results"].length > 0) {
         $("#no_results").hide();
         $("#retention_scoring_list_data").show();
         $("#retention_scoring_listing").html("");
         // populate application scoring_listing data
-        $.each(result["retention_scoring_data"], function (a, b) {
-            $.each(b, function (d, c) {
-                console.log("probability " + c.probability)
-                row = "<tr> <td>" + c.cust_id + "</td>" +
-                    "<td><a href='{% url 'companies:index' %}'>" + c.cust_id + "</a></td>" +
-                    "<td>" + c.loan_num + "</td>" +
-                    "<td>" + c.closure_date + "</td>" +
-                    "<td>" + c.client_clv + "</td>" +
-                    "<td>" + c.classification + "</td>" +
-                    "<td>" + c.recommendation_process + "</td>" +
-                    "<td style='background-color:" + c.retention_color + "'>" + c.income_probability * 100 + "</td>" +
-                    "<td style='background-color:" + c.retention_color + "'>" + c.loan_amount + "</td>" +
-                    // "<td style='background-color:" + c.application_color + "'>" + c.application_text + "</td>" +
-                    `<td class='text-center'>
+        $.each(result["results"], function (a, b) {
+            console.log("probability " + b.income_probability)
+            row = "<tr> <td>" + b.loan_id + "</td>" +
+                "<td><a href='{% url 'companies:index' %}'>" + b.client_id + "</a></td>" +
+                "<td>" + b.retention_loan_num + "</td>" +
+                "<td>" + b.retention_closure_date + "</td>" +
+                "<td>" + b.retention_client_clv + "</td>" +
+                "<td>" + b.retention_classification + "</td>" +
+                "<td>" + b.retention_recommendation_process + "</td>" +
+                "<td style='background-color:" + b.retention_color + "'>" + b.income_probability * 100 + "</td>" +
+                "<td style='background-color:" + b.retention_color + "'>" + b.loan_amount + "</td>" +
+                // "<td style='background-color:" + b.application_color + "'>" + b.application_text + "</td>" +
+                `<td class='text-center'>
                     <ul class='icons-list'>
                         <li class='dropdown'>
                             <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
@@ -172,9 +171,9 @@ function putTableData(result) {
                         </li>
                     </ul>
                 </td></tr>`
-                $("#retention_scoring_listing").append(row);
-            });
+            $("#retention_scoring_listing").append(row);
         });
+
     }
     else {
         // if no result found for the given filter, then display no result

@@ -20,7 +20,7 @@ from apps.endpoints.models import  RetentionScores
 from apps.endpoints.models import  ApplicationScores
 class GetPredictions:
     def __init__(self):
-        global algorithm_object, prediction
+        global algorithm_object, prediction, retention_prediction_data_qry
 
     def get_application_scores(qry):
 
@@ -38,16 +38,17 @@ class GetPredictions:
         return prediction_data_qry
 
     def get_retention_scores(qry):
+        
         prediction_data_dict = {}
         for ln in qry:
             if RetentionScores.objects.filter(loan_id=ln.id).exists():
-                prediction_data_qry = RetentionScores.objects.filter(loan_id=ln.id)
+                retention_prediction_data_qry = RetentionScores.objects.filter(loan_id=ln.id)
             else:
                 prediction_data_dict['retention_text'] = "Loan prediction scheduled"
                 prediction_data_dict['retention_label'] = "System validating data"
 
         # print("predictions",prediction)
-        return prediction_data_qry
+        return retention_prediction_data_qry
 
     def get_behavioral_scores(qry):
         

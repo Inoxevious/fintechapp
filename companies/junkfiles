@@ -1,3 +1,51 @@
+class RetentionAPIView(APIView):
+    def get(self, request, *args, **kw):
+        # filter the queryset based on the filters applied
+        global qry
+        pagination_class = StandardResultsSetPagination
+        qry = Loan_History.objects.all()[:10]
+        NAME_INCOME_TYPE = self.request.query_params.get('business', None)
+        ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
+        OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
+        CODE_GENDER = self.request.query_params.get('school', None)
+        sort_by = self.request.query_params.get('sort_by', None)
+
+
+        if NAME_INCOME_TYPE:
+            qry = Loan_History.objects.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)[:5]
+
+        if ORGANIZATION_TYPE:
+            qry = Loan_History.objects.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)[:5]
+
+        if OCCUPATION_TYPE:
+            qry = Loan_History.objects.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)[:5]
+        if CODE_GENDER:
+            qry = Loan_History.objects.filter(CODE_GENDER = CODE_GENDER)[:5]  
+        # sort it if applied on based on price/points
+        if sort_by == "income":
+            qry = qry.order_by("AMT_INCOME_TOTAL")
+        elif sort_by == "credit_amount":
+            qry = qry.order_by("AMT_CREDIT")
+# get predictions for applications scoring predictions
+        retention_scoring_data = gpred.get_retention_scores(qry)
+        return Response(data={
+            # 'labels': labels,
+            # 'pagination_class':pagination_class,
+            'retention_scoring_data': retention_scoring_data,
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
     for ln in loan:
         query_object_data_dict[ln.client_id] = []
         # client_info = {'age': ln.client.age, 'workclass': 'Private', 'fnlwgt': 70984, 'education': 'Assoc-voc', 'education-num': 11, 'marital-status': 'Married-civ-spouse', 'occupation': 'Machine-op-inspct', 'relationship': 'Husband', 'race': 'White', 'sex': 'Male', 'capital-gain': 0, 'capital-loss': 0, 'hours-per-week': 40, 'native-country': 'United-States'},

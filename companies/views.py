@@ -73,7 +73,6 @@ class ApplicationAPIView(ListAPIView):
     def get_queryset(self):
         # filter the queryset based on the filters applied
         global qry
-        pagination_class = StandardResultsSetPagination
         queryList = ApplicationScores.objects.all()
         loan_officer = self.request.query_params.get('loan_officer', None)
         # ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
@@ -82,7 +81,7 @@ class ApplicationAPIView(ListAPIView):
         sort_by = self.request.query_params.get('sort_by', None)
 
         if loan_officer:
-            queryList = Loan_History.objects.filter(loan_officer = loan_officer)[:5]
+            queryList = ApplicationScores.objects.filter(loan_officer = loan_officer)[:5]
   
         # sort it if applied on based on price/points
         if sort_by == "income":
@@ -93,78 +92,54 @@ class ApplicationAPIView(ListAPIView):
         # application_classifier_data = gpred.get_application_scores(queryList)
         return  queryList
 
-class BehavioralAPIView(APIView):
-    def get(self, request, *args, **kw):
+class BehavioralAPIView(ListAPIView):
+    pagination_class = StandardResultsSetPagination
+    serializer_class = BehaviouralScoresSerializer
+    def get_queryset(self):
         # filter the queryset based on the filters applied
         global qry
-        pagination_class = StandardResultsSetPagination
-        qry = Loan_History.objects.all()[:5]
-        NAME_INCOME_TYPE = self.request.query_params.get('business', None)
-        ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
-        OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
-        CODE_GENDER = self.request.query_params.get('school', None)
+        queryList = BehaviouralScores.objects.all()
+        loan_officer = self.request.query_params.get('loan_officer', None)
+        # ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
+        # OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
+        # CODE_GENDER = self.request.query_params.get('school', None)
         sort_by = self.request.query_params.get('sort_by', None)
 
-
-        if NAME_INCOME_TYPE:
-            qry = Loan_History.objects.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)[:5]
-
-        if ORGANIZATION_TYPE:
-            qry = Loan_History.objects.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)[:5]
-
-        if OCCUPATION_TYPE:
-            qry = Loan_History.objects.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)[:5]
-        if CODE_GENDER:
-            qry = Loan_History.objects.filter(CODE_GENDER = CODE_GENDER)[:5]  
+        if loan_officer:
+            queryList = BehaviouralScores.objects.filter(loan_officer = loan_officer)[:5]
+  
         # sort it if applied on based on price/points
         if sort_by == "income":
-            qry = qry.order_by("AMT_INCOME_TOTAL")
+            queryList = queryList.order_by("client_id")
         elif sort_by == "credit_amount":
-            qry = qry.order_by("AMT_CREDIT")
-
+            queryList = queryList.order_by("loan_amount")
 # get predictions for applications scoring predictions
-        behavioral_classifier_data = gpred.get_behavioral_scores(qry)
-        return Response(data={
-            # 'labels': labels,
-            # 'pagination_class':pagination_class,
-            'behavioral_classifier_data': behavioral_classifier_data,
-        })
-
-class RetentionAPIView(APIView):
-    def get(self, request, *args, **kw):
+        # application_classifier_data = gpred.get_application_scores(queryList)
+        return  queryList
+class RetentionAPIView(ListAPIView):
+    pagination_class = StandardResultsSetPagination
+    serializer_class = RetentionScoresSerializer
+    def get_queryset(self):
         # filter the queryset based on the filters applied
         global qry
-        pagination_class = StandardResultsSetPagination
-        qry = Loan_History.objects.all()[:10]
-        NAME_INCOME_TYPE = self.request.query_params.get('business', None)
-        ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
-        OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
-        CODE_GENDER = self.request.query_params.get('school', None)
+        queryList = RetentionScores.objects.all()
+        loan_officer = self.request.query_params.get('loan_officer', None)
+        # ORGANIZATION_TYPE = self.request.query_params.get('mortage', None)
+        # OCCUPATION_TYPE = self.request.query_params.get('funeral', None)
+        # CODE_GENDER = self.request.query_params.get('school', None)
         sort_by = self.request.query_params.get('sort_by', None)
 
-
-        if NAME_INCOME_TYPE:
-            qry = Loan_History.objects.filter(NAME_INCOME_TYPE = NAME_INCOME_TYPE)[:5]
-
-        if ORGANIZATION_TYPE:
-            qry = Loan_History.objects.filter(ORGANIZATION_TYPE = ORGANIZATION_TYPE)[:5]
-
-        if OCCUPATION_TYPE:
-            qry = Loan_History.objects.filter(OCCUPATION_TYPE = OCCUPATION_TYPE)[:5]
-        if CODE_GENDER:
-            qry = Loan_History.objects.filter(CODE_GENDER = CODE_GENDER)[:5]  
+        if loan_officer:
+            queryList = RetentionScores.objects.filter(loan_officer = loan_officer)[:5]
+  
         # sort it if applied on based on price/points
         if sort_by == "income":
-            qry = qry.order_by("AMT_INCOME_TOTAL")
+            queryList = queryList.order_by("client_id")
         elif sort_by == "credit_amount":
-            qry = qry.order_by("AMT_CREDIT")
+            queryList = queryList.order_by("loan_amount")
 # get predictions for applications scoring predictions
-        retention_scoring_data = gpred.get_retention_scores(qry)
-        return Response(data={
-            # 'labels': labels,
-            # 'pagination_class':pagination_class,
-            'retention_scoring_data': retention_scoring_data,
-        })
+        # application_classifier_data = gpred.get_application_scores(queryList)
+        return  queryList
 
 class HomeView(ListView):
     template_name = 'dashboards/landing/index.html'
