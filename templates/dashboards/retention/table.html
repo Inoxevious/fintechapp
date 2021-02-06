@@ -14,7 +14,12 @@
 
     <div class="panel-body">
         {% include 'dashboards/filters.html' %}
-
+        <div id="result-count" class="text-right">
+            <span class='font-weight-bold'></span> results found.
+        </div>
+        <div id="no_results">
+            <h5>No results found</h5>
+        </div>
     </div>
 
     <table class="table table-sm" id="retention_scoring_list_data" data-toggle="table"
@@ -36,10 +41,21 @@
 
             </tr>
         </thead>
-        <h5 id="no_results"></h5>
         <tbody id="retention_scoring_listing">
         </tbody>
     </table>
+</div>
+<div class="row justify-content-center">
+    <nav aria-label="navigation">
+        <ul class="pagination">
+            <li class="page-item">
+                <button class="btn btn-primary page-link" id="previous">Previous</button>
+            </li>
+            <li class="page-item pull-right">
+                <button class="btn btn-primary page-link" id="next">Next</button>
+            </li>
+        </ul>
+    </nav>
 </div>
 <!-- /individual column searching (selects) -->
 <script src="{% static 'global_assets/js/main/jquery.min.js' %}"></script>

@@ -137,13 +137,12 @@ function putTableData(result) {
     if (result["results"].length > 0) {
         $("#no_results").hide();
         $("#behavioral_list_data").show();
-        $("#listing").html("");
+        $("#behavioral_listing").html("");
         // populate application scoring_listing data
 
         // populate behaviora_listing data
         $.each(result["results"], function (a, b) {
             console.log("behavioral_classifier_data " + JSON.stringify(b))
-
             console.log("probability " + b.income_probability)
             row = "<tr> <td>" + b.loan_id + "</td>" +
                 "<td>" + b.client_id + "</td>" +
@@ -182,9 +181,9 @@ function putTableData(result) {
     }
     else {
         // if no result found for the given filter, then display no result
-        console.log("no data application")
-        $("#no_results h5").html("No results found");
-        $("#behavioral_list_data").hide();
+        console.log("no data behavioral")
+        $("#no_results h5").html("No behavioral results found");
+        $("#behavioral_listing").hide();
         $("#no_results").show();
     }
 

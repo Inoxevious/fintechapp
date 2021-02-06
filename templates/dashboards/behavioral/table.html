@@ -15,6 +15,9 @@
 
     <div class="panel-body">
         {% include 'dashboards/filters.html' %}
+        <div id="no_results">
+            <h5>No results found</h5>
+        </div>
     </div>
 
     <table class="table table-sm" id="behavioral_list_data" data-toggle="table"
@@ -39,10 +42,21 @@
 
             </tr>
         </thead>
-        <h5 id="no_results"></h5>
         <tbody id="behavioral_listing">
         </tbody>
     </table>
+</div>
+<div class="row justify-content-center">
+    <nav aria-label="navigation">
+        <ul class="pagination">
+            <li class="page-item">
+                <button class="btn btn-primary page-link" id="previous">Previous</button>
+            </li>
+            <li class="page-item pull-right">
+                <button class="btn btn-primary page-link" id="next">Next</button>
+            </li>
+        </ul>
+    </nav>
 </div>
 <!-- /individual column searching (selects) -->
 <script src="{% static 'account/global_assets/js/core/libraries/jquery.min.js' %}"></script>

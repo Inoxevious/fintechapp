@@ -177,7 +177,7 @@ function putTableData(result) {
     }
     else {
         // if no result found for the given filter, then display no result
-        console.log("no data ")
+        console.log("no retention data ")
         $("#no_results h5").html("No results found");
         $("#retention_scoring_list_data").hide();
         $("#no_results").show();
