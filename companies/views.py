@@ -178,7 +178,7 @@ class HomeView(ListView):
         global cust_data, loan, user_name, input_data,acc_user, time
         user_id = self.request.session['account_user_id']
         time = end = datetime.today()
-        acc_user = AccountUser.objects.get(id=user)
+        acc_user = AccountUser.objects.get(id=user_id)
         user_name = acc_user
         org = Organization.objects.get(id=1)
         client = Clients.objects.filter(insti=org)
@@ -196,7 +196,7 @@ class BehavioralAnalyticsResultsView(ListView):
         global cust_data, loan, user_name, input_data,acc_user, time
         user_id = self.request.session['account_user_id']
         time = end = datetime.today()
-        acc_user = AccountUser.objects.get(id=user)
+        acc_user = AccountUser.objects.get(id=user_id)
         user_name = acc_user
         org = Organization.objects.get(id=1)
         client = Clients.objects.filter(insti=org)
@@ -215,7 +215,7 @@ class ApplicationAnalyticsResultsView(ListView):
         global cust_data, loan, user_name, input_data,acc_user, time
         user_id = self.request.session['account_user_id']
         time = end = datetime.today()
-        acc_user = AccountUser.objects.get(id=user)
+        acc_user = AccountUser.objects.get(id=user_id)
         user_name = acc_user
         org = Organization.objects.get(id=1)
         client = Clients.objects.filter(insti=org)
@@ -233,7 +233,7 @@ class RetentionAnalyticsResultsView(ListView):
         global cust_data, loan, user_name, input_data,acc_user, time
         user_id = self.request.session['account_user_id']
         time = end = datetime.today()
-        acc_user = AccountUser.objects.get(id=user)
+        acc_user = AccountUser.objects.get(id=user_id)
         user_name = acc_user
         org = Organization.objects.get(id=1)
         client = Clients.objects.filter(insti=org)

@@ -181,16 +181,20 @@ class GetPredictions:
     def get_income_pred(ln_id):
         algorithm_object = RandomForestClassifier()
         ln_cnt = IncomeData.objects.filter(LOAN_ID=ln_id.LOAN_ID).count()
+        print("Income qrty", ln_cnt)
         if ln_cnt == 0:
             incomes_prediction = {}
             incomes_prediction['income_text'] = 'No income data for this client'
         else:
             ln = IncomeData.objects.get(LOAN_ID=ln_id.LOAN_ID)
+            print("Income qrty", ln)
             object_data_dict = {}
             object_data_dict[ln.LOAN_ID] = []
             data ={'age': ln.age, 'workclass': ln.workclass, 'fnlwgt': ln.fnlwgt, 'education': ln.education, 'education-num': ln.education_num, 'marital-status': ln.marital_status, 'occupation':ln.occupation, 'relationship': ln.relationship, 'race': ln.race, 'sex': ln.sex, 'capital-gain': ln.capital_gain, 'capital-loss': ln.capital_loss, 'hours-per-week': ln.hours_per_week, 'native-country': ln.native_country},
             object_data_dict[ln.LOAN_ID].append(data)
+            print("incomes_prediction data", data)
             incomes_prediction = algorithm_object.compute_prediction(data)   
+            print("incomes_prediction respo", incomes_prediction)
             incomes_prediction["cust_id"] = ln.LOAN_ID
             predict_dict_data = {}
             if  incomes_prediction['income_probability'] > 0.67:
