@@ -93,3 +93,68 @@ class ABTest(models.Model):
 
     parent_mlalgorithm_1 = models.ForeignKey(MLAlgorithm, on_delete=models.CASCADE, related_name="parent_mlalgorithm_1",blank=True, null=True)
     parent_mlalgorithm_2 = models.ForeignKey(MLAlgorithm, on_delete=models.CASCADE, related_name="parent_mlalgorithm_2",blank=True, null=True)
+
+
+
+class ApplicationScores(models.Model):
+    loan_id  = models.CharField(max_length=128)
+    client_id = models.CharField(max_length=128)
+    officer_id = models.CharField(max_length=128)
+    company_id = models.CharField(max_length=128)
+    income_probability = models.FloatField(null=True ,blank=True)
+    income_color = models.CharField(null=True ,blank=True,max_length=70)
+    income_text = models.CharField(null=True ,blank=True,max_length=255)
+    application_probability = models.FloatField(null=True ,blank=True)
+    application_color = models.CharField(null=True ,blank=True,max_length=70)
+    application_text = models.CharField(null=True ,blank=True,max_length=255)
+    loan_amount = models.FloatField(null=True ,blank=True)
+    created_by = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    last_update_at = models.DateTimeField(auto_now_add=True, blank=True)
+    def __str__(self):
+        return self.loan_id
+
+
+class BehaviouralScores(models.Model):
+    loan_id  = models.CharField(max_length=128)
+    client_id = models.CharField(max_length=128)
+    officer_id = models.CharField(max_length=128)
+    company_id = models.CharField(max_length=128)
+    income_probability = models.FloatField(null=True ,blank=True)
+    income_color = models.CharField(null=True ,blank=True,max_length=70)
+    income_text = models.CharField(null=True ,blank=True,max_length=255)
+    behavioral_probability = models.FloatField(null=True ,blank=True)
+    behavioral_color = models.CharField(null=True ,blank=True,max_length=70)
+    behavioral_text = models.CharField(null=True ,blank=True,max_length=255)
+    behavioral_time_to_default  = models.CharField(null=True ,blank=True,max_length=255)
+    behavioral_contact_channel  = models.CharField(null=True ,blank=True,max_length=255)
+    behavioral_contact_schedule  = models.CharField(null=True ,blank=True,max_length=255)
+    behavioral_message  = models.CharField(null=True ,blank=True,max_length=255)
+    loan_amount = models.FloatField(null=True ,blank=True)
+    created_by = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    last_update_at = models.DateTimeField(auto_now_add=True, blank=True)
+    def __str__(self):
+        return self.loan_id
+
+class RetentionScores(models.Model):
+    loan_id  = models.CharField(max_length=128)
+    client_id = models.CharField(max_length=128)
+    officer_id = models.CharField(max_length=128)
+    company_id = models.CharField(max_length=128)
+    income_probability = models.FloatField(null=True ,blank=True)
+    income_color = models.CharField(null=True ,blank=True,max_length=70)
+    income_text = models.CharField(null=True ,blank=True,max_length=255)
+    retention_probability = models.FloatField(null=True ,blank=True)
+    retention_color = models.CharField(null=True ,blank=True,max_length=70)
+    retention_classification = models.CharField(null=True ,blank=True,max_length=255)
+    retention_recommendation_process  = models.CharField(null=True ,blank=True,max_length=255)
+    retention_loan_num  = models.CharField(null=True ,blank=True,max_length=255)
+    retention_closure_date = models.CharField(null=True ,blank=True,max_length=255)
+    retention_client_clv  = models.CharField(null=True ,blank=True,max_length=255)
+    loan_amount = models.FloatField(null=True ,blank=True)
+    created_by = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    last_update_at = models.DateTimeField(auto_now_add=True, blank=True)
+    def __str__(self):
+        return self.loan_id

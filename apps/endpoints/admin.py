@@ -17,6 +17,17 @@ class MLAlgorithmStatusAdmin(admin.ModelAdmin):
 class MLRequestAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(BehaviouralScores)
+class BehaviouralScoresAdmin(admin.ModelAdmin):
+    pass
+@admin.register(ApplicationScores)
+class ApplicationScoresAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(RetentionScores)
+class RetentionScoresAdmin(admin.ModelAdmin):
+    pass
+
 @admin.register(ABTest)
 class ABTestAdmin(admin.ModelAdmin):
     pass
