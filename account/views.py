@@ -34,7 +34,7 @@ def index(request, **kwargs):
         user_id = request.user.id
         print("User ID", user_id)
         account_user = AccountUser.objects.get(user_id=user_id)
-        request.session['account_user'] = account_user
+        request.session['account_user_id'] = account_user.id
         print("account_user ID", account_user)
         context ={
             'account_user':account_user

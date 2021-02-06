@@ -176,10 +176,10 @@ class HomeView(ListView):
     template_name = 'dashboards/landing/index.html'
     def get_queryset(self, **kwargs):
         global cust_data, loan, user_name, input_data,acc_user, time
-        user = self.request.user
+        user_id = self.request.session['account_user_id']
         time = end = datetime.today()
-        user_name = user
-        acc_user = AccountUser.objects.get(user=user)
+        acc_user = AccountUser.objects.get(id=user)
+        user_name = acc_user
         org = Organization.objects.get(id=1)
         client = Clients.objects.filter(insti=org)
 
@@ -194,10 +194,10 @@ class BehavioralAnalyticsResultsView(ListView):
     template_name = 'dashboards/behavioral/index.html'
     def get_queryset(self, **kwargs):
         global cust_data, loan, user_name, input_data,acc_user, time
-        user = self.request.user
+        user_id = self.request.session['account_user_id']
         time = end = datetime.today()
-        user_name = user
-        acc_user = AccountUser.objects.get(user=user)
+        acc_user = AccountUser.objects.get(id=user)
+        user_name = acc_user
         org = Organization.objects.get(id=1)
         client = Clients.objects.filter(insti=org)
         
@@ -213,18 +213,10 @@ class ApplicationAnalyticsResultsView(ListView):
     template_name = 'dashboards/application/index.html'
     def get_queryset(self, **kwargs):
         global cust_data, loan, user_name, input_data,acc_user, time
-        user =  self.request.session['account_user']
+        user_id = self.request.session['account_user_id']
         time = end = datetime.today()
-        user_name =  self.request.session['account_user']
-        print(user)
-        if user == N or user == None:
-            redirect('account:login')
-        else:
-            acc_user = AccountUser.objects.get_object_or_404
-            if acc_user:
-                redirect('account:index')
-            else:
-                redirect('account:login')
+        acc_user = AccountUser.objects.get(id=user)
+        user_name = acc_user
         org = Organization.objects.get(id=1)
         client = Clients.objects.filter(insti=org)
 
@@ -239,10 +231,10 @@ class RetentionAnalyticsResultsView(ListView):
     template_name = 'dashboards/retention/index.html'
     def get_queryset(self, **kwargs):
         global cust_data, loan, user_name, input_data,acc_user, time
-        user = self.request.user
+        user_id = self.request.session['account_user_id']
         time = end = datetime.today()
-        user_name = user
-        acc_user = AccountUser.objects.get(user=user)
+        acc_user = AccountUser.objects.get(id=user)
+        user_name = acc_user
         org = Organization.objects.get(id=1)
         client = Clients.objects.filter(insti=org)
 
