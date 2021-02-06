@@ -152,7 +152,7 @@ function putTableData(result) {
             officer_url_id = 'officer_' + b.officer_id
             report_url_id = 'report_' + b.loan_id
             csv_url_id = 'csv_' + b.loan_id
-            document.getElementById("client_url_id").setAttribute("href", client_profile);
+            document.getElementById(client_url_id).setAttribute("href", client_profile);
             // $("#" + client_url_id).attr("url", client_profile);
             // $("#" + officer_url_id).attr("url", officer_profile);
             // $("#" + report_url_id).attr("url", report);
