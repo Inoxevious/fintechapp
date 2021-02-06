@@ -36,8 +36,9 @@ def index(request, **kwargs):
         if AccountUser.objects.filter(user_id=user_id).exists():
             account_user = AccountUser.objects.get(user_id=user_id)
         else:
-            account_user = request.user
-            
+            messages.success(request,"Hie Admin, {} You not authorised to analytics dashboards, use admin portal.".format(user.username))
+            return redirect('account:login')
+
         request.session['account_user_id'] = account_user.id
         print("account_user ID", account_user)
         context ={
