@@ -8,9 +8,10 @@
         text-decoration: none;
     }
 
-    ul.nav.navbar-nav.mega-menu li.active {
+    ul.nav.navbar-nav.menu li.active a.active {
         background: navy;
-        padding: 2px 6px;
+        color: white;
+
     }
 </style>
 
@@ -27,28 +28,31 @@
             {% url 'companies:index' as url %}
             <li {% if request.path == url %} class="active" {% endif %}>
 
-                <a href="{{ url }}">Home</a>
-                <!-- <a href="{% url 'companies:index' %}"><i class="icon-display4 position-left"></i>
+                <a {% if request.path == url %} class="active" {% endif %} href="{{ url }}">Home</a>
+                <!-- <a {% if request.path == url %} class="active" {% endif %} href="{% url 'companies:index' %}"><i class="icon-display4 position-left"></i>
                     Home</a> -->
 
             </li>
             {% url 'companies:application_analytics' as url %}
             <li {% if request.path == url %} class="active" {% endif %} class="mega-menu mega-menu-wide">
-                <a href="{% url 'companies:application_analytics' %}" class="navbar-nav-link">
+                <a {% if request.path == url %} class="active" {% endif %}
+                    href="{% url 'companies:application_analytics' %}" class="navbar-nav-link">
                     <i class="icon-make-group mr-2"></i>
                     Application Scoring Predictions
                 </a>
             </li>
             {% url 'companies:behavioral_analytics' as url %}
             <li {% if request.path == url %} class="active" {% endif %} class="mega-menu mega-menu-wide">
-                <a href="{% url 'companies:behavioral_analytics' %}" class="navbar-nav-link">
+                <a {% if request.path == url %} class="active" {% endif %}
+                    href="{% url 'companies:behavioral_analytics' %}" class="navbar-nav-link">
                     <i class="icon-strategy mr-2"></i>
                     Behavioral Scoring Predictions
                 </a>
             </li>
             {% url 'companies:retention_analytics' as url %}
             <li {% if request.path == url %} class="active" {% endif %} class="mega-menu mega-menu-wide">
-                <a href="{% url 'companies:retention_analytics' %}" class="navbar-nav-link">
+                <a {% if request.path == url %} class="active" {% endif %}
+                    href="{% url 'companies:retention_analytics' %}" class="navbar-nav-link">
                     <i class="icon-alignment-unalign mr-2"></i>
                     Retention Scoring Predictions
                 </a>
@@ -57,13 +61,14 @@
 
             {% url 'companies:reports' as url %}
             <li {% if request.path == url %} class="active" {% endif %} class="mega-menu mega-menu-wide">
-                <a href="{% url 'companies:reports' %}" class="navbar-nav-link">
+                <a {% if request.path == url %} class="active" {% endif %} href="{% url 'companies:reports' %}"
+                    class="navbar-nav-link">
                     <i class="icon-file-text2 mr-2"></i>
                     Reports
                 </a>
             </li>
             <!-- <li class="nav-item dropdown">
-                <a href="{% url 'companies:income_classifier' %}" class="navbar-nav-link">
+                <a {% if request.path == url %} class="active" {% endif %} href="{% url 'companies:income_classifier' %}" class="navbar-nav-link">
                     <i class="icon-file-text2 mr-2"></i>
                     income_classifier_prediction
                 </a>

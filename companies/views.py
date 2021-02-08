@@ -337,8 +337,8 @@ def getBusiness(request):
     # null and blank values
 
     if request.method == "GET" and request.is_ajax():
-        business = ApplicationScores.objects.exclude(loan_id__isnull=True).\
-            exclude(officer_id__exact='').order_by('officer_id').values_list('officer_id').distinct()
+        business = LoanOfficer.objects.exclude(id__isnull=True).\
+            exclude(insti__exact='').order_by('insti').values_list('insti').distinct()
         business = [i[0] for i in list(business)]
         data = {
             "business": business, 
