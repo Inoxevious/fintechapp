@@ -141,15 +141,7 @@ function putTableData(result) {
         // populate application scoring_listing data
         $.each(result["results"], function (a, b) {
             console.log("probability " + b.income_probability)
-            row = "<tr> <td>" + b.loan_id + "</td>" +
-                "<td><a href='{% url 'companies:index' %}'>" + b.client_id + "</a></td>" +
-                "<td>" + b.retention_loan_num + "</td>" +
-                "<td>" + b.retention_closure_date + "</td>" +
-                "<td>" + b.retention_client_clv + "</td>" +
-                "<td>" + b.retention_classification + "</td>" +
-                "<td>" + b.retention_recommendation_process + "</td>" +
-                "<td style='background-color:" + b.retention_color + "'>" + b.income_probability * 100 + "</td>" +
-                "<td style='background-color:" + b.retention_color + "'>" + b.loan_amount + "</td>" +
+            row = `<tr> <td><a href='/companies/client_profile/?=\${b.client_id}'${b.loan_id}</a></td><td><a href='/companies/client_profile/?=\${b.client_id}'>${b.client_id}</a></td><td>${b.retention_loan_num}</td><td>${b.retention_closure_date}</td><td>${b.retention_client_clv}</td><td>${b.retention_classification}</td><td>${b.retention_recommendation_process}</td><td style='background-color:${b.retention_color}'>${b.income_probability * 100}</td><td style='background-color:${b.retention_color}'>${b.loan_amount}</td>${
                 // "<td style='background-color:" + b.application_color + "'>" + b.application_text + "</td>" +
                 `<td class='text-center'>
                     <ul class='icons-list'>
@@ -159,18 +151,16 @@ function putTableData(result) {
                             </a>
 
                             <ul class='dropdown-menu dropdown-menu-right'>
-                                <li><a href='#'><i class='icon-person'></i>
-                                        View
-                                        Client</a></li>
-                                <li><a href='#'><i
-                                            class='icon-book'></i> View
-                                        Report</a></li>
-                                <li><a href='#'><i
-                                            class='icon-file-excel'></i> Export to .csv</a></li>
-                            </ul>
-                        </li>
+                            <li><a href="/companies/client_profile/?=${b.client_id}" ><i class='icon-person'></i>
+                            View
+                            Client</a></li>
+                    <li><a href="/companies/application_report/?=${b.loan_id}"  ><i
+                                class='icon-book'></i> View
+                            Report</a></li>
+                    <li><a href="/companies/application_report_export_csv/?=${b.loan_id}"><i
+                                class='icon-file-excel'></i> Export to .csv</a></li>
                     </ul>
-                </td></tr>`
+                </td></tr>`}`
             $("#retention_scoring_listing").append(row);
         });
 

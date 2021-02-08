@@ -23,11 +23,15 @@ urlpatterns=[
     url(
         r"^index/(?P<user_id>.+)", views.HomeView.as_view(), name="index"
     ),
+
     path('income_classifier/', views.ApplicationAnalyticsResultsView.as_view(), name="income_classifier"),    
     path('application_analytics/', views.ApplicationAnalyticsResultsView.as_view(), name='application_analytics'),
     path('retention_analytics/', views.RetentionAnalyticsResultsView.as_view(), name='retention_analytics'),
     path('behavioral_analytics/', views.BehavioralAnalyticsResultsView.as_view(), name='behavioral_analytics'),
-    path('profile/', views.profile, name='profile'),
+    path('client_profile/', views.client_profile, name='client_profile'),
+    path('application_report/', views.application_report, name='application_report'),
+    path('application_report_export_csv/', views.application_report_export_csv, name='application_report_export_csv'),
+    path('officer_profile/', views.officer_profile, name='officer_profile'),
     path('reports/', views.reports, name='reports'),
     path('articles/', views.articles, name='articles'),
    

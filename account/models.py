@@ -73,6 +73,7 @@ class Clients(models.Model):
         return self.info.user.username
 
 class Loan(models.Model):
+    loan_id = models.CharField(max_length=50,null=True ,blank=True)
     signing_officer = models.ForeignKey(LoanOfficer, related_name="loan_officer", verbose_name="Account Officer", on_delete = models.CASCADE,null=True, blank=True)
     client = models.ForeignKey(AccountUser, related_name="loan_client", verbose_name="Client", on_delete = models.CASCADE,null=True, blank=True)
     application_date = models.DateTimeField()

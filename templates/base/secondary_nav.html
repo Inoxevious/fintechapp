@@ -1,4 +1,21 @@
 <!-- Second navbar -->
+<style type="text/css">
+    ul.nav.navbar-nav.menu {
+        background: white;
+    }
+
+    ul.nav.navbar-nav.menu li a {
+        text-decoration: none;
+    }
+
+    ul.nav.navbar-nav.mega-menu li.active {
+        background: navy;
+        padding: 2px 6px;
+    }
+</style>
+
+
+
 <div class="navbar navbar-default" id="navbar-second">
     <ul class="nav navbar-nav no-border visible-xs-block">
         <li><a class="text-center collapsed" data-toggle="collapse" data-target="#navbar-second-toggle"><i
@@ -6,28 +23,40 @@
     </ul>
 
     <div class="navbar-collapse collapse" id="navbar-second-toggle">
-        <ul class="nav navbar-nav">
-            <li><a href="{% url 'companies:index' %}"><i class="icon-display4 position-left"></i> Home</a></li>
-            <li class="mega-menu mega-menu-wide">
+        <ul class="nav navbar-nav menu">
+            {% url 'companies:index' as url %}
+            <li {% if request.path == url %} class="active" {% endif %}>
+
+                <a href="{{ url }}">Home</a>
+                <!-- <a href="{% url 'companies:index' %}"><i class="icon-display4 position-left"></i>
+                    Home</a> -->
+
+            </li>
+            {% url 'companies:application_analytics' as url %}
+            <li {% if request.path == url %} class="active" {% endif %} class="mega-menu mega-menu-wide">
                 <a href="{% url 'companies:application_analytics' %}" class="navbar-nav-link">
                     <i class="icon-make-group mr-2"></i>
                     Application Scoring Predictions
                 </a>
             </li>
-
-            <li class="nav-item dropdown">
+            {% url 'companies:behavioral_analytics' as url %}
+            <li {% if request.path == url %} class="active" {% endif %} class="mega-menu mega-menu-wide">
                 <a href="{% url 'companies:behavioral_analytics' %}" class="navbar-nav-link">
                     <i class="icon-strategy mr-2"></i>
                     Behavioral Scoring Predictions
                 </a>
             </li>
-            <li class="nav-item dropdown">
+            {% url 'companies:retention_analytics' as url %}
+            <li {% if request.path == url %} class="active" {% endif %} class="mega-menu mega-menu-wide">
                 <a href="{% url 'companies:retention_analytics' %}" class="navbar-nav-link">
                     <i class="icon-alignment-unalign mr-2"></i>
                     Retention Scoring Predictions
                 </a>
             </li>
-            <li class="nav-item dropdown">
+
+
+            {% url 'companies:reports' as url %}
+            <li {% if request.path == url %} class="active" {% endif %} class="mega-menu mega-menu-wide">
                 <a href="{% url 'companies:reports' %}" class="navbar-nav-link">
                     <i class="icon-file-text2 mr-2"></i>
                     Reports
@@ -54,3 +83,17 @@
     </div>
 </div>
 <!-- /second navbar -->
+
+<script type="text/javascript">
+    $(function () {
+        var $page = jQuery.url.attr("file");
+        $('ul.nav.navbar-nav li a').each(function () {
+            var $href = $(this).attr('href');
+            if (($href == $page) || ($href == '')) {
+                $(this).addClass('on');
+            } else {
+                $(this).removeClass('on');
+            }
+        });
+    });
+</script>

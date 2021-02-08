@@ -159,6 +159,67 @@ class HomeView(ListView):
         }
         return context
 
+class ProfileView(ListView):
+    template_name = 'dashboards/clients/profile/index.html'
+    def get_queryset(self, **kwargs):
+        global cust_data, loan, user_name, input_data,acc_user, time, client
+        user_id = self.request.session['account_user_id']
+        id = self.request.GET.get('client_id', None)
+        print(id)
+        time = end = datetime.today()
+        acc_user = AccountUser.objects.get(id=user_id)
+        client = Clients.objects.all()[:1]
+        user_name = acc_user
+        print("acc_user",acc_user)
+        org = Organization.objects.get(id=1)
+        client = Clients.objects.filter(insti=org)
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'user_name':user_name,
+            'acc_user':acc_user,
+            'client':client,
+        }
+        return context
+
+class ApplicationReportExportCsvView(ListView):
+    template_name = 'dashboards/clients/profile/index.html'
+    def get_queryset(self, **kwargs):
+        global cust_data, loan, user_name, input_data,acc_user, time
+        user_id = self.request.session['account_user_id']
+        time = end = datetime.today()
+        acc_user = AccountUser.objects.get(id=user_id)
+        user_name = acc_user
+        print("acc_user",acc_user)
+        org = Organization.objects.get(id=1)
+        client = Clients.objects.filter(insti=org)
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'user_name':user_name,
+            'acc_user':acc_user,
+        }
+        return context
+
+class ApplicationReportView(ListView):
+    template_name = 'dashboards/clients/profile/index.html'
+    def get_queryset(self, **kwargs):
+        global cust_data, loan, user_name, input_data,acc_user, time
+        user_id = self.request.session['account_user_id']
+        time = end = datetime.today()
+        acc_user = AccountUser.objects.get(id=user_id)
+        user_name = acc_user
+        print("acc_user",acc_user)
+        org = Organization.objects.get(id=1)
+        client = Clients.objects.filter(insti=org)
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'user_name':user_name,
+            'acc_user':acc_user,
+        }
+        return context
+
 class BehavioralAnalyticsResultsView(ListView):
     template_name = 'dashboards/behavioral/index.html'
     def get_queryset(self, **kwargs):
@@ -215,8 +276,40 @@ class RetentionAnalyticsResultsView(ListView):
         return context
 
 
-def profile(request):
-    return render(request,'dashboards/profile/index.html')
+def client_profile(request):
+    id = request.GET.get('client_id', None)
+    print(id)
+    client = Clients.objects.get(id=id)
+    print("client", client)
+    context = {
+        'client':client,
+    }
+    return render(request,'dashboards/clients/profile/index.html', context)
+
+def officer_profile(request):
+    id = request.GET.get('officer_id', None)
+    print(id)
+    officer = LoanOfficer.objects.get(id=id)
+    print("officer", officer)
+    context = {
+        'officer':officer,
+    }
+    return render(request,'dashboards/officers/profile/index.html', context)
+
+
+def application_report_export_csv(request):
+    id = request.GET.get('loan_id', None)
+    print(id)
+    officer = Loan.objects.get(loan_id=id)
+    print("loan", loan)
+    return render(request,'dashboards/articles/index.html')
+
+def application_report(request):
+    id = request.GET.get('loan_id', None)
+    print(id)
+    officer = Loan.objects.get(loan_id=id)
+    print("loan", loan)
+    return render(request,'dashboards/articles/index.html')
 
 def reports(request):
     return render(request,'dashboards/reports/index.html')
@@ -236,12 +329,7 @@ def some_view(request):
     return response
 
 
-def application_report_export_csv(request):
-    
-     return render(request,'dashboards/articles/index.html')
 
-def application_report(request):
-     return render(request,'dashboards/articles/index.html')
 
 #Get Business Loan Filter
 def getBusiness(request):

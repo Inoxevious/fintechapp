@@ -144,37 +144,32 @@ function putTableData(result) {
         $.each(result["results"], function (a, b) {
             console.log("behavioral_classifier_data " + JSON.stringify(b))
             console.log("probability " + b.income_probability)
-            var client_profile = "{% url'companies:profile' " + b.client_id + " %}"
-            var officer_profile = "{% url'companies:profile' " + b.officer_id + " %}"
-            var report = "{% url'companies:profile' " + b.loan_id + " %}"
-            var csv = "{% url'companies:profile' " + b.loan_id + " %}"
-            client_url_id = 'client_' + b.loan_id
+            var client_profile = b.client_id
+            var officer_profile = "{% url 'companies:profile' " + b.officer_id + " %}"
+            var report = "{% url 'companies:profile' " + b.loan_id + " %}"
+            var csv = "{% url 'companies:profile' " + b.loan_id + " %}"
+            client_url_id = 'client'
             officer_url_id = 'officer_' + b.officer_id
             report_url_id = 'report_' + b.loan_id
             csv_url_id = 'csv_' + b.loan_id
 
-            // document.getElementById(client_url_id).setAttribute("href", client_profile);
-            $("#" + client_url_id).attr("url", client_profile);
-            $("#" + officer_url_id).attr("url", officer_profile);
-            $("#" + report_url_id).attr("url", report);
-            $("#" + csv_url_id).attr("url", csv);
             console.log("URLSSSSS" + client_profile)
-            row = `<tr> <td>${b.loan_id}</td><td><a data-url="${client_profile}" id="${client_url_id}" >${b.client_id}</a></td><td>${b.loan_amount}</td><td>${b.loan_amount}</td><td>${b.loan_amount}</td><td style='background-color:${b.income_color}'>${b.income_probability}</td><td style='background-color:${b.income_color}'>${b.income_text}</td><td>${b.behavioral_time_to_default}</td><td>${b.behavioral_contact_channel}</td><td>${b.behavioral_contact_schedule}</td><td>${b.behavioral_message}</td>${`<td class='text-center'>
+            row = `<tr> <td><a href="/companies/client_profile/?client_id=${b.client_id}">${b.loan_id}</a></td><td><a href="/companies/client_profile/?client_id=${b.client_id}" id="${client_url_id}" >${b.client_id}</a></td><td>${b.loan_amount}</td><td>${b.loan_amount}</td><td>${b.loan_amount}</td><td style='background-color:${b.income_color}'>${b.income_probability}</td><td style='background-color:${b.income_color}'>${b.income_text}</td><td>${b.behavioral_time_to_default}</td><td>${b.behavioral_contact_channel}</td><td>${b.behavioral_contact_schedule}</td><td>${b.behavioral_message}</td>${`<td class='text-center'>
                     <ul class='icons-list'>
                         <li class='dropdown'>
-                            <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
+                            <a class='dropdown-toggle' data-toggle='dropdown'>
                                 <i class='icon-menu9'></i>
                             </a>
 
                             <ul class='dropdown-menu dropdown-menu-right'>
-                                <li><a id="`}${client_url_id}${`"><i class='icon-person'></i>
-                                        View
-                                        Client</a></li>
-                                <li><a id="`}${report_url_id}${`" href=""><i
-                                            class='icon-book'></i> View
-                                        Report</a></li>
-                                <li><a id="`}${csv_url_id}${`" href=''><i
-                                            class='icon-file-excel'></i> Export to .csv</a></li>
+                            <li><a href="/companies/client_profile/?=${b.client_id}" ><i class='icon-person'></i>
+                            View
+                            Client</a></li>
+                    <li><a href="/companies/application_report/?=${b.loan_id}"  ><i
+                                class='icon-book'></i> View
+                            Report</a></li>
+                    <li><a href="/companies/application_report_export_csv/?=${b.loan_id}"><i
+                                class='icon-file-excel'></i> Export to .csv</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -182,9 +177,6 @@ function putTableData(result) {
             $("#behavioral_listing").append(row);
 
 
-        });
-        $(document).on('click', '.alink', function () {
-            var url = $("#" + client_url_id).attr("data-url");
         });
     }
     else {
@@ -223,6 +215,29 @@ function putTableData(result) {
     // displaying result count
 
     $("#result-count span").html(result["count"]);
+}
+
+function clientUrl(data) {
+    console.log("dound dta" + data)
+    id = "#" + data
+    console.log(id)
+    let url = "/companies/profile/" + data
+    // let url = $(id).attr("url")
+    // let url = '{% url companies:behavioral_scoring_view %}'
+    console.log("bhv url" + url)
+    $.ajax({
+        method: 'GET',
+        url: url,
+        data: data,
+        success: function (result) {
+            console.log("API RES" + JSON.stringify(result))
+            // putTableData(result);]]]
+            window.location.href = ""
+        },
+        error: function (response) {
+            console.log('no client data')
+        }
+    });
 }
 
 function getAPIData() {

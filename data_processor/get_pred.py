@@ -121,6 +121,7 @@ class GetPredictions:
                 incomes_prediction = GetPredictions.get_income_pred(ln)
                 retention_prediction = GetPredictions.get_retention_pred(ln)
                 prediction = merge(incomes_prediction, retention_prediction)
+                print("Preddd", prediction)
                     #result here as a probability
                 prediction['loan_amount'] = ln.AMT_CREDIT
                 prediction['created_by'] = 'Cron Job'
@@ -204,12 +205,13 @@ class GetPredictions:
         ln_cnt = IncomeData.objects.filter(LOAN_ID=ln_id.LOAN_ID).count()
         if ln_cnt == 0:
             retention_prediction = {}
-            retention_prediction['recommendation_process'] = 'Client data missing'
-            retention_prediction["classification"] = 'Client data missing'                
-            retention_prediction["loan_num"] = 'Client data missing'
-            retention_prediction["closure_date"] = 'Client data missing'
-            retention_prediction["client_clv"] = 'Client data missing'
+            retention_prediction['retention_recommendation_process'] = 'Client data missing'
+            retention_prediction["retention_classification"] = 'Client data missing'                
+            retention_prediction["retention_loan_num"] = 'Client data missing'
+            retention_prediction["retention_closure_date"] = 'Client data missing'
+            retention_prediction["retention_client_clv"] = 'Client data missing'
             retention_prediction["retention_color"] = 'Client data missing'
+            retention_prediction["retention_probability"] = 0
         else:
             ln = IncomeData.objects.get(LOAN_ID=ln_id.LOAN_ID)
             object_data_dict = {}
@@ -273,7 +275,11 @@ class GetPredictions:
         print("Income qrty", ln_cnt)
         if ln_cnt == 0:
             incomes_prediction = {}
+            incomes_prediction['income_probability'] = 100
+            incomes_prediction['income_color'] = 'red'
+            # incomes_prediction['income_text'] = 100
             incomes_prediction['income_text'] = 'No income data for this client'
+
         else:
             ln = IncomeData.objects.get(LOAN_ID=ln_id.LOAN_ID)
             print("Income qrty", ln)

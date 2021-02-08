@@ -79,6 +79,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'companies.contect_pr.base_url',
+            
             ],
             'libraries': { 
                 'custom_tags':'companies.template_tags.custom_tags'
@@ -102,7 +104,6 @@ DATABASES = {
         # 'NAME': 'finapp',
         # 'PASSWORD': 'postgres', 
         # 'HOST':  'localhost',
-        # 'NAME': 'fintech',
         'NAME': 'fintech',
         'PASSWORD':  'fintech123456789',
         'HOST':  'fintech.coxeytfzdoap.eu-west-2.rds.amazonaws.com',

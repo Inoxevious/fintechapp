@@ -141,37 +141,32 @@ function putTableData(result) {
         // populate application scoring_listing data
         $.each(result["results"], function (a, b) {
             console.log("probability " + b.income_probability)
-            row = "<tr> <td>" + b.client_id + "</td>" +
-                "<td cl ass=''>" + b.income_probability + "</td>" +
-                "<td>" + b.loan_amount + "</td>" +
-                "<td style='background-color:" + b.income_color + "'>" + b.income_text + "</td>" +
-                "<td style='background-color:" + b.application_color + "'>" + b.application_text + "</td>" +
-                "<td style='background-color:" + b.income_color + "'>" + b.income_text + "</td>" +
-
-                "<td style='background-color:" + b.income_color + "'>" + b.income_text + "</td>" +
-
-                "<td style='background-color:" + b.income_color + "'>" + b.income_text + "</td>" +
-                "<td style='background-color:" + "'>" + b.income_text + "</td>" +
-                `<td class='text-center'>
+            var report = "{% url 'companies:profile' " + b.loan_id + " %}"
+            var csv = "{% url 'companies:profile' " + b.loan_id + " %}"
+            client_url_id = 'client'
+            officer_url_id = 'officer_' + b.officer_id
+            report_url_id = 'report_' + b.loan_id
+            csv_url_id = 'csv_' + b.loan_id
+            row = `<tr> <td ><a href="/companies/client_profile/?=${b.client_id}" >${b.client_id}</a></td><td  class=''>${b.income_probability}</td><td>${b.loan_amount}</td><td style='background-color:${b.income_color}'>${b.income_text}</td><td style='background-color:${b.application_color}'>${b.application_text}</td><td style='background-color:${b.income_color}'>${b.income_text}</td><td style='background-color:${b.income_color}'>${b.income_text}</td><td style='background-color:${b.income_color}'>${b.income_text}</td><td style='background-color:'>${b.income_text}</td>${`<td class='text-center'>
                     <ul class='icons-list'>
                         <li class='dropdown'>
-                            <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
+                            <a href="#" class='dropdown-toggle' data-toggle='dropdown'>
                                 <i class='icon-menu9'></i>
                             </a>
 
                             <ul class='dropdown-menu dropdown-menu-right'>
-                                <li><a href='#'><i class='icon-person'></i>
+                                <li><a href="/companies/client_profile/?=${b.client_id}" ><i class='icon-person'></i>
                                         View
                                         Client</a></li>
-                                <li><a href='#'><i
+                                <li><a href="/companies/application_report/?=${b.loan_id}"  ><i
                                             class='icon-book'></i> View
                                         Report</a></li>
-                                <li><a href='#'><i
+                                <li><a href="/companies/application_report_export_csv/?=${b.loan_id}"><i
                                             class='icon-file-excel'></i> Export to .csv</a></li>
                             </ul>
                         </li>
                     </ul>
-                </td></tr>`
+                </td></tr>`}`
             $("#application_classifier_listing").append(row);
 
         });
