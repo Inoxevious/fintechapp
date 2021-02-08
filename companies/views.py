@@ -417,3 +417,66 @@ def data_aggretation(request):
         'data': data,
     })
 
+def live_app_score_pred(request):
+    algorithm_object = RandomForestClassifier()
+    # posts = Post.objects.all()
+    response_data = {}
+    context = {}
+    if request.method == 'POST':
+        age = request.POST.get('age') 
+        workclass = request.POST.get('workclass') 
+        fnlwgt = request.POST.get('fnlwgt') 
+        education = request.POST.get('education') 
+        education_num = request.POST.get('education_num') 
+        marital_status = request.POST.get('marital_status') 
+        occupation = request.POST.get('occupation') 
+        relationship = request.POST.get('relationship') 
+        race = request.POST.get('race') 
+        sex = request.POST.get('sex') 
+        capital_gain = request.POST.get('capital_gain') 
+        capital_loss = request.POST.get('capital_loss') 
+        hours_per_week = request.POST.get('hours_per_week') 
+        native_country = request.POST.get('native_country') 
+
+        data ={'age':  age, 'workclass':  workclass, 
+        'fnlwgt':  fnlwgt, 'education':  education, 
+        'education-num':  education_num, 'marital-status':  marital_status, 
+        'occupation': occupation, 'relationship':  relationship, 
+        'race':  race, 'sex':  sex, 'capital-gain':  capital_gain, 
+        'capital-loss':  capital_loss, 'hours-per-week':  hours_per_week, 
+        'native-country':  native_country
+        }
+        incomes_prediction = {}
+        print("incomes_prediction data", data)
+        incomes_prediction = algorithm_object.compute_prediction(data) 
+        print("incomes_prediction data", incomes_prediction)
+        if  incomes_prediction['income_probability'] > 0.67:
+            color = 'red'
+            text = 'high risk'
+            incomes_prediction["income_color"] = color
+            incomes_prediction["income_text"] = text
+        elif  incomes_prediction['income_probability'] > 0.33:
+            color = 'blue'
+            text = 'moderate risk'
+            incomes_prediction["income_color"] = color
+            incomes_prediction["income_text"] = text
+        else:
+            color = 'green'
+            text = 'low risk'
+            incomes_prediction["income_color"] = color
+            incomes_prediction["income_text"] = text
+        data = {
+            "incomes_prediction": incomes_prediction, 
+        }
+        context = {
+            'result': "prediction successful",
+            'incomes_prediction':incomes_prediction,
+        }
+
+        return render(request,'dashboards/officers/predictions/index.html', context)
+
+    context = {
+        'result': "fail",
+        
+    }
+    return render(request,'dashboards/officers/predictions/index.html', context)

@@ -15,4 +15,4 @@ class LoanAdmin(admin.ModelAdmin):
 
 @admin.register(Clients)
 class ClientsAdmin(admin.ModelAdmin):
-    
+    pass

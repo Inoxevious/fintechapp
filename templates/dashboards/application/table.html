@@ -3,7 +3,23 @@
 <!-- Individual column searching (selects) -->
 <div class="panel panel-flat">
     <div class="panel-heading">
-        <h5 class="panel-title">Individual column searching</h5>
+        <div class="row justify-content-center">
+            <nav aria-label="navigation">
+                <ul class="pagination">
+                    <li class="page-item">
+
+                        <a style="background-color: green;" class="btn btn-primary"
+                            href="{% url 'companies:live_app_score_pred' %}">
+                            Request Application score
+                        </a>
+
+                    </li>
+                    <!-- <li style="padding-left: 35px;" class="page-item pull-right">
+                        <button class="btn btn-primary page-link" id="next">Next</button>
+                    </li> -->
+                </ul>
+            </nav>
+        </div>
         <div class="heading-elements">
             <ul class="icons-list">
                 <li><a data-action="collapse"></a></li>

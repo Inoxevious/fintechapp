@@ -32,6 +32,8 @@ urlpatterns=[
     path('application_report/', views.application_report, name='application_report'),
     path('application_report_export_csv/', views.application_report_export_csv, name='application_report_export_csv'),
     path('officer_profile/', views.officer_profile, name='officer_profile'),
+    path('live_app_score_pred/', views.live_app_score_pred, name='live_app_score_pred'),
+
     path('reports/', views.reports, name='reports'),
     path('articles/', views.articles, name='articles'),
    
